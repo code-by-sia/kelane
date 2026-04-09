@@ -1,0 +1,313 @@
+[
+  {
+    "code": 1001,
+    "name": "Classic Margherita Pizza",
+    "summary": "A traditional Italian pizza topped with fresh tomatoes, mozzarella cheese, and basil.",
+    "date": "2026-02-20T10:00:00Z",
+    "categories": ["Bakery", "Vegan"],
+    "flagged": false,
+    "liked": true,
+    "calories": 1000,
+    "preperationTime": 90,
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Pizza_Margherita_stu_spivack.jpg",
+    "images": [
+      "https://upload.wikimedia.org/wikipedia/commons/c/c8/Pizza_Margherita_stu_spivack.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/6/6f/Margherita_Originale.jpg"
+    ],
+    "ingredients": [
+      "500g flour",
+      "300ml warm water",
+      "10g salt",
+      "7g dry yeast",
+      "200g tomato sauce",
+      "250g fresh mozzarella",
+      "Fresh basil leaves",
+      "2 tbsp olive oil"
+    ],
+    "tools": ["Mixing bowl", "Oven", "Baking tray", "Rolling pin"],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Mix flour, yeast, salt, and water to form dough.",
+        "tools": ["Mixing bowl", "Rolling pin"],
+        "ingredients": ["flour", "yeast", "salt", "water"],
+        "duration": 10,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Knead for 10 minutes and let rise for 1 hour.",
+        "duration": 60,
+        "dependsOn": [1]
+      },
+      {
+        "id": 3,
+        "action": "Roll out the dough and spread tomato sauce evenly.",
+        "duration": 900,
+        "dependsOn": [2]
+      },
+      {
+        "id": 4,
+        "action": "Add sliced mozzarella and basil leaves.",
+        "duration": 10,
+        "dependsOn": [3]
+      },
+      {
+        "id": 5,
+        "action": "Drizzle with olive oil.",
+        "duration": 60,
+        "dependsOn": [4]
+      },
+      {
+        "id": 6,
+        "action": "Bake at 220°C for 15–20 minutes.",
+        "duration": 15,
+        "dependsOn": [5]
+      }
+    ]
+  },
+  {
+    "code": 1002,
+    "calories": 300,
+    "name": "Healthy Avocado Salad",
+    "summary": "A fresh avocado salad combining ripe avocado, tomatoes, and crisp greens with a light dressing — perfect for a healthy meal.",
+    "date": "2026-02-18T12:30:00Z",
+    "categories": ["Healthy", "Vegan"],
+    "flagged": false,
+    "liked": false,
+    "preperationTime": 15,
+    "image": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
+      "https://images.pexels.com/photos/853099/pexels-photo-853099.jpeg",
+      "https://images.pexels.com/photos/5754343/pexels-photo-5754343.jpeg"
+    ],
+    "ingredients": [
+      "2 ripe avocados",
+      "1 cup cherry tomatoes",
+      "1 cucumber",
+      "1 tbsp lemon juice",
+      "2 tbsp olive oil",
+      "Salt to taste",
+      "Black pepper to taste"
+    ],
+    "tools": ["Knife", "Cutting board", "Salad bowl", "Spoon"],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Dice the avocados, cucumber, and halve the cherry tomatoes.",
+        "duration": 240,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Place all vegetables in a salad bowl.",
+        "duration": 60,
+        "dependsOn": [1]
+      },
+      {
+        "id": 3,
+        "action": "Mix lemon juice, olive oil, salt, and pepper.",
+        "duration": 60,
+        "dependsOn": []
+      },
+      {
+        "id": 4,
+        "action": "Pour dressing over salad and toss gently.",
+        "duration": 60,
+        "dependsOn": [2, 3]
+      },
+      {
+        "id": 5,
+        "action": "Serve immediately.",
+        "duration": 60,
+        "dependsOn": [4]
+      }
+    ]
+  },
+  {
+    "code": 1003,
+    "calories": 300,
+    "name": "Grilled Lemon Garlic Salmon",
+    "summary": "Salmon fillets marinated in garlic, lemon, and herbs then grilled for a tender and flavorful fish entrée.",
+    "date": "2026-02-15T18:45:00Z",
+    "categories": ["Fish", "Healthy"],
+    "flagged": false,
+    "liked": true,
+    "preperationTime": 30,
+    "image": "https://images.pexels.com/photos/3296274/pexels-photo-3296274.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/3296274/pexels-photo-3296274.jpeg",
+      "https://images.pexels.com/photos/5938/salmon-dish-food-meal.jpg",
+      "https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg"
+    ],
+    "ingredients": [
+      "2 salmon fillets",
+      "2 cloves garlic (minced)",
+      "2 tbsp lemon juice",
+      "1 tbsp olive oil",
+      "1 tsp dried parsley",
+      "Salt to taste",
+      "Black pepper to taste"
+    ],
+    "tools": ["Grill pan", "Mixing bowl", "Tongs", "Brush"],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Mix garlic, lemon juice, olive oil, parsley, salt, and pepper.",
+        "duration": 60,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Marinate salmon for 15 minutes.",
+        "duration": 900,
+        "dependsOn": [1]
+      },
+      {
+        "id": 3,
+        "action": "Preheat grill pan over medium heat.",
+        "duration": 120,
+        "dependsOn": [2]
+      },
+      {
+        "id": 4,
+        "action": "Grill salmon for 4–5 minutes per side.",
+        "duration": 5,
+        "dependsOn": [3]
+      },
+      {
+        "id": 5,
+        "action": "Serve with garnish.",
+        "duration": 30,
+        "dependsOn": [4]
+      }
+    ]
+  },
+  {
+    "code": 1004,
+    "calories": 300,
+    "name": "Creamy Mushroom Pasta",
+    "summary": "A rich pasta dish with sautéed mushrooms, garlic, and creamy sauce, topped with parmesan — comforting and satisfying.",
+    "date": "2026-02-10T14:20:00Z",
+    "categories": ["Pasta", "Vegan"],
+    "flagged": false,
+    "liked": true,
+    "preperationTime": 25,
+    "image": "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg",
+      "https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg",
+      "https://images.pexels.com/photos/8500/food-pasta-spaghetti-mushroom.jpg"
+    ],
+    "ingredients": [
+      "250g pasta",
+      "200g mushrooms (sliced)",
+      "2 cloves garlic (minced)",
+      "200ml heavy cream",
+      "50g parmesan cheese",
+      "2 tbsp olive oil",
+      "Salt to taste",
+      "Black pepper to taste"
+    ],
+    "tools": ["Pot", "Frying pan", "Colander", "Wooden spoon"],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Cook pasta according to package instructions.",
+        "duration": 120,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Heat olive oil in a frying pan.",
+        "duration": 60,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Sauté garlic and mushrooms until tender.",
+        "duration": 15,
+        "dependsOn": [2]
+      },
+      {
+        "id": 4,
+        "action": "Add cream and simmer for 5 minutes.",
+        "duration": 300,
+        "dependsOn": [3]
+      },
+      {
+        "id": 5,
+        "action": "Mix in pasta and parmesan, season, and serve.",
+        "duration": 60,
+        "dependsOn": [1, 4]
+      }
+    ]
+  },
+  {
+    "code": 1005,
+    "calories": 2300,
+    "name": "Chocolate Chip Cookies",
+    "summary": "Warm, chewy cookies loaded with chocolate chips — a classic bakery dessert that’s both simple and delicious.",
+    "date": "2026-02-05T09:15:00Z",
+    "categories": ["Bakery", "Dessert"],
+    "flagged": false,
+    "liked": true,
+    "preperationTime": 40,
+    "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg",
+      "https://images.pexels.com/photos/159688/cookie-baking-chocolate-chip-159688.jpeg",
+      "https://images.pexels.com/photos/327973/pexels-photo-327973.jpeg"
+    ],
+    "ingredients": [
+      "2 cups flour",
+      "1 cup sugar",
+      "1/2 cup brown sugar",
+      "1 cup butter (softened)",
+      "2 eggs",
+      "1 tsp vanilla extract",
+      "1 tsp baking soda",
+      "1 cup chocolate chips"
+    ],
+    "tools": ["Mixing bowl", "Electric mixer", "Baking sheet", "Oven"],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Preheat oven to 180°C.",
+        "duration": 60,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Cream butter and sugars together.",
+        "duration": 300,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Add eggs and vanilla extract.",
+        "duration": 60,
+        "dependsOn": [2]
+      },
+      {
+        "id": 4,
+        "action": "Mix in flour and baking soda.",
+        "duration": 60,
+        "dependsOn": []
+      },
+      {
+        "id": 5,
+        "action": "Fold in chocolate chips.",
+        "duration": 60,
+        "dependsOn": [4, 3, 2]
+      },
+      {
+        "id": 6,
+        "action": "Bake 10–12 minutes until golden.",
+        "duration": 600,
+        "dependsOn": [1, 5]
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.side-bar .lucide {
+    @apply stroke-rose-600;
+}
