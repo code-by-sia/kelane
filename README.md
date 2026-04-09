@@ -1,16 +1,16 @@
-# React + Vite
+# Kelane
+## Project Structure Overview
+This template provides a robust foundation for a modern SPA. Understanding the file layout is key to development:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+*   **`src/`**: Core application source code. Components and primary logic reside here.
+*   **`public/`**: Contains static assets that are served directly (e.g., `index.html`, favicon).
+*   **`dist/`**: The final, production-optimized build output directory.
+*   **`data/`**: Intended for static data sets or cached resources.
+*   **`mock/`**: Used for creating isolated mock API responses for frontend testing.
 
-Currently, two official plugins are available:
+## 🛠️ Key Configuration Files
+*   **`package.json`**: Defines scripts (`dev`, `build`) and manages project dependencies.
+*   **`vite.config.js`**: Configures the Vite build tool, handling plugins and build targets.
+*   **`eslint.config.js`**: Enforces code quality and style guidelines across the codebase.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This structure supports rapid development with React and Vite, while providing clear separation between source code, static assets, and build outputs.
