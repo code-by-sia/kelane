@@ -71,6 +71,7 @@ const useRecipeStore = create(
     }),
     {
       name: "recipe-app-storage",
+      storage: window.localStorage,
     },
   ),
 );
