@@ -1,29 +1,25 @@
+import { useMemo } from "react";
+import { useNavigate } from "react-router";
 import {
   AppleIcon,
-  BookIcon,
   CitrusIcon,
   ClockFadingIcon,
-  ClockIcon,
   CookingPotIcon,
   FlameIcon,
   LibraryBigIcon,
   MicrowaveIcon,
-  NotebookIcon,
   RulerIcon,
   SaladIcon,
-  Users,
-  Users2,
   Users2Icon,
 } from "lucide-react";
 import { Button } from "./ui/button";
-import { useRecipe } from "@/hooks/recipe";
-import { useMemo } from "react";
 import { Badge } from "./ui/badge";
-import { useNavigate } from "react-router";
+import useRecipeStore from "@/store/recipe";
 
 export function RecipeViewer({ recipeId }) {
   const go = useNavigate();
-  const recipe = useRecipe(recipeId);
+  const getRecipe = useRecipeStore((store) => store.getRecipe);
+  const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
 
   if (!recipe)
     return (
@@ -95,7 +91,6 @@ export function RecipeViewer({ recipeId }) {
         <strong className="block pb-2">Summary:</strong>
         {recipe?.summary || "No description available"}
       </p>
-
       <div className="px-5 ">
         <strong className="block pb-2">Steps:</strong>
         <ol className="flex flex-col gap-3">

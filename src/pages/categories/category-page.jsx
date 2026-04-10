@@ -3,13 +3,10 @@ import { RecipeList } from "@/components/recipe-list";
 import { Button } from "@/components/ui/button";
 import SidebarPage from "@/pages/sidebar-page";
 import { PlusCircleIcon, SearchIcon } from "lucide-react";
-import { useEffect } from "react";
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 export default function CategoryPage({ id, recipes = [] }) {
   const { recipeId } = useParams();
-  const [searchQuery, setSearchQuery] = useState("");
   const go = useNavigate();
 
   return (

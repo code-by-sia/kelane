@@ -1,4 +1,3 @@
-import { useCategoryManager } from "@/hooks/category";
 import SidebarPage from "../sidebar-page";
 import Repeat from "@/components/repeat";
 import {
@@ -10,8 +9,9 @@ import {
 } from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
+import useRecipeStore from "@/store/recipe";
 
-export function CategoryFolder({ name }) {
+export function CategoryFolder({ name, recipes = 0 }) {
   return (
     <a
       href={`/categories/${name}`}
@@ -25,14 +25,17 @@ export function CategoryFolder({ name }) {
       />
       <div className="flex flex-col">
         <span>{name}</span>
-        <small>12 recipes</small>
+        <small>{recipes || "No "} recipes</small>
       </div>
     </a>
   );
 }
 
 export default function CategoriesPage() {
-  const { categories } = useCategoryManager();
+  const getCategoriesWithCounts = useRecipeStore(
+    (store) => store.getCategoriesWithCounts,
+  );
+  const categories = getCategoriesWithCounts();
   return (
     <SidebarPage
       title="Recipes"
@@ -61,7 +64,11 @@ export default function CategoriesPage() {
     >
       <div className="p-6 gap-6 flex flex-wrap">
         <Repeat
-          value={categories.map((it) => ({ code: it, name: it }))}
+          value={categories.map(({ name, recipes }) => ({
+            code: name,
+            name,
+            recipes,
+          }))}
           view={CategoryFolder}
         />
       </div>

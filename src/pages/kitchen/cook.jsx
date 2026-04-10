@@ -1,12 +1,16 @@
 import { Loading } from "@/components/loading";
 import { useChef } from "@/hooks/chef";
-import { useRecipe } from "@/hooks/recipe";
+
 import { useParams } from "react-router";
 import Step from "./step";
+import { useMemo } from "react";
+import useRecipeStore from "@/store/recipe";
 
 export default function CookPage() {
   const { recipeId } = useParams();
-  const recipe = useRecipe(recipeId);
+  const getRecipe = useRecipeStore((store) => store.getRecipe);
+  const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
+
   const { steps, startStep, finishStep } = useChef(recipe);
 
   return (

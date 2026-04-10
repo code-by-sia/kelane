@@ -41,3 +41,4 @@ When implementing new features or debugging:
 2.  **Build Tool:** The project utilizes Vite for fast bundling and HMR.
 3.  **Styling/UI:** Use `shadcn/ui` components styled with `TailwindCSS`.
 4.  **Component Design:** Adhere strictly to component best practices: keep components small, highly focused, and reusable.
+5. **State Management:** Use Zustand and add stores under the src/store directory.

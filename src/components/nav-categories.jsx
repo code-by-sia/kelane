@@ -46,13 +46,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import { useCategoryManager } from "@/hooks/category";
+
+import useRecipeStore from "@/store/recipe";
 
 export function NavCategories() {
   const { isMobile } = useSidebar();
   const { pathname } = useLocation();
 
-  const { categories } = useCategoryManager();
+  const categories = useRecipeStore((state) => state.categories);
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">

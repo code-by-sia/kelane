@@ -1,12 +1,16 @@
 import CategoryPage from "./category-page";
-import { useRecipeManager } from "@/hooks/recipe";
+
+import useRecipeStore from "@/store/recipe";
 import { useMemo } from "react";
 
 export function FavoritesPage() {
-  const { recipes } = useRecipeManager();
+  const getFavoriteRecipes = useRecipeStore(
+    (store) => store.getFavoriteRecipes,
+  );
+
   const likedRecipes = useMemo(
-    () => recipes.filter((recipe) => recipe.liked),
-    [recipes],
+    () => getFavoriteRecipes(),
+    [getFavoriteRecipes],
   );
 
   return <CategoryPage id="Favorites" recipes={likedRecipes} />;

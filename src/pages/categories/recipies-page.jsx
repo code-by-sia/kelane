@@ -1,10 +1,8 @@
-import { useCategoryManager } from "@/hooks/category";
 import SidebarPage from "../sidebar-page";
 import Repeat from "@/components/repeat";
 import {
   ChevronRight,
   Columns3Icon,
-  FolderIcon,
   GalleryThumbnailsIcon,
   LayoutGridIcon,
   LayoutListIcon,
@@ -12,8 +10,9 @@ import {
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router";
-import { useCategoryRecipes } from "@/hooks/recipe";
 import { RecipeViewer } from "@/components/recipe";
+import useRecipeStore from "@/store/recipe";
+import { useMemo } from "react";
 
 export function RecipeItem({
   code,
@@ -48,7 +47,13 @@ export function RecipeItem({
 
 export default function RecipiesPage() {
   const { id, recipeId } = useParams();
-  const recipes = useCategoryRecipes(id);
+  const getRecipesInCategory = useRecipeStore(
+    (store) => store.getRecipesInCategory,
+  );
+  const recipes = useMemo(
+    () => getRecipesInCategory(id),
+    [getRecipesInCategory, id],
+  );
 
   return (
     <SidebarPage

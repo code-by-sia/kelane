@@ -1,12 +1,12 @@
 import CategoryPage from "./category-page";
-import { useRecipeManager } from "@/hooks/recipe";
+import useRecipeStore from "@/store/recipe";
 import { useMemo } from "react";
 
 export function WantToCookPage() {
-  const { recipes } = useRecipeManager();
+  const getFlaggedRecipes = useRecipeStore((store) => store.getFlaggedRecipes);
   const flaggedRecipes = useMemo(
-    () => recipes.filter((recipe) => recipe.flagged),
-    [recipes],
+    () => getFlaggedRecipes(),
+    [getFlaggedRecipes],
   );
 
   return <CategoryPage id="Want To Cook" recipes={flaggedRecipes} />;

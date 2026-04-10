@@ -1,14 +1,15 @@
 import CategoryPage from "./category-page";
-import { useRecipeManager } from "@/hooks/recipe";
-import { useEffect } from "react";
+import useRecipeStore from "@/store/recipe";
 import { useMemo } from "react";
 
 export function UncategorizedPage() {
-  const { recipes } = useRecipeManager();
+  const getUncategorizedRecipes = useRecipeStore(
+    (store) => store.getUncategorizedRecipes,
+  );
 
   const uncategorizedRecipes = useMemo(
-    () => recipes.filter((recipe) => recipe.categories.length === 0),
-    [recipes],
+    () => getUncategorizedRecipes(),
+    [getUncategorizedRecipes],
   );
 
   return <CategoryPage id="Uncategorized" recipes={uncategorizedRecipes} />;
