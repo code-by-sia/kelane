@@ -42,3 +42,4 @@ When implementing new features or debugging:
 3.  **Styling/UI:** Use `shadcn/ui` components styled with `TailwindCSS`.
 4.  **Component Design:** Adhere strictly to component best practices: keep components small, highly focused, and reusable.
 5. **State Management:** Use Zustand and add stores under the src/store directory.
+6. **Version Control Workflow:** All future commits must adhere to [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) guidelines to ensure clear, machine-readable release history. Use prefixes like `feat(scope):`, `fix(scope):`, `docs:`, `chore(scope):`, etc.
