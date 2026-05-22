@@ -1,57 +1,41 @@
 import { Button } from "@/components/ui/button";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
-import { IconBrowser } from "@tabler/icons-react";
-import { Compass, ShieldAlertIcon } from "lucide-react";
-import { DynamicIcon } from "lucide-react/dynamic";
-
-function Option({ title, description, icon, disabled = false }) {
-  return (
-    <Item variant="outline" className={disabled ? "bg-neutral-50" : "bg-white"}>
-      <ItemMedia variant="icon">
-        <DynamicIcon name={icon} />
-      </ItemMedia>
-      <ItemContent>
-        <ItemTitle>{title}</ItemTitle>
-        <ItemDescription>{description}</ItemDescription>
-      </ItemContent>
-      <ItemActions>
-        <Button size="sm" variant="outline" disabled={disabled}>
-          Select
-        </Button>
-      </ItemActions>
-    </Item>
-  );
-}
+import { DatabaseIcon, CloudOffIcon } from "lucide-react";
 
 export default function DataStorage({ onNext }) {
   return (
-    <div className="flex flex-col  h-full max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold my-3 mb-6">Choose data provider</h1>
-      <div className="flex w-full max-w-lg flex-col gap-3">
-        <Option
-          title="Browser Storage"
-          description="Store your data in the browser's local storage."
-          icon="compass"
-        />
-        <Option
-          title="Samal Cloud Storage"
-          description="Store your data in a Samal Storage Service."
-          icon="cloud"
-          disabled={true}
-        />
-        <Option
-          title="Google Drive"
-          description="Store your data in a Google Drive."
-          icon="folder"
-          disabled={true}
-        />
+    <div className="flex flex-col justify-center h-full max-w-2xl mx-auto gap-6">
+      <div>
+        <h1 className="text-2xl font-light mb-1">Your data stays with you</h1>
+        <p className="text-muted-foreground text-sm">
+          Kelane stores everything locally in your browser — no account, no cloud, no tracking.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4">
+        <div className="flex items-start gap-4 p-5 rounded-xl border bg-white">
+          <DatabaseIcon size={28} className="text-rose-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium mb-1">Browser localStorage</p>
+            <p className="text-sm text-muted-foreground">
+              All recipes, grocery lists, and meal plans are saved in your
+              browser's localStorage. Data persists across sessions but is
+              tied to this browser and device.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-start gap-4 p-5 rounded-xl border bg-neutral-50">
+          <CloudOffIcon size={28} className="text-muted-foreground shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium mb-1 text-muted-foreground">Cloud sync</p>
+            <p className="text-sm text-muted-foreground">
+              Cloud backup and cross-device sync — coming soon.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <Button onClick={onNext}>Got it</Button>
       </div>
     </div>
   );

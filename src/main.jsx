@@ -12,6 +12,7 @@ import { FavoritesPage } from "./pages/categories/favorites";
 import { UncategorizedPage } from "./pages/categories/uncategorized";
 import GrocoriesPage from "./pages/grocories/grocories-page";
 import CookPage from "./pages/kitchen/cook";
+import SetupPage from "./setup/index";
 
 import "./index.css";
 import CategoriesPage from "./pages/categories/categories-page";
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")).render(
     <Toaster richColors position="top-right" />
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/setup" element={<SetupPage />} />
       <Route path="/cook/:recipeId" element={<CookPage />} />
       <Route path="/categories/" element={<CategoriesPage />} />
       <Route path="/categories/:id" element={<RecipiesPage />} />
