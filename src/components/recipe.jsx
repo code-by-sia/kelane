@@ -21,6 +21,7 @@ import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
+import { SmartExpiryPicker } from "./smart-expiry-picker";
 import {
   Sheet,
   SheetContent,
@@ -169,25 +170,20 @@ function GroceriesSheet({ recipe }) {
               </div>
               {effectiveMissing.map((ing) =>
                 expandedIng === ing ? (
-                  <div key={ing} className="flex flex-col gap-1 py-1 pl-6">
+                  <div key={ing} className="flex flex-col gap-2 py-2 pl-6">
                     <span className="text-sm font-medium">{ing}</span>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        type="date"
-                        className="flex-1 h-7 text-xs"
-                        placeholder="Expiry (optional)"
-                        value={expiryDates[ing] || ""}
-                        onChange={(e) => setExpiry(ing, e.target.value)}
-                        autoFocus
+                    <div className="border rounded-lg p-2 bg-muted/30">
+                      <p className="text-xs text-muted-foreground mb-1.5">Expiry date (optional)</p>
+                      <SmartExpiryPicker
+                        value={expiryDates[ing] ?? null}
+                        onChange={(val) => setExpiry(ing, val)}
                       />
+                    </div>
+                    <div className="flex gap-2">
                       <Button size="xs" onClick={() => addOne(ing)}>
                         Add to list
                       </Button>
-                      <Button
-                        size="xs"
-                        variant="ghost"
-                        onClick={() => setExpandedIng(null)}
-                      >
+                      <Button size="xs" variant="ghost" onClick={() => setExpandedIng(null)}>
                         Cancel
                       </Button>
                     </div>

@@ -109,6 +109,35 @@ const useGroceriesStore = create(
         });
       },
 
+      // Update expiresAt for all fridge items whose id is in the ids Set
+      updateFridgeItemsExpiry: (ids, expiresAt) =>
+        set((state) => ({
+          fridgeItems: state.fridgeItems.map((f) =>
+            ids.has(f.id) ? { ...f, expiresAt: expiresAt ?? null } : f,
+          ),
+        })),
+
+      // Move a group of fridge items (by id Set) back to the to-buy list
+      moveFridgeToBuy: (ids) => {
+        const items = get().fridgeItems.filter((f) => ids.has(f.id));
+        if (!items.length) return;
+        const first = items[0];
+        set((state) => ({
+          fridgeItems: state.fridgeItems.filter((f) => !ids.has(f.id)),
+          toBuyItems: [
+            ...state.toBuyItems,
+            {
+              id: crypto.randomUUID(),
+              checked: false,
+              name: first.name,
+              quantity: first.quantity,
+              unit: first.unit,
+              expiresAt: null,
+            },
+          ],
+        }));
+      },
+
       // fridgeIds = Set of IDs that go to fridge; rest are just removed from list
       moveMultipleToFridge: (fridgeIds, removeIds, expiresAt) => {
         const items = get().toBuyItems.filter((i) => fridgeIds.has(i.id));

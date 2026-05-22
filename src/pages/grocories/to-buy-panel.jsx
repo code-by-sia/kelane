@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { SmartExpiryPicker } from "@/components/smart-expiry-picker";
 import useGroceriesStore from "@/store/groceries";
 
 const UNITS = ["pcs", "g", "kg", "ml", "L", "tbsp", "tsp", "cup"];
@@ -18,7 +19,7 @@ const EMPTY = { name: "", quantity: "", unit: "pcs" };
 
 function MoveFridgeDialog({ items, onConfirm, onCancel }) {
   const [toFridge, setToFridge] = useState(new Set(items.map((i) => i.id)));
-  const [expiresAt, setExpiresAt] = useState("");
+  const [expiresAt, setExpiresAt] = useState(null);
 
   const toggle = (id) =>
     setToFridge((prev) => {
@@ -45,9 +46,7 @@ function MoveFridgeDialog({ items, onConfirm, onCancel }) {
         <div className="flex flex-col gap-1 my-1">
           <div className="flex items-center gap-2 pb-1 border-b">
             <Checkbox checked={allChecked} onCheckedChange={toggleAll} />
-            <span className="text-xs text-muted-foreground uppercase tracking-wide">
-              All
-            </span>
+            <span className="text-xs text-muted-foreground uppercase tracking-wide">All</span>
           </div>
           {items.map((item) => (
             <div key={item.id} className="flex items-center gap-2 py-1">
@@ -65,24 +64,15 @@ function MoveFridgeDialog({ items, onConfirm, onCancel }) {
           ))}
         </div>
 
-        <div className="flex items-center gap-2 mt-2">
-          <span className="text-sm text-muted-foreground shrink-0">
-            Expiry date (optional)
-          </span>
-          <Input
-            type="date"
-            value={expiresAt}
-            onChange={(e) => setExpiresAt(e.target.value)}
-            className="flex-1"
-          />
+        <div className="border rounded-lg p-3 bg-muted/30 mt-1">
+          <p className="text-xs text-muted-foreground mb-2">Expiry date (optional)</p>
+          <SmartExpiryPicker value={expiresAt} onChange={setExpiresAt} />
         </div>
 
         <DialogFooter className="mt-2">
-          <Button variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
+          <Button variant="outline" onClick={onCancel}>Cancel</Button>
           <Button
-            onClick={() => onConfirm(toFridge, expiresAt || null)}
+            onClick={() => onConfirm(toFridge, expiresAt)}
             disabled={items.length === 0}
           >
             <RefrigeratorIcon />
@@ -100,21 +90,15 @@ export default function ToBuyPanel() {
   const removeToBuyItem = useGroceriesStore((s) => s.removeToBuyItem);
   const removeToBuyItems = useGroceriesStore((s) => s.removeToBuyItems);
   const toggleToBuyItem = useGroceriesStore((s) => s.toggleToBuyItem);
-  const clearCheckedToBuyItems = useGroceriesStore(
-    (s) => s.clearCheckedToBuyItems,
-  );
+  const clearCheckedToBuyItems = useGroceriesStore((s) => s.clearCheckedToBuyItems);
   const moveToFridge = useGroceriesStore((s) => s.moveToFridge);
   const moveMultipleToFridge = useGroceriesStore((s) => s.moveMultipleToFridge);
 
   const [form, setForm] = useState(EMPTY);
+  const [formExpiry, setFormExpiry] = useState(null);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(new Set());
   const [moveDialogOpen, setMoveDialogOpen] = useState(false);
-
-  const field = (key) => ({
-    value: form[key],
-    onChange: (e) => setForm((f) => ({ ...f, [key]: e.target.value })),
-  });
 
   const submit = (e) => {
     e.preventDefault();
@@ -123,8 +107,10 @@ export default function ToBuyPanel() {
       name: form.name.trim(),
       quantity: form.quantity ? Number(form.quantity) : null,
       unit: form.unit,
+      expiresAt: formExpiry,
     });
     setForm(EMPTY);
+    setFormExpiry(null);
     setOpen(false);
   };
 
@@ -143,9 +129,7 @@ export default function ToBuyPanel() {
   };
 
   const handleMoveConfirm = (fridgeIds, expiresAt) => {
-    const removeOnly = new Set(
-      [...selected].filter((id) => !fridgeIds.has(id)),
-    );
+    const removeOnly = new Set([...selected].filter((id) => !fridgeIds.has(id)));
     moveMultipleToFridge(fridgeIds, removeOnly, expiresAt);
     setMoveDialogOpen(false);
     clearSelection();
@@ -153,13 +137,10 @@ export default function ToBuyPanel() {
 
   const checkedCount = toBuyItems.filter((i) => i.checked).length;
   const selectedItems = toBuyItems.filter((i) => selected.has(i.id));
-  const allSelected =
-    toBuyItems.length > 0 && selected.size === toBuyItems.length;
+  const allSelected = toBuyItems.length > 0 && selected.size === toBuyItems.length;
 
   const toggleAll = () =>
-    setSelected(
-      allSelected ? new Set() : new Set(toBuyItems.map((i) => i.id)),
-    );
+    setSelected(allSelected ? new Set() : new Set(toBuyItems.map((i) => i.id)));
 
   return (
     <div className="flex flex-col h-full">
@@ -193,14 +174,14 @@ export default function ToBuyPanel() {
               title="Move to fridge"
               onClick={() => moveToFridge(item.id)}
             >
-              <RefrigeratorIcon />
+              <RefrigeratorIcon size={14} />
             </Button>
             <Button
               variant="ghost"
               size="icon-sm"
               onClick={() => removeToBuyItem(item.id)}
             >
-              <Trash2Icon />
+              <Trash2Icon size={14} />
             </Button>
           </div>
         ))}
@@ -210,18 +191,12 @@ export default function ToBuyPanel() {
         <div className="border-t px-4 py-2 flex items-center gap-2 bg-accent">
           <Checkbox checked={allSelected} onCheckedChange={toggleAll} />
           <span className="text-sm flex-1">{selected.size} selected</span>
-          <Button size="sm" variant="ghost" onClick={clearSelection}>
-            Cancel
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setMoveDialogOpen(true)}
-          >
-            <RefrigeratorIcon /> To fridge
+          <Button size="sm" variant="ghost" onClick={clearSelection}>Cancel</Button>
+          <Button size="sm" variant="outline" onClick={() => setMoveDialogOpen(true)}>
+            <RefrigeratorIcon size={14} /> To fridge
           </Button>
           <Button size="sm" variant="destructive" onClick={batchDelete}>
-            <Trash2Icon /> Delete
+            <Trash2Icon size={14} /> Delete
           </Button>
         </div>
       )}
@@ -237,50 +212,52 @@ export default function ToBuyPanel() {
             Clear {checkedCount} checked
           </Button>
         )}
+
         {open ? (
           <form onSubmit={submit} className="flex flex-col gap-2">
-            <Input placeholder="Item name" autoFocus {...field("name")} />
+            <Input
+              placeholder="Item name"
+              autoFocus
+              value={form.name}
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            />
             <div className="flex gap-2">
               <Input
                 type="number"
                 min="0"
                 placeholder="Qty"
                 className="w-20"
-                {...field("quantity")}
+                value={form.quantity}
+                onChange={(e) => setForm((f) => ({ ...f, quantity: e.target.value }))}
               />
               <select
                 value={form.unit}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, unit: e.target.value }))
-                }
+                onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
                 className="border rounded-md px-2 text-sm bg-background"
               >
-                {UNITS.map((u) => (
-                  <option key={u}>{u}</option>
-                ))}
+                {UNITS.map((u) => <option key={u}>{u}</option>)}
               </select>
             </div>
+
+            <div className="border rounded-lg p-2.5 bg-muted/30">
+              <p className="text-xs text-muted-foreground mb-1.5">Expiry date (optional)</p>
+              <SmartExpiryPicker value={formExpiry} onChange={setFormExpiry} />
+            </div>
+
             <div className="flex gap-2 justify-end">
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => setOpen(false)}
+                onClick={() => { setOpen(false); setFormExpiry(null); }}
               >
                 Cancel
               </Button>
-              <Button type="submit" size="sm">
-                Add
-              </Button>
+              <Button type="submit" size="sm">Add</Button>
             </div>
           </form>
         ) : (
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full"
-            onClick={() => setOpen(true)}
-          >
+          <Button variant="outline" size="sm" className="w-full" onClick={() => setOpen(true)}>
             <PlusIcon /> Add item
           </Button>
         )}
