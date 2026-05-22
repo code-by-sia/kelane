@@ -4,32 +4,29 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ListTodoIcon, RefrigeratorIcon } from "lucide-react";
 import SidebarPage from "@/pages/sidebar-page";
-import { ListTodoIcon, Refrigerator, RefrigeratorIcon } from "lucide-react";
+import FridgePanel from "./fridge-panel";
+import ToBuyPanel from "./to-buy-panel";
 
 export default function GrocoriesPage() {
   return (
     <SidebarPage>
-      <ResizablePanelGroup orientation="horizontal">
-        <ResizablePanel>
+      <ResizablePanelGroup orientation="horizontal" className="h-full">
+        <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col">
           <Header>
-            {/* <SidebarTrigger />
-            <Separator
-              orientation="vertical"
-              className="mx-2 data-[orientation=vertical]:h-4"
-            />*/}
             <RefrigeratorIcon size={18} />
-            Fridge/In-Stock
+            Fridge / In-Stock
           </Header>
+          <FridgePanel />
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel>
+        <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col">
           <Header>
             <ListTodoIcon size={18} />
             To Buy List
           </Header>
+          <ToBuyPanel />
         </ResizablePanel>
       </ResizablePanelGroup>
     </SidebarPage>
