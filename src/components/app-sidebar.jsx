@@ -70,7 +70,7 @@ export function AppSidebar({ ...props }) {
         <NavFeeds items={data.feeds} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

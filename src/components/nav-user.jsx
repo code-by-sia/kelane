@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  IconCreditCard,
   IconDotsVertical,
   IconLogout,
-  IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react";
+import { UtensilsIcon } from "lucide-react";
+import { useNavigate } from "react-router";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,9 +24,27 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import useSetupStore from "@/store/setup";
 
-export function NavUser({ user }) {
+function initials(name) {
+  if (!name) return "?";
+  return name
+    .split(" ")
+    .map((w) => w[0]?.toUpperCase())
+    .slice(0, 2)
+    .join("");
+}
+
+export function NavUser() {
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
+  const profile = useSetupStore((s) => s.profile);
+  const preferences = useSetupStore((s) => s.preferences);
+  const resetSetup = useSetupStore((s) => s.resetSetup);
+
+  const name = profile?.name || "Chef";
+  const email = profile?.email || "";
+  const tags = preferences?.dietaryTags ?? [];
 
   return (
     <SidebarMenu>
@@ -37,14 +55,15 @@ export function NavUser({ user }) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarFallback className="rounded-lg bg-rose-100 text-rose-700 text-xs font-semibold">
+                  {initials(name)}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{name}</span>
                 <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
+                  {email || (tags.length > 0 ? tags.join(", ") : "Kelane")}
                 </span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
@@ -59,36 +78,45 @@ export function NavUser({ user }) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg bg-rose-100 text-rose-700 text-xs font-semibold">
+                    {initials(name)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
-                  <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
-                  </span>
+                  <span className="truncate font-medium">{name}</span>
+                  {email && (
+                    <span className="text-muted-foreground truncate text-xs">
+                      {email}
+                    </span>
+                  )}
+                  {tags.length > 0 && (
+                    <span className="text-muted-foreground truncate text-xs">
+                      {tags.join(" · ")}
+                    </span>
+                  )}
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/setup")}>
                 <IconUserCircle />
-                Account
+                Edit profile
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
+                <UtensilsIcon size={16} />
+                Preferences
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                resetSetup();
+                navigate("/setup");
+              }}
+            >
               <IconLogout />
-              Log out
+              Reset onboarding
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

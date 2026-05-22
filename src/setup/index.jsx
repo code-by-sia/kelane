@@ -4,6 +4,7 @@ import Steps from "@/components/step";
 import Welcome from "./terms";
 import Preferences from "./preferences";
 import DataStorage from "./storage";
+import UserSetup from "./user-setup";
 import useSetupStore from "@/store/setup";
 import { Button } from "@/components/ui/button";
 
@@ -28,9 +29,14 @@ function Side({ step, setStep }) {
             icon: 3,
           },
           {
+            title: "About you",
+            subtitle: "Your name and email",
+            icon: 4,
+          },
+          {
             title: "All Set",
             subtitle: "Start cooking",
-            icon: 4,
+            icon: 5,
           },
         ]}
         value={step}
@@ -85,7 +91,8 @@ export default function SetupPage() {
           {step === 0 && <Welcome onNext={() => setStep(1)} />}
           {step === 1 && <Preferences onNext={() => setStep(2)} />}
           {step === 2 && <DataStorage onNext={() => setStep(3)} />}
-          {step === 3 && <SetupComplete />}
+          {step === 3 && <UserSetup onNext={() => setStep(4)} />}
+          {step === 4 && <SetupComplete />}
         </div>
         <Side step={step} setStep={setStep} />
       </main>
