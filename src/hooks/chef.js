@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 
-export function useChef(recipe) {
+export function useChef(recipe, { onStepFinished } = {}) {
   const [context, setContext] = useState({});
 
-  if (!recipe?.steps) return [];
+  if (!recipe?.steps) return { steps: [], startStep: () => {}, finishStep: () => {} };
 
   const steps = useMemo(
     () =>
@@ -12,8 +12,9 @@ export function useChef(recipe) {
         action: step.action,
         status: context[step.id]?.status || "unknown",
         duration: step.duration,
+        ingredients: step.ingredients ?? [],
         dependsOn: step.dependsOn.filter(
-          (dep) => context[dep]?.status != "completed",
+          (dep) => context[dep]?.status !== "completed",
         ),
       })),
     [context, recipe.steps],
@@ -31,6 +32,10 @@ export function useChef(recipe) {
       ...prev,
       [stepId]: { status: "completed" },
     }));
+    const step = recipe.steps.find((s) => s.id === stepId);
+    if (step && onStepFinished) {
+      onStepFinished(step);
+    }
   };
 
   return { steps, startStep, finishStep };

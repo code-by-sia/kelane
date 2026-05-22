@@ -83,6 +83,32 @@ const useGroceriesStore = create(
         }));
       },
 
+      // Deduct quantity from a fridge item by name (substring match). Removes if qty reaches 0.
+      deductFridgeIngredient: (name, quantity) => {
+        set((state) => {
+          const lower = name.toLowerCase();
+          const item = state.fridgeItems.find((f) =>
+            f.name.toLowerCase().includes(lower) || lower.includes(f.name.toLowerCase()),
+          );
+          if (!item) return state;
+          if (item.quantity == null || quantity == null) {
+            // no quantity tracking — just remove
+            return {
+              fridgeItems: state.fridgeItems.filter((f) => f.id !== item.id),
+            };
+          }
+          const remaining = item.quantity - quantity;
+          return {
+            fridgeItems:
+              remaining <= 0
+                ? state.fridgeItems.filter((f) => f.id !== item.id)
+                : state.fridgeItems.map((f) =>
+                    f.id === item.id ? { ...f, quantity: remaining } : f,
+                  ),
+          };
+        });
+      },
+
       // fridgeIds = Set of IDs that go to fridge; rest are just removed from list
       moveMultipleToFridge: (fridgeIds, removeIds, expiresAt) => {
         const items = get().toBuyItems.filter((i) => fridgeIds.has(i.id));
