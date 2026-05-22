@@ -15,6 +15,7 @@ import {
 import { ChefHatIcon, CookingPotIcon, SquareTerminal } from "lucide-react";
 import { NavCategories } from "./nav-categories";
 import { NavFeeds } from "./nav-feeds";
+import { SearchTrigger } from "./recipe-search";
 
 const data = {
   user: {
@@ -62,6 +63,9 @@ export function AppSidebar({ ...props }) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <div className="px-2 pt-1">
+          <SearchTrigger />
+        </div>
         <NavCategories />
         <NavFeeds items={data.feeds} />
       </SidebarContent>
