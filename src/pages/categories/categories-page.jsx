@@ -1,5 +1,5 @@
+import { useState } from "react";
 import SidebarPage from "../sidebar-page";
-import Repeat from "@/components/repeat";
 import {
   Columns3Icon,
   FolderIcon,
@@ -10,6 +10,15 @@ import {
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import useRecipeStore from "@/store/recipe";
+
+const GALLERY_COLORS = [
+  "bg-yellow-100 border-yellow-200",
+  "bg-blue-100 border-blue-200",
+  "bg-green-100 border-green-200",
+  "bg-purple-100 border-purple-200",
+  "bg-pink-100 border-pink-200",
+  "bg-orange-100 border-orange-200",
+];
 
 export function CategoryFolder({ name, recipes = 0 }) {
   return (
@@ -31,47 +40,125 @@ export function CategoryFolder({ name, recipes = 0 }) {
   );
 }
 
+function CategoryListRow({ name, recipes = 0 }) {
+  return (
+    <a
+      href={`/categories/${name}`}
+      className="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors border-b last:border-b-0"
+    >
+      <FolderIcon
+        fill="var(--color-yellow-200)"
+        stroke="var(--color-yellow-600)"
+        size="20"
+        strokeWidth={0.6}
+      />
+      <span className="flex-1 text-sm font-medium">{name}</span>
+      <span className="text-xs text-muted-foreground">{recipes || 0} recipes</span>
+    </a>
+  );
+}
+
+function CategoryGalleryCard({ name, recipes = 0, colorClass }) {
+  return (
+    <a
+      href={`/categories/${name}`}
+      className={`flex flex-col rounded-xl border overflow-hidden hover:shadow-md transition-shadow ${colorClass}`}
+    >
+      <div className="h-24 flex items-center justify-center">
+        <FolderIcon
+          fill="var(--color-yellow-200)"
+          stroke="var(--color-yellow-600)"
+          size="52"
+          strokeWidth={0.4}
+        />
+      </div>
+      <div className="bg-background px-4 py-3 border-t">
+        <p className="font-medium text-sm">{name}</p>
+        <p className="text-xs text-muted-foreground">{recipes || 0} recipes</p>
+      </div>
+    </a>
+  );
+}
+
+const VIEWS = [
+  { id: "grid", icon: LayoutGridIcon },
+  { id: "list", icon: LayoutListIcon },
+  { id: "columns", icon: Columns3Icon },
+  { id: "gallery", icon: GalleryThumbnailsIcon },
+];
+
 export default function CategoriesPage() {
   const getCategoriesWithCounts = useRecipeStore(
     (store) => store.getCategoriesWithCounts,
   );
   const categories = getCategoriesWithCounts();
+
+  const [view, setView] = useState(
+    () => localStorage.getItem("categories.view") || "grid",
+  );
+
+  const changeView = (v) => {
+    setView(v);
+    localStorage.setItem("categories.view", v);
+  };
+
   return (
     <SidebarPage
       title="Recipes"
       header={
         <div>
           <ButtonGroup>
-            <Button
-              variant="outline"
-              className="bg-gray-600 text-white"
-              size="sm"
-            >
-              <LayoutGridIcon />
-            </Button>
-            <Button variant="outline" size="sm" className="cursor-pointer">
-              <LayoutListIcon />
-            </Button>
-            <Button variant="outline" size="sm" className="cursor-pointer">
-              <Columns3Icon />
-            </Button>
-            <Button variant="outline" size="sm" className="cursor-pointer">
-              <GalleryThumbnailsIcon />
-            </Button>
+            {VIEWS.map(({ id, icon: Icon }) => (
+              <Button
+                key={id}
+                variant="outline"
+                size="sm"
+                className={`cursor-pointer ${view === id ? "bg-gray-600 text-white hover:bg-gray-700 hover:text-white" : ""}`}
+                onClick={() => changeView(id)}
+              >
+                <Icon />
+              </Button>
+            ))}
           </ButtonGroup>
         </div>
       }
     >
-      <div className="p-6 gap-6 flex flex-wrap">
-        <Repeat
-          value={categories.map(({ name, recipes }) => ({
-            code: name,
-            name,
-            recipes,
-          }))}
-          view={CategoryFolder}
-        />
-      </div>
+      {view === "grid" && (
+        <div className="p-6 gap-6 flex flex-wrap">
+          {categories.map(({ name, recipes }) => (
+            <CategoryFolder key={name} name={name} recipes={recipes} />
+          ))}
+        </div>
+      )}
+
+      {view === "list" && (
+        <div className="divide-y">
+          {categories.map(({ name, recipes }) => (
+            <CategoryListRow key={name} name={name} recipes={recipes} />
+          ))}
+        </div>
+      )}
+
+      {view === "columns" && (
+        <div className="p-6 grid grid-cols-3 gap-4">
+          {categories.map(({ name, recipes }) => (
+            <CategoryFolder key={name} name={name} recipes={recipes} />
+          ))}
+        </div>
+      )}
+
+      {view === "gallery" && (
+        <div className="p-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {categories.map(({ name, recipes }, i) => (
+            <CategoryGalleryCard
+              key={name}
+              name={name}
+              recipes={recipes}
+              colorClass={GALLERY_COLORS[i % GALLERY_COLORS.length]}
+            />
+          ))}
+        </div>
+      )}
     </SidebarPage>
   );
 }
