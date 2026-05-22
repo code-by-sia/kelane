@@ -3,22 +3,113 @@ import { PlusIcon, Trash2Icon, RefrigeratorIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import useGroceriesStore from "@/store/groceries";
 
 const UNITS = ["pcs", "g", "kg", "ml", "L", "tbsp", "tsp", "cup"];
-
 const EMPTY = { name: "", quantity: "", unit: "pcs" };
+
+function MoveFridgeDialog({ items, onConfirm, onCancel }) {
+  const [toFridge, setToFridge] = useState(new Set(items.map((i) => i.id)));
+  const [expiresAt, setExpiresAt] = useState("");
+
+  const toggle = (id) =>
+    setToFridge((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
+  const allChecked = toFridge.size === items.length;
+  const toggleAll = () =>
+    setToFridge(allChecked ? new Set() : new Set(items.map((i) => i.id)));
+
+  return (
+    <Dialog open onOpenChange={onCancel}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Move to fridge</DialogTitle>
+          <DialogDescription>
+            Check which items to add to your fridge stock. Unchecked items will
+            be removed from the buy list without being added to the fridge.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-1 my-1">
+          <div className="flex items-center gap-2 pb-1 border-b">
+            <Checkbox checked={allChecked} onCheckedChange={toggleAll} />
+            <span className="text-xs text-muted-foreground uppercase tracking-wide">
+              All
+            </span>
+          </div>
+          {items.map((item) => (
+            <div key={item.id} className="flex items-center gap-2 py-1">
+              <Checkbox
+                checked={toFridge.has(item.id)}
+                onCheckedChange={() => toggle(item.id)}
+              />
+              <span className="flex-1 text-sm">{item.name}</span>
+              {item.quantity && (
+                <span className="text-xs text-muted-foreground">
+                  {item.quantity} {item.unit}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2 mt-2">
+          <span className="text-sm text-muted-foreground shrink-0">
+            Expiry date (optional)
+          </span>
+          <Input
+            type="date"
+            value={expiresAt}
+            onChange={(e) => setExpiresAt(e.target.value)}
+            className="flex-1"
+          />
+        </div>
+
+        <DialogFooter className="mt-2">
+          <Button variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => onConfirm(toFridge, expiresAt || null)}
+            disabled={items.length === 0}
+          >
+            <RefrigeratorIcon />
+            Move {toFridge.size > 0 ? toFridge.size : "none"} to fridge
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export default function ToBuyPanel() {
   const toBuyItems = useGroceriesStore((s) => s.toBuyItems);
   const addToBuyItem = useGroceriesStore((s) => s.addToBuyItem);
   const removeToBuyItem = useGroceriesStore((s) => s.removeToBuyItem);
+  const removeToBuyItems = useGroceriesStore((s) => s.removeToBuyItems);
   const toggleToBuyItem = useGroceriesStore((s) => s.toggleToBuyItem);
-  const clearCheckedToBuyItems = useGroceriesStore((s) => s.clearCheckedToBuyItems);
+  const clearCheckedToBuyItems = useGroceriesStore(
+    (s) => s.clearCheckedToBuyItems,
+  );
   const moveToFridge = useGroceriesStore((s) => s.moveToFridge);
+  const moveMultipleToFridge = useGroceriesStore((s) => s.moveMultipleToFridge);
 
   const [form, setForm] = useState(EMPTY);
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(new Set());
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
 
   const field = (key) => ({
     value: form[key],
@@ -37,7 +128,38 @@ export default function ToBuyPanel() {
     setOpen(false);
   };
 
+  const toggleSelect = (id) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
+  const clearSelection = () => setSelected(new Set());
+
+  const batchDelete = () => {
+    removeToBuyItems(selected);
+    clearSelection();
+  };
+
+  const handleMoveConfirm = (fridgeIds, expiresAt) => {
+    const removeOnly = new Set(
+      [...selected].filter((id) => !fridgeIds.has(id)),
+    );
+    moveMultipleToFridge(fridgeIds, removeOnly, expiresAt);
+    setMoveDialogOpen(false);
+    clearSelection();
+  };
+
   const checkedCount = toBuyItems.filter((i) => i.checked).length;
+  const selectedItems = toBuyItems.filter((i) => selected.has(i.id));
+  const allSelected =
+    toBuyItems.length > 0 && selected.size === toBuyItems.length;
+
+  const toggleAll = () =>
+    setSelected(
+      allSelected ? new Set() : new Set(toBuyItems.map((i) => i.id)),
+    );
 
   return (
     <div className="flex flex-col h-full">
@@ -46,15 +168,18 @@ export default function ToBuyPanel() {
           <p className="text-sm text-muted-foreground p-4">Nothing to buy.</p>
         )}
         {toBuyItems.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center gap-3 px-4 py-2 group"
-          >
+          <div key={item.id} className="flex items-center gap-2 px-4 py-2">
+            <Checkbox
+              checked={selected.has(item.id)}
+              onCheckedChange={() => toggleSelect(item.id)}
+            />
             <Checkbox
               checked={item.checked}
               onCheckedChange={() => toggleToBuyItem(item.id)}
             />
-            <span className={`flex-1 text-sm ${item.checked ? "line-through text-muted-foreground" : "font-medium"}`}>
+            <span
+              className={`flex-1 text-sm ${item.checked ? "line-through text-muted-foreground" : "font-medium"}`}
+            >
               {item.name}
             </span>
             {item.quantity && (
@@ -81,8 +206,28 @@ export default function ToBuyPanel() {
         ))}
       </div>
 
+      {selected.size > 0 && (
+        <div className="border-t px-4 py-2 flex items-center gap-2 bg-accent">
+          <Checkbox checked={allSelected} onCheckedChange={toggleAll} />
+          <span className="text-sm flex-1">{selected.size} selected</span>
+          <Button size="sm" variant="ghost" onClick={clearSelection}>
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setMoveDialogOpen(true)}
+          >
+            <RefrigeratorIcon /> To fridge
+          </Button>
+          <Button size="sm" variant="destructive" onClick={batchDelete}>
+            <Trash2Icon /> Delete
+          </Button>
+        </div>
+      )}
+
       <div className="border-t p-4 flex flex-col gap-2">
-        {checkedCount > 0 && (
+        {checkedCount > 0 && selected.size === 0 && (
           <Button
             variant="ghost"
             size="sm"
@@ -105,25 +250,49 @@ export default function ToBuyPanel() {
               />
               <select
                 value={form.unit}
-                onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, unit: e.target.value }))
+                }
                 className="border rounded-md px-2 text-sm bg-background"
               >
-                {UNITS.map((u) => <option key={u}>{u}</option>)}
+                {UNITS.map((u) => (
+                  <option key={u}>{u}</option>
+                ))}
               </select>
             </div>
             <div className="flex gap-2 justify-end">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit" size="sm">Add</Button>
+              <Button type="submit" size="sm">
+                Add
+              </Button>
             </div>
           </form>
         ) : (
-          <Button variant="outline" size="sm" className="w-full" onClick={() => setOpen(true)}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => setOpen(true)}
+          >
             <PlusIcon /> Add item
           </Button>
         )}
       </div>
+
+      {moveDialogOpen && (
+        <MoveFridgeDialog
+          items={selectedItems}
+          onConfirm={handleMoveConfirm}
+          onCancel={() => setMoveDialogOpen(false)}
+        />
+      )}
     </div>
   );
 }

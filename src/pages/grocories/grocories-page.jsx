@@ -12,7 +12,7 @@ import ToBuyPanel from "./to-buy-panel";
 export default function GrocoriesPage() {
   return (
     <SidebarPage>
-      <ResizablePanelGroup orientation="horizontal" className="h-full">
+      <ResizablePanelGroup orientation="horizontal" style={{ height: "100svh" }}>
         <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col">
           <Header>
             <RefrigeratorIcon size={18} />

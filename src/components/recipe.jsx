@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   AppleIcon,
@@ -17,6 +17,7 @@ import {
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { Input } from "./ui/input";
 import {
   Sheet,
   SheetContent,
@@ -60,15 +61,30 @@ function GroceriesSheet({ recipe }) {
     };
   }, [recipe.ingredients, fridgeItems]);
 
+  // expandedIng = the ingredient string currently showing the expiry input
+  const [expandedIng, setExpandedIng] = useState(null);
+  const [expiryDates, setExpiryDates] = useState({});
+
+  const setExpiry = (ing, val) =>
+    setExpiryDates((d) => ({ ...d, [ing]: val }));
+
   const addOne = (ingredient) => {
     const parsed = parseIngredient(ingredient);
-    addToBuyItem(parsed);
+    addToBuyItem({ ...parsed, expiresAt: expiryDates[ingredient] || null });
     toast.success(`Added "${parsed.name}" to buy list`);
+    setExpandedIng(null);
   };
 
   const addAllMissing = () => {
-    missing.forEach((ing) => addToBuyItem(parseIngredient(ing)));
-    toast.success(`Added ${missing.length} item${missing.length !== 1 ? "s" : ""} to buy list`);
+    missing.forEach((ing) => {
+      addToBuyItem({
+        ...parseIngredient(ing),
+        expiresAt: expiryDates[ing] || null,
+      });
+    });
+    toast.success(
+      `Added ${missing.length} item${missing.length !== 1 ? "s" : ""} to buy list`,
+    );
   };
 
   return (
@@ -83,7 +99,8 @@ function GroceriesSheet({ recipe }) {
         <SheetHeader>
           <SheetTitle>Groceries</SheetTitle>
           <SheetDescription>
-            {recipe.name} · {inStock.length}/{recipe.ingredients?.length ?? 0} ingredients in stock
+            {recipe.name} · {inStock.length}/{recipe.ingredients?.length ?? 0}{" "}
+            ingredients in stock
           </SheetDescription>
         </SheetHeader>
 
@@ -97,7 +114,10 @@ function GroceriesSheet({ recipe }) {
                 const match = findStockMatch(ing, fridgeItems);
                 return (
                   <div key={ing} className="flex items-center gap-2 py-1">
-                    <CheckCircle2Icon size={16} className="shrink-0 text-green-500" />
+                    <CheckCircle2Icon
+                      size={16}
+                      className="shrink-0 text-green-500"
+                    />
                     <span className="flex-1 text-sm">{ing}</span>
                     {match && (
                       <span className="text-xs text-muted-foreground">
@@ -115,15 +135,48 @@ function GroceriesSheet({ recipe }) {
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">
                 Missing
               </h3>
-              {missing.map((ing) => (
-                <div key={ing} className="flex items-center gap-2 py-1">
-                  <XCircleIcon size={16} className="shrink-0 text-rose-400" />
-                  <span className="flex-1 text-sm">{ing}</span>
-                  <Button size="xs" variant="outline" onClick={() => addOne(ing)}>
-                    Add
-                  </Button>
-                </div>
-              ))}
+              {missing.map((ing) =>
+                expandedIng === ing ? (
+                  <div key={ing} className="flex flex-col gap-1 py-1 pl-6">
+                    <span className="text-sm font-medium">{ing}</span>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="date"
+                        className="flex-1 h-7 text-xs"
+                        placeholder="Expiry (optional)"
+                        value={expiryDates[ing] || ""}
+                        onChange={(e) => setExpiry(ing, e.target.value)}
+                        autoFocus
+                      />
+                      <Button size="xs" onClick={() => addOne(ing)}>
+                        Add to list
+                      </Button>
+                      <Button
+                        size="xs"
+                        variant="ghost"
+                        onClick={() => setExpandedIng(null)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div key={ing} className="flex items-center gap-2 py-1">
+                    <XCircleIcon
+                      size={16}
+                      className="shrink-0 text-rose-400"
+                    />
+                    <span className="flex-1 text-sm">{ing}</span>
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onClick={() => setExpandedIng(ing)}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                ),
+              )}
             </section>
           )}
 
