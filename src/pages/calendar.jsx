@@ -1,6 +1,7 @@
 import * as React from "react";
-import { format } from "date-fns";
-import { PlusIcon, Trash2Icon, UtensilsIcon } from "lucide-react";
+import { addDays, format } from "date-fns";
+import { PlusIcon, ShoppingCartIcon, Trash2Icon, UtensilsIcon } from "lucide-react";
+import { toast } from "sonner";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import {
   Sheet,
@@ -21,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import SidebarPage from "@/pages/sidebar-page";
 import useCalendarStore from "@/store/calendar";
 import useRecipeStore from "@/store/recipe";
+import useGroceriesStore from "@/store/groceries";
 
 const SLOTS = ["breakfast", "lunch", "dinner", "snack"];
 const SLOT_COLORS = {
@@ -204,15 +206,74 @@ function DaySheet({ dateKey, onClose }) {
   );
 }
 
+function isInStock(ingredient, fridgeItems) {
+  return fridgeItems.some((item) =>
+    ingredient.toLowerCase().includes(item.name.toLowerCase()),
+  );
+}
+
+function parseIngredient(str) {
+  const match = str.match(/^(\d+\.?\d*)\s*(g|kg|ml|l|tbsp|tsp|cup)?\s*(.+)$/i);
+  if (!match) return { name: str.trim(), quantity: null, unit: "pcs" };
+  const [, qty, unit, name] = match;
+  return { name: name.trim(), quantity: Number(qty), unit: unit?.toLowerCase() || "pcs" };
+}
+
 export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = React.useState(null);
+  const meals = useCalendarStore((s) => s.meals);
+  const getRecipe = useRecipeStore((s) => s.getRecipe);
+  const fridgeItems = useGroceriesStore((s) => s.fridgeItems);
+  const toBuyItems = useGroceriesStore((s) => s.toBuyItems);
+  const addToBuyItem = useGroceriesStore((s) => s.addToBuyItem);
+
+  const generateShoppingList = () => {
+    const today = new Date();
+    const nextSevenDays = Array.from({ length: 7 }, (_, i) =>
+      format(addDays(today, i), "yyyy-MM-dd"),
+    );
+
+    const allRecipeCodes = new Set(
+      nextSevenDays.flatMap((d) => (meals[d] ?? []).map((m) => m.recipeCode)),
+    );
+
+    let added = 0;
+    for (const code of allRecipeCodes) {
+      const recipe = getRecipe(code);
+      if (!recipe?.ingredients) continue;
+      for (const ing of recipe.ingredients) {
+        if (isInStock(ing, fridgeItems)) continue;
+        const parsed = parseIngredient(ing);
+        const alreadyInList = toBuyItems.some(
+          (t) => t.name.toLowerCase() === parsed.name.toLowerCase(),
+        );
+        if (alreadyInList) continue;
+        addToBuyItem(parsed);
+        added++;
+      }
+    }
+
+    if (added === 0) {
+      toast.info("Nothing to add — all ingredients are in stock or already in your list.");
+    } else {
+      toast.success(`Added ${added} item${added !== 1 ? "s" : ""} to your buy list.`);
+    }
+  };
 
   const handleDayClick = (date) => {
     setSelectedDate(format(date, "yyyy-MM-dd"));
   };
 
   return (
-    <SidebarPage>
+    <SidebarPage
+      title="Meal Calendar"
+      header={
+        <Button size="sm" variant="outline" onClick={generateShoppingList}>
+          <ShoppingCartIcon size={14} />
+          Generate shopping list (7 days)
+        </Button>
+      }
+    >
       <Calendar
         mode="single"
         numberOfMonths={6}
