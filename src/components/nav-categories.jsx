@@ -34,6 +34,7 @@ import {
   BookmarkXIcon,
   ChevronRight,
   Clock9Icon,
+  CompassIcon,
   EllipsisIcon,
   FlagIcon,
   HeartIcon,
@@ -60,6 +61,14 @@ export function NavCategories() {
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Recipes</SidebarGroupLabel>
       <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild isActive={pathname === `/`}>
+            <a href="/">
+              <CompassIcon />
+              <span>Explore</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarMenuButton asChild isActive={pathname === `/categories`}>
             <a href="/categories">
