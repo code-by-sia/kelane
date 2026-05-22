@@ -9,6 +9,7 @@ import {
   FlameIcon,
   LibraryBigIcon,
   MicrowaveIcon,
+  PencilIcon,
   RulerIcon,
   SaladIcon,
   Users2Icon,
@@ -31,6 +32,7 @@ import {
 } from "./ui/sheet";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
+import { RecipeFormDialog } from "./recipe-form";
 
 function parseIngredient(str) {
   const match = str.match(/^(\d+\.?\d*)\s*(g|kg|ml|l|tbsp|tsp|cup)?\s*(.+)$/i);
@@ -244,6 +246,7 @@ export function RecipeViewer({ recipeId }) {
   const go = useNavigate();
   const getRecipe = useRecipeStore((store) => store.getRecipe);
   const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
+  const [editOpen, setEditOpen] = useState(false);
 
   if (!recipe)
     return (
@@ -298,6 +301,10 @@ export function RecipeViewer({ recipeId }) {
           Cook
         </Button>
         <GroceriesSheet recipe={recipe} />
+        <Button variant="outline" onClick={() => setEditOpen(true)}>
+          <PencilIcon className="stroke-rose-600" size={18} />
+          Edit
+        </Button>
         <Button variant="outline">
           <AppleIcon className="stroke-rose-600" size={18} />
           Adjust to diet
@@ -307,6 +314,7 @@ export function RecipeViewer({ recipeId }) {
           Adjust
         </Button>
       </div>
+      <RecipeFormDialog open={editOpen} onOpenChange={setEditOpen} recipe={recipe} />
       <p className="p-3 px-5">
         <strong className="block pb-2">Summary:</strong>
         {recipe?.summary || "No description available"}
