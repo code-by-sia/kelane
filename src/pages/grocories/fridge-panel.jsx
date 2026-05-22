@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { differenceInDays, parseISO } from "date-fns";
-import { PlusIcon, Trash2Icon } from "lucide-react";
+import { CalendarOffIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -9,18 +9,61 @@ import useGroceriesStore from "@/store/groceries";
 
 const UNITS = ["pcs", "g", "kg", "ml", "L", "tbsp", "tsp", "cup"];
 
-function expiryBadge(expiresAt) {
-  if (!expiresAt) return null;
+function expiryDisplay(expiresAt) {
+  if (!expiresAt)
+    return (
+      <CalendarOffIcon
+        size={14}
+        className="text-muted-foreground/50"
+        title="No expiry date set"
+      />
+    );
   const days = differenceInDays(parseISO(expiresAt), new Date());
   if (days < 0) return <Badge variant="destructive">Expired</Badge>;
   if (days === 0) return <Badge variant="destructive">Today</Badge>;
-  if (days <= 3)
+  if (days === 1)
     return (
       <Badge className="bg-orange-400 text-white border-transparent">
-        {days}d left
+        Tomorrow
       </Badge>
     );
-  return <Badge variant="outline">{days}d left</Badge>;
+  if (days < 7)
+    return (
+      <Badge className="bg-orange-400 text-white border-transparent">
+        {days}d
+      </Badge>
+    );
+  if (days < 30)
+    return (
+      <Badge variant="outline">{Math.round(days / 7)}w</Badge>
+    );
+  return <Badge variant="outline">{Math.round(days / 30)}mo</Badge>;
+}
+
+// Group items by name (case-insensitive), summing quantities, using earliest expiry
+function groupFridgeItems(items) {
+  const map = new Map();
+  for (const item of items) {
+    const key = item.name.toLowerCase();
+    if (map.has(key)) {
+      const g = map.get(key);
+      g.ids.push(item.id);
+      if (item.quantity != null) g.quantity = (g.quantity ?? 0) + item.quantity;
+      // earliest non-null expiry
+      if (item.expiresAt) {
+        if (!g.expiresAt || item.expiresAt < g.expiresAt) g.expiresAt = item.expiresAt;
+      }
+    } else {
+      map.set(key, {
+        ids: [item.id],
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        expiresAt: item.expiresAt,
+      });
+    }
+  }
+  return [...map.values()];
 }
 
 const EMPTY = { name: "", quantity: "", unit: "pcs", expiresAt: "" };
@@ -34,6 +77,8 @@ export default function FridgePanel() {
   const [form, setForm] = useState(EMPTY);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(new Set());
+
+  const grouped = useMemo(() => groupFridgeItems(fridgeItems), [fridgeItems]);
 
   const field = (key) => ({
     value: form[key],
@@ -53,53 +98,59 @@ export default function FridgePanel() {
     setOpen(false);
   };
 
-  const toggleSelect = (id) =>
+  // Selection operates on group keys (first id in group)
+  const toggleSelect = (groupKey) =>
     setSelected((prev) => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      next.has(groupKey) ? next.delete(groupKey) : next.add(groupKey);
       return next;
     });
 
   const clearSelection = () => setSelected(new Set());
 
   const batchDelete = () => {
-    removeFridgeItems(selected);
+    const idsToDelete = new Set(
+      grouped
+        .filter((g) => selected.has(g.ids[0]))
+        .flatMap((g) => g.ids),
+    );
+    removeFridgeItems(idsToDelete);
     clearSelection();
   };
 
   const allSelected =
-    fridgeItems.length > 0 && selected.size === fridgeItems.length;
+    grouped.length > 0 && selected.size === grouped.length;
 
   const toggleAll = () =>
     setSelected(
-      allSelected ? new Set() : new Set(fridgeItems.map((i) => i.id)),
+      allSelected ? new Set() : new Set(grouped.map((g) => g.ids[0])),
     );
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto divide-y">
-        {fridgeItems.length === 0 && (
+        {grouped.length === 0 && (
           <p className="text-sm text-muted-foreground p-4">
             No items in fridge.
           </p>
         )}
-        {fridgeItems.map((item) => (
-          <div key={item.id} className="flex items-center gap-3 px-4 py-2">
+        {grouped.map((group) => (
+          <div key={group.ids[0]} className="flex items-center gap-3 px-4 py-2">
             <Checkbox
-              checked={selected.has(item.id)}
-              onCheckedChange={() => toggleSelect(item.id)}
+              checked={selected.has(group.ids[0])}
+              onCheckedChange={() => toggleSelect(group.ids[0])}
             />
-            <span className="flex-1 text-sm font-medium">{item.name}</span>
-            {item.quantity && (
+            <span className="flex-1 text-sm font-medium">{group.name}</span>
+            {group.quantity != null && (
               <span className="text-xs text-muted-foreground">
-                {item.quantity} {item.unit}
+                {group.quantity} {group.unit}
               </span>
             )}
-            {expiryBadge(item.expiresAt)}
+            {expiryDisplay(group.expiresAt)}
             <Button
               variant="ghost"
               size="icon-sm"
-              onClick={() => removeFridgeItem(item.id)}
+              onClick={() => removeFridgeItems(new Set(group.ids))}
             >
               <Trash2Icon />
             </Button>

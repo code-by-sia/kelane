@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import { Toaster } from "sonner";
 
 import { BrowserRouter, Route, Routes } from "react-router";
 import HomePage from "./pages/welcome";
@@ -18,6 +19,7 @@ import RecipiesPage from "./pages/categories/recipies-page";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
+    <Toaster richColors position="top-right" />
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/cook/:recipeId" element={<CookPage />} />
