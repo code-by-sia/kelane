@@ -8,6 +8,7 @@ import { ListTodoIcon, RefrigeratorIcon } from "lucide-react";
 import SidebarPage from "@/pages/sidebar-page";
 import FridgePanel from "./fridge-panel";
 import ToBuyPanel from "./to-buy-panel";
+import { ExpiryAlert } from "@/components/expiry-alert";
 
 export default function GrocoriesPage() {
   return (
@@ -18,6 +19,7 @@ export default function GrocoriesPage() {
             <RefrigeratorIcon size={18} />
             Fridge / In-Stock
           </Header>
+          <ExpiryAlert />
           <FridgePanel />
         </ResizablePanel>
         <ResizableHandle withHandle />
