@@ -31,6 +31,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./ui/popover";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
 import { RecipeFormDialog } from "./recipe-form";
@@ -238,11 +243,21 @@ function GroceriesSheet({ recipe }) {
   );
 }
 
+function scaleIngredient(str, factor) {
+  if (factor === 1) return str;
+  const match = str.match(/^(\d+\.?\d*)\s*(g|kg|ml|l|tbsp|tsp|cup)?\s*(.+)$/i);
+  if (!match) return str;
+  const [, qty, unit, name] = match;
+  const scaled = Math.round(Number(qty) * factor * 10) / 10;
+  return `${scaled}${unit ? ` ${unit}` : ""} ${name}`.trim();
+}
+
 export function RecipeViewer({ recipeId }) {
   const go = useNavigate();
   const getRecipe = useRecipeStore((store) => store.getRecipe);
   const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
   const [editOpen, setEditOpen] = useState(false);
+  const [scaledGuests, setScaledGuests] = useState(null); // null = use recipe default
 
   if (!recipe)
     return (
@@ -305,16 +320,78 @@ export function RecipeViewer({ recipeId }) {
           <AppleIcon className="stroke-rose-600" size={18} />
           Adjust to diet
         </Button>
-        <Button variant="outline">
-          <RulerIcon className="stroke-rose-600" size={18} />
-          Adjust
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline">
+              <RulerIcon className="stroke-rose-600" size={18} />
+              Adjust{scaledGuests !== null && scaledGuests !== (recipe.guests || 1)
+                ? ` (${scaledGuests})`
+                : ""}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-56 flex flex-col gap-3 p-4">
+            <p className="text-sm font-medium">Servings</p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setScaledGuests((g) => Math.max(1, (g ?? recipe.guests ?? 1) - 1))}
+                className="w-8 h-8 rounded-md border flex items-center justify-center text-lg hover:bg-accent cursor-pointer"
+              >
+                −
+              </button>
+              <span className="flex-1 text-center text-lg font-light">
+                {scaledGuests ?? recipe.guests ?? 1}
+              </span>
+              <button
+                type="button"
+                onClick={() => setScaledGuests((g) => (g ?? recipe.guests ?? 1) + 1)}
+                className="w-8 h-8 rounded-md border flex items-center justify-center text-lg hover:bg-accent cursor-pointer"
+              >
+                +
+              </button>
+            </div>
+            {scaledGuests !== null && scaledGuests !== (recipe.guests || 1) && (
+              <button
+                type="button"
+                onClick={() => setScaledGuests(null)}
+                className="text-xs text-muted-foreground hover:text-foreground text-center cursor-pointer"
+              >
+                Reset to {recipe.guests || 1}
+              </button>
+            )}
+          </PopoverContent>
+        </Popover>
       </div>
       <RecipeFormDialog open={editOpen} onOpenChange={setEditOpen} recipe={recipe} />
       <p className="p-3 px-5">
         <strong className="block pb-2">Summary:</strong>
         {recipe?.summary || "No description available"}
       </p>
+      {recipe.ingredients?.length > 0 && (() => {
+        const baseGuests = recipe.guests || 1;
+        const targetGuests = scaledGuests ?? baseGuests;
+        const factor = targetGuests / baseGuests;
+        return (
+          <div className="px-5 pb-3">
+            <div className="flex items-baseline gap-2 pb-2">
+              <strong>Ingredients</strong>
+              {factor !== 1 && (
+                <span className="text-xs text-muted-foreground">
+                  scaled ×{Math.round(factor * 10) / 10} for {targetGuests} serving{targetGuests !== 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+            <ul className="flex flex-col gap-1">
+              {recipe.ingredients.map((ing, i) => (
+                <li key={i} className="text-sm flex items-start gap-2">
+                  <span className="text-muted-foreground mt-0.5">·</span>
+                  {scaleIngredient(ing, factor)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })()}
       <div className="px-5">
         <strong className="block pb-2">Steps:</strong>
         <ol className="flex flex-col gap-3">
