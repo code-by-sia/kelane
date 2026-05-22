@@ -7,11 +7,13 @@ import {
   LayoutGridIcon,
   LayoutListIcon,
   PlusIcon,
+  Settings2Icon,
 } from "lucide-react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import useRecipeStore from "@/store/recipe";
 import { RecipeFormDialog } from "@/components/recipe-form";
+import { CategoryManagerDialog } from "@/components/category-manager";
 
 const GALLERY_COLORS = [
   "bg-yellow-100 border-yellow-200",
@@ -99,6 +101,7 @@ export default function CategoriesPage() {
     () => localStorage.getItem("categories.view") || "grid",
   );
   const [addOpen, setAddOpen] = useState(false);
+  const [manageOpen, setManageOpen] = useState(false);
 
   const changeView = (v) => {
     setView(v);
@@ -112,6 +115,9 @@ export default function CategoriesPage() {
         <div className="flex items-center gap-2">
           <Button size="sm" onClick={() => setAddOpen(true)}>
             <PlusIcon size={14} /> Add Recipe
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => setManageOpen(true)}>
+            <Settings2Icon size={14} /> Categories
           </Button>
           <ButtonGroup>
             {VIEWS.map(({ id, icon: Icon }) => (
@@ -130,6 +136,7 @@ export default function CategoriesPage() {
       }
     >
       <RecipeFormDialog open={addOpen} onOpenChange={setAddOpen} />
+      <CategoryManagerDialog open={manageOpen} onOpenChange={setManageOpen} />
       {view === "grid" && (
         <div className="p-6 gap-6 flex flex-wrap">
           {categories.map(({ name, recipes }) => (
