@@ -37,6 +37,7 @@ import {
   EllipsisIcon,
   FlagIcon,
   HeartIcon,
+  HistoryIcon,
   ShareIcon,
   TagIcon,
   TimerIcon,
@@ -96,6 +97,14 @@ export function NavCategories() {
             <a href="/uncategorized">
               <BookmarkXIcon />
               <span>Uncategorized</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild isActive={pathname === `/history`}>
+            <a href="/history">
+              <HistoryIcon />
+              <span>Cooking History</span>
             </a>
           </SidebarMenuButton>
         </SidebarMenuItem>

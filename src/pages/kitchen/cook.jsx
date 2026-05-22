@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router";
 import { toast } from "sonner";
 import { Loading } from "@/components/loading";
@@ -6,6 +6,7 @@ import { useChef } from "@/hooks/chef";
 import Step from "./step";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
+import useHistoryStore from "@/store/history";
 
 // Parse "500g flour" → { name: "flour", quantity: 500, unit: "g" }
 function parseIngredient(str) {
@@ -20,6 +21,15 @@ export default function CookPage() {
   const getRecipe = useRecipeStore((store) => store.getRecipe);
   const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
   const deductFridgeIngredient = useGroceriesStore((s) => s.deductFridgeIngredient);
+  const startCooking = useHistoryStore((s) => s.startCooking);
+  const completeCooking = useHistoryStore((s) => s.completeCooking);
+  const historyIdRef = useRef(null);
+
+  // Record cook session start
+  useEffect(() => {
+    if (!recipe) return;
+    historyIdRef.current = startCooking(recipe.code, recipe.name);
+  }, [recipe?.code]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleStepFinished = useCallback(
     (step) => {
@@ -47,6 +57,17 @@ export default function CookPage() {
   const { steps, startStep, finishStep } = useChef(recipe, {
     onStepFinished: handleStepFinished,
   });
+
+  // Mark history complete when all steps done
+  useEffect(() => {
+    if (!steps.length) return;
+    const allDone = steps.every((s) => s.status === "completed");
+    if (allDone && historyIdRef.current) {
+      completeCooking(historyIdRef.current);
+      toast.success(`${recipe?.name} complete! Added to cooking history.`);
+      historyIdRef.current = null;
+    }
+  }, [steps, completeCooking, recipe?.name]);
 
   return (
     <Loading isLoading={!recipe}>
