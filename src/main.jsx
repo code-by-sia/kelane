@@ -13,6 +13,7 @@ import { UncategorizedPage } from "./pages/categories/uncategorized";
 import GrocoriesPage from "./pages/grocories/grocories-page";
 import CookPage from "./pages/kitchen/cook";
 import HistoryPage from "./pages/history";
+import BrowserPage from "./pages/browser";
 import SetupPage from "./setup/index";
 
 import "./index.css";
@@ -36,7 +37,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/uncategorized" element={<UncategorizedPage />} />
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/feeds/:feedUrl" element={<GrocoriesPage />} />
-      <Route path="/browser" element={<GrocoriesPage />} />
+      <Route path="/browser" element={<BrowserPage />} />
       <Route path="/groceries" element={<GrocoriesPage />} />
     </Routes>
   </BrowserRouter>,
