@@ -193,7 +193,7 @@ export default function BrowserPage() {
 
   return (
     <SidebarPage>
-      <div className="flex flex-col h-full" style={{ height: "100svh" }}>
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
         {/* ── Toolbar ─────────────────────────────────────────────────── */}
         <div className="flex items-center gap-2 px-3 py-2 border-b bg-background shrink-0">
           <Button
