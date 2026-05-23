@@ -1,12 +1,10 @@
 import { useRef, useState } from "react";
 import {
   ArrowRightIcon,
-  CheckIcon,
   GlobeIcon,
   RefreshCwIcon,
   Settings2Icon,
   ShieldOffIcon,
-  TriangleAlertIcon,
   UtensilsIcon,
 } from "lucide-react";
 import SidebarPage from "@/pages/sidebar-page";
@@ -122,7 +120,12 @@ const QUICK_SITES = ["bbcgoodfood.com", "seriouseats.com", "allrecipes.com"];
 
 export default function BrowserPage() {
   const settingsState = useSettingsStore();
+  const proxyPresetId = useSettingsStore((s) => s.proxyPresetId);
+  const customProxyPrefix = useSettingsStore((s) => s.customProxyPrefix);
+  const setProxyPreset = useSettingsStore((s) => s.setProxyPreset);
+  const setCustomProxyPrefix = useSettingsStore((s) => s.setCustomProxyPrefix);
   const proxyPrefix = getProxyPrefix(settingsState);
+  const activePreset = PROXY_PRESETS.find((p) => p.id === proxyPresetId) ?? PROXY_PRESETS[0];
 
   const [inputVal, setInputVal] = useState("");
   const [targetUrl, setTargetUrl] = useState(""); // the real URL the user wants
@@ -284,44 +287,95 @@ export default function BrowserPage() {
             </div>
           )}
 
-          {/* Blocked by X-Frame-Options */}
+          {/* Blocked by X-Frame-Options — proxy picker */}
           {blocked && targetUrl && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-muted-foreground px-6">
-              <TriangleAlertIcon
-                size={40}
-                strokeWidth={0.8}
-                className="text-amber-400"
-              />
-              <div className="text-center">
-                <p className="font-medium text-foreground">
-                  This site blocks embedding
-                </p>
-                <p className="text-sm mt-1 max-w-sm">
-                  <span className="font-mono text-xs bg-muted px-1 rounded">
-                    X-Frame-Options
-                  </span>{" "}
-                  prevents loading {new URL(targetUrl).hostname} in an iframe.
-                </p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
+              <div className="w-full max-w-sm flex flex-col gap-4">
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <ShieldOffIcon size={36} strokeWidth={0.8} className="text-amber-400" />
+                  <p className="font-medium text-foreground">This site blocks embedding</p>
+                  <p className="text-sm text-muted-foreground max-w-xs">
+                    <span className="font-mono text-xs bg-muted px-1 rounded">X-Frame-Options</span>{" "}
+                    prevents loading <strong>{new URL(targetUrl).hostname}</strong> directly.
+                    Route it through a CORS proxy to load it here.
+                  </p>
+                </div>
+
+                {/* Proxy preset selector */}
+                <div className="flex flex-col gap-1.5">
+                  {PROXY_PRESETS.map((preset) => (
+                    <label
+                      key={preset.id}
+                      className={`flex items-start gap-2.5 rounded-lg border p-2.5 cursor-pointer transition-colors ${
+                        proxyPresetId === preset.id
+                          ? "border-primary bg-primary/5"
+                          : "hover:bg-muted/50"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="blocked-proxy"
+                        className="sr-only"
+                        checked={proxyPresetId === preset.id}
+                        onChange={() => setProxyPreset(preset.id)}
+                      />
+                      <div
+                        className={`mt-0.5 w-3.5 h-3.5 rounded-full border-2 shrink-0 flex items-center justify-center ${
+                          proxyPresetId === preset.id
+                            ? "border-primary bg-primary"
+                            : "border-muted-foreground"
+                        }`}
+                      >
+                        {proxyPresetId === preset.id && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium">{preset.label}</p>
+                        <p className="text-xs text-muted-foreground">{preset.hint}</p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+
+                {/* Custom proxy input */}
+                {proxyPresetId === "custom" && (
+                  <div className="flex flex-col gap-1">
+                    <Label className="text-xs">Proxy prefix URL</Label>
+                    <Input
+                      placeholder="https://my-proxy.example.com/?url="
+                      value={customProxyPrefix}
+                      onChange={(e) => setCustomProxyPrefix(e.target.value)}
+                      className="h-8 text-xs font-mono"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      The target URL will be appended (URL-encoded).
+                    </p>
+                  </div>
+                )}
+
+                {/* Local proxy hint */}
+                {proxyPresetId === "local" && (
+                  <div className="rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
+                    Start the proxy in a separate terminal:
+                    <code className="block mt-1 font-mono text-foreground">npm run proxy</code>
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <Button size="sm" className="flex-1" onClick={loadViaProxy}>
+                    <ShieldOffIcon size={13} />
+                    Load via {activePreset.label.replace(" (recommended)", "")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(targetUrl, "_blank")}
+                  >
+                    Open in new tab
+                  </Button>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2 justify-center">
-                <Button size="sm" onClick={loadViaProxy}>
-                  <ShieldOffIcon size={13} />
-                  Load via proxy
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.open(targetUrl, "_blank")}
-                >
-                  Open in new tab
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground text-center max-w-xs">
-                The proxy strips embedding restrictions so the page can load
-                here. Make sure{" "}
-                <code className="font-mono">npm run proxy</code> is running if
-                you use the local proxy.
-              </p>
             </div>
           )}
 

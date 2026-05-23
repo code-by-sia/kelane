@@ -118,7 +118,7 @@ function AddMealRow({ dateKey, onAdd }) {
                 className="fixed inset-0 z-40"
                 onMouseDown={() => setOpen(false)}
               />
-              <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-md border bg-popover shadow-lg overflow-hidden">
+              <div className="absolute bottom-full left-0 right-0 z-50 mb-1 rounded-md border bg-popover shadow-lg overflow-hidden">
                 <div className="border-b px-3 py-2">
                   <input
                     ref={searchRef}
