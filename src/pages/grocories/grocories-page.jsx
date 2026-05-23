@@ -17,7 +17,7 @@ export default function GrocoriesPage() {
       {/* ── Mobile: tabbed layout ─────────────────────────────────────── */}
       <div className="flex flex-col flex-1 min-h-0 md:hidden">
         <Tabs defaultValue="buy" className="flex flex-col flex-1 min-h-0">
-          <TabsList className="w-full rounded-none border-b h-11 shrink-0">
+          <TabsList className="w-full rounded-none border-b h-11 shrink-0 bg-background">
             <TabsTrigger value="fridge" className="flex-1 gap-1.5">
               <RefrigeratorIcon size={15} />
               Fridge

@@ -665,7 +665,7 @@ export default function CalendarPage() {
       }
     >
       {/* ── Sub-toolbar ─────────────────────────────────────────────── */}
-      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border-b bg-card shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border-b bg-background shrink-0">
         {/* Nav arrows */}
         <Button variant="ghost" size="icon-sm" onClick={goBack}>
           <ChevronLeftIcon size={16} />
