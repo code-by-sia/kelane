@@ -33,7 +33,6 @@ import {
   ArchiveIcon,
   BookHeartIcon,
   ChevronRight,
-  Clock9Icon,
   CompassIcon,
   EllipsisIcon,
   HistoryIcon,
@@ -72,14 +71,6 @@ export function NavCategories() {
             <a href="/categories">
               <TagIcon />
               <span>Categories</span>
-            </a>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={pathname === `/most-recent`}>
-            <a href="/most-recent">
-              <Clock9Icon />
-              <span>Most Recent</span>
             </a>
           </SidebarMenuButton>
         </SidebarMenuItem>

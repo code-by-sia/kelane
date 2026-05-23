@@ -1,15 +1,18 @@
 import { useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
-import { FlagIcon, HeartIcon } from "lucide-react";
+import { Clock9Icon, FlagIcon, HeartIcon } from "lucide-react";
 import { RecipeViewer } from "@/components/recipe";
 import { RecipeList } from "@/components/recipe-list";
 import SidebarPage from "@/pages/sidebar-page";
 import useRecipeStore from "@/store/recipe";
 
+const A_WEEK = 7 * 24 * 60 * 60 * 1000;
+
 const FILTERS = [
   { id: "all", label: "All" },
   { id: "favorites", label: "Favorites", icon: HeartIcon },
   { id: "want-to-cook", label: "Want to Cook", icon: FlagIcon },
+  { id: "recent", label: "Most Recent", icon: Clock9Icon },
 ];
 
 export function MyRecipesPage() {
@@ -17,18 +20,23 @@ export function MyRecipesPage() {
   const { recipeId } = useParams();
   const go = useNavigate();
 
+  const recipes = useRecipeStore((s) => s.recipes);
   const getFavoriteRecipes = useRecipeStore((s) => s.getFavoriteRecipes);
   const getFlaggedRecipes = useRecipeStore((s) => s.getFlaggedRecipes);
 
-  const recipes = useMemo(() => {
+  const filtered = useMemo(() => {
+    if (filter === "favorites") return getFavoriteRecipes();
+    if (filter === "want-to-cook") return getFlaggedRecipes();
+    if (filter === "recent")
+      return [...recipes]
+        .filter((r) => r.date && new Date(r.date) > new Date(Date.now() - A_WEEK))
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+    // "all" → union of favorites + want-to-cook, favorites first
     const favs = getFavoriteRecipes();
     const flagged = getFlaggedRecipes();
-    if (filter === "favorites") return favs;
-    if (filter === "want-to-cook") return flagged;
-    // "all" → union, favorites first
     const seen = new Set(favs.map((r) => r.code));
     return [...favs, ...flagged.filter((r) => !seen.has(r.code))];
-  }, [filter, getFavoriteRecipes, getFlaggedRecipes]);
+  }, [filter, recipes, getFavoriteRecipes, getFlaggedRecipes]);
 
   return (
     <SidebarPage
@@ -36,7 +44,7 @@ export function MyRecipesPage() {
         <div className="flex flex-col gap-0 justify-center">
           <span className="text-sm -my-1">My Recipes</span>
           <small className="text-xs text-muted-foreground">
-            {recipes.length} recipe{recipes.length !== 1 ? "s" : ""}
+            {filtered.length} recipe{filtered.length !== 1 ? "s" : ""}
           </small>
         </div>
       }
@@ -61,7 +69,7 @@ export function MyRecipesPage() {
     >
       <div className="flex divide-x h-full">
         <RecipeList
-          recipes={recipes}
+          recipes={filtered}
           onSelect={(code) => go(`/my-recipes/${code}`)}
         />
         <RecipeViewer recipeId={recipeId} />
