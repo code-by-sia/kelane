@@ -129,7 +129,7 @@ function GroceriesSheet({ recipe }) {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline">
-          <CitrusIcon className="stroke-amber-500" size={18} />
+          <CitrusIcon className="text-primary" size={18} />
           Grocories
         </Button>
       </SheetTrigger>
@@ -493,7 +493,7 @@ export function RecipeViewer({ recipeId }) {
         </Button>
         <GroceriesSheet recipe={recipe} />
         <Button variant="outline" onClick={() => setEditOpen(true)}>
-          <PencilIcon size={15} />
+          <PencilIcon size={15} className="text-primary" />
           Edit
         </Button>
         <Button
@@ -501,7 +501,7 @@ export function RecipeViewer({ recipeId }) {
           onClick={() => setDietOpen(true)}
           className={appliedDiet ? "border-green-500 text-green-700" : ""}
         >
-          <AppleIcon size={15} />
+          <AppleIcon size={15} className={appliedDiet ? "" : "text-primary"} />
           {appliedDiet
             ? `${DIETS.find((d) => d.id === appliedDiet)?.emoji} ${DIETS.find((d) => d.id === appliedDiet)?.label}`
             : "Adjust to diet"}
@@ -509,7 +509,7 @@ export function RecipeViewer({ recipeId }) {
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline">
-              <RulerIcon size={15} />
+              <RulerIcon size={15} className="text-primary" />
               Scale{scaledGuests !== null && scaledGuests !== (recipe.guests || 1)
                 ? ` (${scaledGuests})`
                 : ""}
