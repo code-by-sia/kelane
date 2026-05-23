@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { PlusIcon, Trash2Icon, RefrigeratorIcon } from "lucide-react";
+import { CameraIcon, PlusIcon, Trash2Icon, RefrigeratorIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IngredientInput } from "@/components/ingredient-input";
 import { NutritionButton } from "@/components/nutrition-popover";
+import { CameraFinder } from "@/components/camera-finder";
 import {
   Dialog,
   DialogContent,
@@ -100,6 +101,7 @@ export default function ToBuyPanel() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(new Set());
   const [moveDialogOpen, setMoveDialogOpen] = useState(false);
+  const [cameraOpen, setCameraOpen] = useState(false);
 
   const submit = (e) => {
     e.preventDefault();
@@ -287,9 +289,19 @@ export default function ToBuyPanel() {
             </div>
           </form>
         ) : (
-          <Button variant="outline" size="sm" className="w-full" onClick={() => setOpen(true)}>
-            <PlusIcon /> Add item
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="flex-1" onClick={() => setOpen(true)}>
+              <PlusIcon /> Add item
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              title="Find items with camera"
+              onClick={() => setCameraOpen(true)}
+            >
+              <CameraIcon size={14} />
+            </Button>
+          </div>
         )}
       </div>
 
@@ -300,6 +312,7 @@ export default function ToBuyPanel() {
           onCancel={() => setMoveDialogOpen(false)}
         />
       )}
+      <CameraFinder open={cameraOpen} onClose={() => setCameraOpen(false)} />
     </div>
   );
 }
