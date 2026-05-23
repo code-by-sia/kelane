@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { PlusIcon, Trash2Icon, RefrigeratorIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { IngredientInput } from "@/components/ingredient-input";
+import { NutritionButton } from "@/components/nutrition-popover";
 import {
   Dialog,
   DialogContent,
@@ -164,10 +165,11 @@ export default function ToBuyPanel() {
               {item.name}
             </span>
             {item.quantity && (
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-muted-foreground shrink-0">
                 {item.quantity} {item.unit}
               </span>
             )}
+            <NutritionButton name={item.name} />
             <Button
               variant="ghost"
               size="icon-sm"
@@ -215,7 +217,7 @@ export default function ToBuyPanel() {
 
         {open ? (
           <form onSubmit={submit} className="flex flex-col gap-2">
-            <Input
+            <IngredientInput
               placeholder="Item name"
               autoFocus
               value={form.name}

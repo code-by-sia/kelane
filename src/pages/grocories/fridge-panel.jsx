@@ -2,10 +2,11 @@ import { useMemo, useState } from "react";
 import { differenceInDays, parseISO } from "date-fns";
 import { CalendarOffIcon, ListTodoIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SmartExpiryPicker } from "@/components/smart-expiry-picker";
+import { IngredientInput } from "@/components/ingredient-input";
+import { NutritionButton } from "@/components/nutrition-popover";
 import useGroceriesStore from "@/store/groceries";
 
 const UNITS = ["pcs", "g", "kg", "ml", "L", "tbsp", "tsp", "cup"];
@@ -148,6 +149,8 @@ export default function FridgePanel() {
                   {expiryDisplay(group.expiresAt)}
                 </button>
 
+                <NutritionButton name={group.name} />
+
                 {/* Move back to buy list */}
                 <Button
                   variant="ghost"
@@ -207,7 +210,7 @@ export default function FridgePanel() {
       <div className="border-t p-4">
         {addOpen ? (
           <form onSubmit={submit} className="flex flex-col gap-2">
-            <Input
+            <IngredientInput
               placeholder="Item name"
               autoFocus
               value={form.name}
