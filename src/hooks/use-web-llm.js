@@ -15,9 +15,8 @@
 
 import { useState, useRef, useCallback } from "react";
 import { CreateMLCEngine } from "@mlc-ai/web-llm";
-
-// Small instruction-tuned model — <2 GB VRAM, good JSON extraction quality.
-const MODEL_ID = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
+import useSettingsStore from "@/store/settings";
+import { DEFAULT_MODEL_ID } from "@/data/llm-models";
 
 // System prompt that instructs the model to output ONLY a JSON recipe.
 const SYSTEM_PROMPT = `You are a recipe extraction assistant. Extract recipe information from the provided text and return ONLY a valid JSON object — no markdown, no explanation, no extra text.
@@ -47,6 +46,9 @@ Rules:
 - Return ONLY the JSON object, nothing else.`;
 
 export function useWebLLM() {
+  // Read model from settings; fall back to default if not set.
+  const modelId = useSettingsStore((s) => s.modelId) || DEFAULT_MODEL_ID;
+
   const [status, setStatus] = useState(() =>
     typeof navigator !== "undefined" && !navigator.gpu
       ? "unsupported"
@@ -56,9 +58,18 @@ export function useWebLLM() {
   const [errorMessage, setErrorMessage] = useState(null);
   const engineRef = useRef(null);
   const initPromiseRef = useRef(null);
+  // Track which model the current engine was built with; re-init if changed.
+  const loadedModelRef = useRef(null);
 
   /** Ensure the engine is initialised (downloads & caches model on first call) */
   const ensureEngine = useCallback(async () => {
+    // Re-initialise if the selected model has changed since last load.
+    if (engineRef.current && loadedModelRef.current !== modelId) {
+      engineRef.current = null;
+      initPromiseRef.current = null;
+      loadedModelRef.current = null;
+    }
+
     if (engineRef.current) return engineRef.current;
 
     // If already initialising, wait on the same promise
@@ -69,7 +80,7 @@ export function useWebLLM() {
       setProgress(0);
       setErrorMessage(null);
 
-      const engine = await CreateMLCEngine(MODEL_ID, {
+      const engine = await CreateMLCEngine(modelId, {
         initProgressCallback: (info) => {
           // info.progress is 0-1
           setProgress(Math.round((info.progress ?? 0) * 100));
@@ -77,6 +88,7 @@ export function useWebLLM() {
       });
 
       engineRef.current = engine;
+      loadedModelRef.current = modelId;
       initPromiseRef.current = null;
       setStatus("ready");
       setProgress(100);
@@ -91,7 +103,7 @@ export function useWebLLM() {
       setErrorMessage(err?.message ?? "Model failed to load");
       throw err;
     }
-  }, []);
+  }, [modelId]);
 
   /**
    * Extract a structured recipe from raw text.

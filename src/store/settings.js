@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { DEFAULT_MODEL_ID } from "@/data/llm-models";
 
 export const PROXY_PRESETS = [
   {
@@ -39,9 +40,13 @@ const useSettingsStore = create(
       // "tomato" | "warm-kitchen" | "sage" | "ocean" | "aubergine"
       themeId: "tomato",
 
+      // LLM model used by the recipe scanner (on-device WebLLM)
+      modelId: DEFAULT_MODEL_ID,
+
       setProxyPreset: (id) => set({ proxyPresetId: id }),
       setCustomProxyPrefix: (prefix) => set({ customProxyPrefix: prefix }),
       setTheme: (id) => set({ themeId: id }),
+      setModel: (id) => set({ modelId: id }),
     }),
     { name: "kelane-settings" },
   ),

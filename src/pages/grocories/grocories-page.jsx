@@ -38,9 +38,12 @@ export default function GrocoriesPage() {
       </div>
 
       {/* ── Desktop: resizable side-by-side ──────────────────────────── */}
+      {/* Wrapper div carries the hidden/flex so react-resizable-panels' inline
+          style="display:flex" can't override the hidden class on mobile. */}
+      <div className="hidden md:flex flex-1 min-h-0">
       <ResizablePanelGroup
         orientation="horizontal"
-        className="hidden md:flex flex-1 min-h-0"
+        className="flex flex-1 min-h-0"
       >
         <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col">
           <Header>
@@ -59,6 +62,7 @@ export default function GrocoriesPage() {
           <ToBuyPanel />
         </ResizablePanel>
       </ResizablePanelGroup>
+      </div>
     </SidebarPage>
   );
 }

@@ -4,7 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import useSetupStore from "@/store/setup";
+import { AVATARS } from "@/data/avatars";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -24,6 +26,11 @@ export default function UserSetup({ onNext }) {
     defaultValues: { name: profile.name, email: profile.email },
   });
 
+  const handleAvatarClick = (emoji) => {
+    // Tap same emoji to deselect
+    setProfile({ avatar: profile.avatar === emoji ? "" : emoji });
+  };
+
   const onSubmit = (data) => {
     setProfile({ name: data.name, email: data.email || "" });
     onNext();
@@ -34,8 +41,37 @@ export default function UserSetup({ onNext }) {
       <div>
         <h1 className="text-2xl font-light mb-1">Who's cooking?</h1>
         <p className="text-muted-foreground text-sm">
-          This appears in your sidebar. You can change it anytime.
+          Pick an avatar and tell us your name. You can change both anytime.
         </p>
+      </div>
+
+      {/* Avatar picker */}
+      <div className="flex flex-col gap-2">
+        <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+          Avatar (optional)
+        </Label>
+        <div className="grid grid-cols-10 gap-1.5">
+          {AVATARS.map(({ id, emoji, label }) => {
+            const active = profile.avatar === emoji;
+            return (
+              <button
+                key={id}
+                type="button"
+                title={label}
+                onClick={() => handleAvatarClick(emoji)}
+                className={cn(
+                  "aspect-square rounded-xl text-2xl flex items-center justify-center transition-all cursor-pointer select-none",
+                  "hover:bg-accent hover:scale-110",
+                  active
+                    ? "bg-primary/10 ring-2 ring-primary ring-offset-2 scale-105"
+                    : "bg-muted/40",
+                )}
+              >
+                {emoji}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <form
