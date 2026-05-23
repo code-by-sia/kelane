@@ -36,6 +36,21 @@ const useCalendarStore = create(
         }),
 
       getMealsForDate: (date) => get().meals[date] ?? [],
+
+      addMealToMultipleDays: (dates, recipeCode, slot) =>
+        set((state) => {
+          const meals = { ...state.meals };
+          for (const date of dates) {
+            const existing = meals[date] ?? [];
+            const alreadyAdded = existing.some(
+              (m) => m.recipeCode === recipeCode && m.slot === slot,
+            );
+            if (!alreadyAdded) {
+              meals[date] = [...existing, { recipeCode, slot }];
+            }
+          }
+          return { meals };
+        }),
     }),
     { name: "calendar-storage" },
   ),

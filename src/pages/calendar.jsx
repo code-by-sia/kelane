@@ -16,11 +16,24 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ClockIcon,
+  FlameIcon,
+  PanelRightIcon,
   PlusIcon,
+  Repeat2Icon,
   ShoppingCartIcon,
   Trash2Icon,
   UtensilsIcon,
 } from "lucide-react";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useDraggable,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { toast } from "sonner";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import {
@@ -30,12 +43,19 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import SidebarPage from "@/pages/sidebar-page";
 import useCalendarStore from "@/store/calendar";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
+import "./calendar.css";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const SLOTS = ["breakfast", "lunch", "dinner", "snack"];
@@ -51,6 +71,7 @@ const SLOT_CHIP = {
   dinner: "bg-blue-100 text-blue-800",
   snack: "bg-purple-100 text-purple-800",
 };
+const DOW_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const VIEWS = [
   { id: "day", label: "Day", icon: ClockIcon },
@@ -81,7 +102,6 @@ function AddMealRow({ dateKey, onAdd }) {
 
   const openDropdown = () => {
     setOpen(true);
-    // Focus the search input after render
     setTimeout(() => searchRef.current?.focus(), 0);
   };
 
@@ -91,7 +111,7 @@ function AddMealRow({ dateKey, onAdd }) {
         <select
           value={slot}
           onChange={(e) => setSlot(e.target.value)}
-          className="border rounded-md px-2 text-sm bg-background h-9 shrink-0"
+          className="border rounded-md px-2 text-sm bg-card h-9 shrink-0"
         >
           {SLOTS.map((s) => (
             <option key={s} value={s}>
@@ -100,7 +120,6 @@ function AddMealRow({ dateKey, onAdd }) {
           ))}
         </select>
 
-        {/* Recipe picker — plain dropdown to avoid Radix Dialog focus-trap issues */}
         <div className="flex-1 relative min-w-0">
           <Button
             variant="outline"
@@ -113,7 +132,6 @@ function AddMealRow({ dateKey, onAdd }) {
 
           {open && (
             <>
-              {/* Invisible backdrop — closes dropdown on outside click */}
               <div
                 className="fixed inset-0 z-40"
                 onMouseDown={() => setOpen(false)}
@@ -140,8 +158,6 @@ function AddMealRow({ dateKey, onAdd }) {
                         key={r.code}
                         className="px-3 py-2 text-sm cursor-pointer hover:bg-accent transition-colors"
                         onMouseDown={(e) => {
-                          // preventDefault keeps focus out of the Sheet focus-trap
-                          // so this fires reliably even inside a Radix Dialog
                           e.preventDefault();
                           setSelected(r);
                           setSearch("");
@@ -166,7 +182,114 @@ function AddMealRow({ dateKey, onAdd }) {
   );
 }
 
-// ── Shared: DaySheet (slide-over) ──────────────────────────────────────────
+// ── Repeat meal popover ────────────────────────────────────────────────────
+function RepeatMealPopover({ meal, dateKey }) {
+  const addMealToMultipleDays = useCalendarStore((s) => s.addMealToMultipleDays);
+  const [open, setOpen] = React.useState(false);
+  // Mon=0 … Sun=6 in our Mon-anchored week
+  const [selectedDows, setSelectedDows] = React.useState(new Set([0, 1, 2, 3, 4]));
+  const [weeks, setWeeks] = React.useState(1);
+
+  const weekStart = startOfWeek(new Date(dateKey + "T12:00:00"), {
+    weekStartsOn: 1,
+  });
+
+  const computeDates = React.useCallback(() => {
+    const dates = [];
+    for (let w = 0; w < weeks; w++) {
+      for (const dow of selectedDows) {
+        dates.push(format(addDays(addWeeks(weekStart, w), dow), "yyyy-MM-dd"));
+      }
+    }
+    return dates;
+  }, [weekStart, weeks, selectedDows]);
+
+  const handleApply = () => {
+    const dates = computeDates();
+    if (dates.length === 0) return;
+    addMealToMultipleDays(dates, meal.recipeCode, meal.slot);
+    toast.success(
+      `Repeated to ${dates.length} day${dates.length !== 1 ? "s" : ""}`,
+    );
+    setOpen(false);
+  };
+
+  const toggleDow = (i) =>
+    setSelectedDows((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+
+  const dateCount = computeDates().length;
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon-sm" title="Repeat this meal">
+          <Repeat2Icon size={14} />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent side="left" className="w-60 p-3 flex flex-col gap-3">
+        <p className="text-sm font-semibold">Repeat meal</p>
+
+        <div>
+          <p className="text-xs text-muted-foreground mb-1.5">Days of week</p>
+          <div className="flex flex-wrap gap-1">
+            {DOW_LABELS.map((label, i) => (
+              <button
+                key={label}
+                onClick={() => toggleDow(i)}
+                className={`cal-dow-btn ${selectedDows.has(i) ? "cal-dow-btn--active" : "cal-dow-btn--idle"}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground flex-1">Weeks</span>
+          <div className="flex items-center gap-1">
+            <button
+              className="scale-counter-btn"
+              onClick={() => setWeeks((w) => Math.max(1, w - 1))}
+            >
+              −
+            </button>
+            <span className="w-5 text-center text-sm tabular-nums">{weeks}</span>
+            <button
+              className="scale-counter-btn"
+              onClick={() => setWeeks((w) => Math.min(8, w + 1))}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        {dateCount > 0 && (
+          <p className="text-xs text-muted-foreground">
+            Will add to{" "}
+            <strong className="text-foreground">
+              {dateCount} day{dateCount !== 1 ? "s" : ""}
+            </strong>
+          </p>
+        )}
+
+        <Button
+          size="sm"
+          className="w-full"
+          onClick={handleApply}
+          disabled={selectedDows.size === 0}
+        >
+          Apply
+        </Button>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+// ── DaySheet ───────────────────────────────────────────────────────────────
 function DaySheet({ dateKey, onClose }) {
   const getMealsForDate = useCalendarStore((s) => s.getMealsForDate);
   const addMeal = useCalendarStore((s) => s.addMeal);
@@ -228,12 +351,12 @@ function DaySheet({ dateKey, onClose }) {
                           {recipe.calories} kcal
                         </span>
                       )}
+                      {/* Repeat button */}
+                      <RepeatMealPopover meal={m} dateKey={dateKey} />
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        onClick={() =>
-                          removeMeal(dateKey, m.recipeCode, m.slot)
-                        }
+                        onClick={() => removeMeal(dateKey, m.recipeCode, m.slot)}
                       >
                         <Trash2Icon size={14} />
                       </Button>
@@ -253,7 +376,7 @@ function DaySheet({ dateKey, onClose }) {
   );
 }
 
-// ── Month view: existing calendar grid (1 month, navigable) ───────────────
+// ── Month view ─────────────────────────────────────────────────────────────
 function MealDayButton({ day, modifiers, ...props }) {
   const meals = useCalendarStore((s) => s.meals);
   const dateKey = format(day.date, "yyyy-MM-dd");
@@ -280,7 +403,6 @@ function MealDayButton({ day, modifiers, ...props }) {
 function MonthView({ anchorDate, onDayClick }) {
   const [month, setMonth] = React.useState(anchorDate);
 
-  // Keep month in sync if anchorDate jumps (e.g. Today button)
   React.useEffect(() => {
     if (!isSameMonth(anchorDate, month)) setMonth(anchorDate);
   }, [anchorDate]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -297,7 +419,26 @@ function MonthView({ anchorDate, onDayClick }) {
   );
 }
 
-// ── Week view: Mon–Sun columns × slot rows ─────────────────────────────────
+// ── Week view droppable cell ───────────────────────────────────────────────
+function DroppableCell({ id, isToday, onClick, children }) {
+  const { setNodeRef, isOver } = useDroppable({ id });
+
+  return (
+    <td
+      ref={setNodeRef}
+      className={[
+        "cal-td-cell group",
+        isToday ? "cal-td-cell--today" : "cal-td-cell--normal",
+        isOver ? "cal-td-cell--over" : "hover:bg-muted/50",
+      ].join(" ")}
+      onClick={onClick}
+    >
+      {children}
+    </td>
+  );
+}
+
+// ── Week view ──────────────────────────────────────────────────────────────
 function WeekView({ anchorDate, onDayClick }) {
   const meals = useCalendarStore((s) => s.meals);
   const getRecipe = useRecipeStore((s) => s.getRecipe);
@@ -306,7 +447,6 @@ function WeekView({ anchorDate, onDayClick }) {
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const today = new Date();
 
-  // Per-day calorie totals
   const dayCalories = React.useMemo(
     () =>
       days.reduce((acc, day) => {
@@ -322,8 +462,8 @@ function WeekView({ anchorDate, onDayClick }) {
   );
 
   return (
-    <div className="flex-1 overflow-auto bg-card">
-      <table className="w-full h-full border-collapse table-fixed min-w-[600px]">
+    <div className="cal-week-scroll">
+      <table className="cal-table">
         <colgroup>
           <col className="w-24" />
           {days.map((d) => (
@@ -331,11 +471,9 @@ function WeekView({ anchorDate, onDayClick }) {
           ))}
         </colgroup>
 
-        {/* Header: day names + dates */}
         <thead>
           <tr>
-            {/* Slot label column header */}
-            <th className="border-b border-r p-2 text-left bg-muted/30">
+            <th className="cal-th-slot">
               <span className="text-xs text-muted-foreground font-normal">
                 Slot
               </span>
@@ -347,19 +485,13 @@ function WeekView({ anchorDate, onDayClick }) {
               return (
                 <th
                   key={dk}
-                  className={`border-b border-r p-2 text-center cursor-pointer hover:bg-muted/50 transition-colors ${
-                    isToday ? "bg-primary/8" : "bg-card"
-                  }`}
+                  className={`cal-th-day ${isToday ? "cal-th-day--today" : "cal-th-day--normal"}`}
                   onClick={() => onDayClick(dk)}
                 >
                   <p className="text-xs text-muted-foreground font-normal">
                     {format(day, "EEE")}
                   </p>
-                  <p
-                    className={`text-base font-semibold leading-tight ${
-                      isToday ? "text-primary" : ""
-                    }`}
-                  >
+                  <p className={`text-base font-semibold leading-tight ${isToday ? "text-primary" : ""}`}>
                     {format(day, "d")}
                   </p>
                   {cals > 0 && (
@@ -373,36 +505,29 @@ function WeekView({ anchorDate, onDayClick }) {
           </tr>
         </thead>
 
-        {/* Slot rows */}
         <tbody>
           {SLOTS.map((slot) => (
             <tr key={slot} className="h-[80px]">
-              {/* Slot label */}
-              <td className="border-b border-r p-2 align-middle bg-muted/20">
+              <td className="cal-td-label">
                 <div className="flex items-center gap-1.5">
-                  <span
-                    className={`w-2 h-2 rounded-full shrink-0 ${SLOT_COLORS[slot]}`}
-                  />
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${SLOT_COLORS[slot]}`} />
                   <span className="text-xs font-medium capitalize text-muted-foreground">
                     {slot}
                   </span>
                 </div>
               </td>
 
-              {/* Day × slot cells */}
               {days.map((day) => {
                 const dk = format(day, "yyyy-MM-dd");
                 const isToday = isSameDay(day, today);
-                const cellMeals = (meals[dk] ?? []).filter(
-                  (m) => m.slot === slot,
-                );
+                const cellMeals = (meals[dk] ?? []).filter((m) => m.slot === slot);
+                const dropId = `${dk}|${slot}`;
 
                 return (
-                  <td
+                  <DroppableCell
                     key={dk}
-                    className={`border-b border-r p-1 align-top cursor-pointer hover:bg-muted/50 transition-colors group ${
-                      isToday ? "bg-primary/8" : "bg-card"
-                    }`}
+                    id={dropId}
+                    isToday={isToday}
                     onClick={() => onDayClick(dk)}
                   >
                     <div className="flex flex-col gap-0.5">
@@ -425,7 +550,7 @@ function WeekView({ anchorDate, onDayClick }) {
                         </div>
                       )}
                     </div>
-                  </td>
+                  </DroppableCell>
                 );
               })}
             </tr>
@@ -436,7 +561,82 @@ function WeekView({ anchorDate, onDayClick }) {
   );
 }
 
-// ── Day view: inline single-day panel ─────────────────────────────────────
+// ── Recipe picker panel (draggable recipes) ────────────────────────────────
+function DraggableRecipeCard({ recipe }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `recipe|${recipe.code}`,
+    data: { recipeCode: recipe.code },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      className={`cal-picker__recipe ${isDragging ? "cal-picker__recipe--dragging" : ""}`}
+    >
+      {recipe.image ? (
+        <img src={recipe.image} alt="" className="cal-picker__thumb" />
+      ) : (
+        <div className="cal-picker__thumb-placeholder">
+          <FlameIcon size={14} className="text-muted-foreground/40" strokeWidth={1} />
+        </div>
+      )}
+      <span className="text-xs font-medium leading-tight line-clamp-2 flex-1 min-w-0">
+        {recipe.name}
+      </span>
+    </div>
+  );
+}
+
+function RecipePickerPanel({ onClose }) {
+  const recipes = useRecipeStore((s) => s.recipes);
+  const [search, setSearch] = React.useState("");
+
+  const filtered = React.useMemo(
+    () =>
+      recipes.filter((r) =>
+        r.name.toLowerCase().includes(search.toLowerCase()),
+      ),
+    [recipes, search],
+  );
+
+  return (
+    <div className="cal-picker">
+      <div className="cal-picker__header">
+        <span className="cal-picker__title">Recipes</span>
+        <Button variant="ghost" size="icon-sm" onClick={onClose} title="Close picker">
+          <PanelRightIcon size={14} />
+        </Button>
+      </div>
+
+      <div className="cal-picker__search">
+        <Input
+          placeholder="Search…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="h-7 text-xs"
+        />
+      </div>
+
+      <p className="px-3 py-1.5 text-[10px] text-muted-foreground border-b">
+        Drag a recipe onto a slot to add it
+      </p>
+
+      <div className="cal-picker__list">
+        {filtered.length === 0 ? (
+          <p className="text-xs text-muted-foreground text-center py-8">
+            No recipes found.
+          </p>
+        ) : (
+          filtered.map((r) => <DraggableRecipeCard key={r.code} recipe={r} />)
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Day view ───────────────────────────────────────────────────────────────
 function DayView({ anchorDate }) {
   const dateKey = format(anchorDate, "yyyy-MM-dd");
   const getMealsForDate = useCalendarStore((s) => s.getMealsForDate);
@@ -472,9 +672,7 @@ function DayView({ anchorDate }) {
             </div>
 
             {grouped[slot].length === 0 ? (
-              <p className="text-sm text-muted-foreground pl-5">
-                No meal planned
-              </p>
+              <p className="text-sm text-muted-foreground pl-5">No meal planned</p>
             ) : (
               <div className="flex flex-col gap-1">
                 {grouped[slot].map((m) => {
@@ -499,12 +697,11 @@ function DayView({ anchorDate }) {
                           {recipe.calories} kcal
                         </span>
                       )}
+                      <RepeatMealPopover meal={m} dateKey={dateKey} />
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        onClick={() =>
-                          removeMeal(dateKey, m.recipeCode, m.slot)
-                        }
+                        onClick={() => removeMeal(dateKey, m.recipeCode, m.slot)}
                       >
                         <Trash2Icon size={13} />
                       </Button>
@@ -546,8 +743,11 @@ export default function CalendarPage() {
   );
   const [anchorDate, setAnchorDate] = React.useState(today);
   const [sheetDateKey, setSheetDateKey] = React.useState(null);
+  const [showPicker, setShowPicker] = React.useState(false);
+  const [activeDragRecipe, setActiveDragRecipe] = React.useState(null);
 
   const meals = useCalendarStore((s) => s.meals);
+  const addMeal = useCalendarStore((s) => s.addMeal);
   const getRecipe = useRecipeStore((s) => s.getRecipe);
   const fridgeItems = useGroceriesStore((s) => s.fridgeItems);
   const toBuyItems = useGroceriesStore((s) => s.toBuyItems);
@@ -556,6 +756,29 @@ export default function CalendarPage() {
   const changeView = (v) => {
     setView(v);
     localStorage.setItem("calendar.view", v);
+    if (v !== "week") setShowPicker(false);
+  };
+
+  // ── DnD sensors ────────────────────────────────────────────────────────
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+  );
+
+  const handleDragStart = ({ active }) => {
+    const code = active.data.current?.recipeCode;
+    if (code) setActiveDragRecipe(getRecipe(code));
+  };
+
+  const handleDragEnd = ({ active, over }) => {
+    setActiveDragRecipe(null);
+    if (!over) return;
+    const [dateKey, slot] = over.id.split("|");
+    const recipeCode = active.data.current?.recipeCode;
+    if (!dateKey || !slot || !recipeCode) return;
+    addMeal(dateKey, recipeCode, slot);
+    toast.success(
+      `Added ${activeDragRecipe?.name ?? "recipe"} to ${slot} on ${format(new Date(dateKey + "T00:00:00"), "EEE d MMM")}`,
+    );
   };
 
   // ── Navigation ─────────────────────────────────────────────────────────
@@ -573,7 +796,6 @@ export default function CalendarPage() {
 
   const goToday = () => setAnchorDate(new Date());
 
-  // Keyboard navigation
   React.useEffect(() => {
     const handler = (e) => {
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
@@ -597,7 +819,6 @@ export default function CalendarPage() {
     return format(anchorDate, "MMMM yyyy");
   }, [view, anchorDate]);
 
-  // ── Day click handler ──────────────────────────────────────────────────
   const handleDayClick = (dateOrKey) => {
     const dk =
       typeof dateOrKey === "string"
@@ -652,12 +873,10 @@ export default function CalendarPage() {
       title="Meal Calendar"
       header={
         <>
-          {/* Desktop: full label */}
           <Button size="sm" variant="outline" onClick={generateShoppingList} className="hidden sm:flex">
             <ShoppingCartIcon size={14} />
             Shopping list (7 days)
           </Button>
-          {/* Mobile: icon only */}
           <Button size="icon-sm" variant="outline" onClick={generateShoppingList} className="sm:hidden" title="Generate shopping list">
             <ShoppingCartIcon size={15} />
           </Button>
@@ -665,8 +884,7 @@ export default function CalendarPage() {
       }
     >
       {/* ── Sub-toolbar ─────────────────────────────────────────────── */}
-      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border-b bg-background shrink-0">
-        {/* Nav arrows */}
+      <div className="cal-toolbar">
         <Button variant="ghost" size="icon-sm" onClick={goBack}>
           <ChevronLeftIcon size={16} />
         </Button>
@@ -677,19 +895,29 @@ export default function CalendarPage() {
           <ChevronRightIcon size={16} />
         </Button>
 
-        {/* Period label — shorter on mobile */}
         <span className="flex-1 text-xs sm:text-sm font-medium text-center px-1 truncate">
           {periodLabel}
         </span>
 
-        {/* View toggle — icons only on mobile */}
+        {/* Recipe picker toggle — only visible in week view */}
+        {view === "week" && (
+          <Button
+            variant={showPicker ? "default" : "outline"}
+            size="icon-sm"
+            onClick={() => setShowPicker((v) => !v)}
+            title={showPicker ? "Hide recipe picker" : "Show recipe picker"}
+          >
+            <PanelRightIcon size={14} />
+          </Button>
+        )}
+
         <ButtonGroup>
           {VIEWS.map(({ id, label, icon: Icon }) => (
             <Button
               key={id}
               variant="outline"
               size="sm"
-              className={`gap-1.5 cursor-pointer ${view === id ? "bg-foreground text-background hover:bg-foreground/90 hover:text-background" : ""}`}
+              className={`gap-1.5 cursor-pointer ${view === id ? "view-btn--active" : ""}`}
               onClick={() => changeView(id)}
             >
               <Icon size={13} />
@@ -700,15 +928,43 @@ export default function CalendarPage() {
       </div>
 
       {/* ── View content ────────────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {view === "day" && <DayView anchorDate={anchorDate} />}
-        {view === "week" && (
-          <WeekView anchorDate={anchorDate} onDayClick={handleDayClick} />
-        )}
-        {view === "month" && (
-          <MonthView anchorDate={anchorDate} onDayClick={handleDayClick} />
-        )}
-      </div>
+      <DndContext
+        sensors={sensors}
+        modifiers={[restrictToWindowEdges]}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="flex flex-1 overflow-hidden">
+          {view === "day" && <DayView anchorDate={anchorDate} />}
+          {view === "week" && <WeekView anchorDate={anchorDate} onDayClick={handleDayClick} />}
+          {view === "month" && (
+            <div className="flex-1 flex flex-col overflow-hidden">
+              <MonthView anchorDate={anchorDate} onDayClick={handleDayClick} />
+            </div>
+          )}
+
+          {/* Recipe picker panel */}
+          {showPicker && view === "week" && (
+            <RecipePickerPanel onClose={() => setShowPicker(false)} />
+          )}
+        </div>
+
+        {/* Drag overlay — shows a chip while dragging */}
+        <DragOverlay dropAnimation={null}>
+          {activeDragRecipe && (
+            <div className="cal-drag-chip">
+              {activeDragRecipe.image && (
+                <img
+                  src={activeDragRecipe.image}
+                  alt=""
+                  className="w-6 h-6 rounded object-cover shrink-0"
+                />
+              )}
+              <span className="max-w-[160px] truncate">{activeDragRecipe.name}</span>
+            </div>
+          )}
+        </DragOverlay>
+      </DndContext>
 
       {/* DaySheet — used for week and month views */}
       {view !== "day" && (

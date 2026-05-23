@@ -1,0 +1,102 @@
+@reference "../index.css";
+
+/* ── Sub-toolbar ── */
+.cal-toolbar {
+    @apply flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border-b bg-background shrink-0;
+}
+
+/* ── Week grid wrapper ── */
+.cal-week-wrapper {
+    @apply flex flex-1 overflow-hidden;
+}
+
+.cal-week-scroll {
+    @apply flex-1 overflow-auto bg-card;
+}
+
+.cal-table {
+    @apply w-full h-full border-collapse table-fixed min-w-[600px];
+}
+
+/* Header cells */
+.cal-th-slot {
+    @apply border-b border-r p-2 text-left bg-muted/30;
+}
+
+.cal-th-day {
+    @apply border-b border-r p-2 text-center cursor-pointer hover:bg-muted/50 transition-colors;
+}
+
+.cal-th-day--today { @apply bg-primary/8; }
+.cal-th-day--normal { @apply bg-card; }
+
+/* Body cells */
+.cal-td-label {
+    @apply border-b border-r p-2 align-middle bg-muted/20;
+}
+
+.cal-td-cell {
+    @apply border-b border-r p-1 align-top cursor-pointer transition-colors;
+}
+
+.cal-td-cell--today  { @apply bg-primary/8; }
+.cal-td-cell--normal { @apply bg-card; }
+.cal-td-cell--over   { @apply bg-primary/15 ring-2 ring-inset ring-primary/30; }
+
+/* ── Recipe picker panel ── */
+.cal-picker {
+    @apply w-64 shrink-0 border-l flex flex-col bg-card;
+}
+
+.cal-picker__header {
+    @apply flex items-center justify-between px-3 py-2.5 border-b shrink-0;
+}
+
+.cal-picker__title {
+    @apply text-xs font-semibold uppercase tracking-wide text-muted-foreground;
+}
+
+.cal-picker__search {
+    @apply px-3 py-2 border-b shrink-0;
+}
+
+.cal-picker__list {
+    @apply flex-1 overflow-y-auto flex flex-col gap-1 p-2;
+}
+
+.cal-picker__recipe {
+    @apply flex items-center gap-2 p-2 rounded-lg border border-transparent
+           hover:bg-accent hover:border-border transition-colors
+           cursor-grab active:cursor-grabbing select-none;
+}
+
+.cal-picker__recipe--dragging {
+    @apply opacity-40;
+}
+
+.cal-picker__thumb {
+    @apply w-9 h-9 rounded-md object-cover shrink-0;
+}
+
+.cal-picker__thumb-placeholder {
+    @apply w-9 h-9 rounded-md bg-muted flex items-center justify-center shrink-0;
+}
+
+/* ── Drag overlay chip ── */
+.cal-drag-chip {
+    @apply flex items-center gap-2 px-2.5 py-1.5 rounded-lg border bg-card
+           shadow-xl text-xs font-medium pointer-events-none;
+}
+
+/* ── Repeat day-of-week button ── */
+.cal-dow-btn {
+    @apply text-xs px-2 py-1 rounded-md border transition-colors cursor-pointer;
+}
+
+.cal-dow-btn--active {
+    @apply bg-primary text-primary-foreground border-primary;
+}
+
+.cal-dow-btn--idle {
+    @apply border-border hover:bg-accent;
+}
