@@ -52,7 +52,7 @@ function NavItem({ href, icon: Icon, label, active, onClick }) {
       className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-2 text-[10px] font-medium transition-colors
         ${
           active
-            ? "text-amber-500"
+            ? "text-primary"
             : "text-muted-foreground active:text-foreground"
         }`}
     >
@@ -120,7 +120,7 @@ export function MobileNav() {
                 className={`flex flex-col items-center gap-1.5 py-4 rounded-xl transition-colors
                   ${
                     pathname.startsWith(item.href)
-                      ? "text-amber-500 bg-amber-50 dark:bg-amber-950/30"
+                      ? "text-primary bg-primary/8"
                       : "text-foreground hover:bg-muted active:bg-muted"
                   }`}
               >

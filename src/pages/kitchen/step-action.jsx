@@ -35,7 +35,7 @@ export default function StepAction({ duration, status, dependsOn, onChange }) {
   if (status === "unknown") {
     if (dependsOn.length === 0)
       return (
-        <Button className="w-24 bg-amber-700" onClick={(_) => onChange("START")}>
+        <Button className="w-24" onClick={(_) => onChange("START")}>
           <PlayIcon className="me-auto" /> Start
         </Button>
       );
@@ -49,7 +49,7 @@ export default function StepAction({ duration, status, dependsOn, onChange }) {
     if (duration > 3) {
       return (
         <Button
-          className="bg-orange-700 w-24"
+          className="w-24 bg-primary/85 hover:bg-primary/75"
           onClick={(_) => onChange("DONE")}
         >
           <AlarmCheckIcon className="me-auto" />

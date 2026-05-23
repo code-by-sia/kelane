@@ -42,7 +42,7 @@ export default function Preferences({ onNext }) {
             className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${
               dietaryTags.includes(id)
                 ? "border-primary/50 bg-primary/8"
-                : "border-border bg-white hover:bg-neutral-50"
+                : "border-border bg-card hover:bg-accent"
             }`}
           >
             <Checkbox

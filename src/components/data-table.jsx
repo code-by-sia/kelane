@@ -23,7 +23,7 @@ export function DataTable({ className, onSelect, columns, data }) {
   });
 
   return (
-    <div className={`overflow-hidden rounded-md border bg-white ${className}`}>
+    <div className={`overflow-hidden rounded-md border bg-card ${className}`}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

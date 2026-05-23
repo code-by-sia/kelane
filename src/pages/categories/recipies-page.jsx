@@ -33,8 +33,8 @@ export function RecipeCard({ code, name, summary, calories, preperationTime, ima
           className="aspect-[4/3] w-full object-cover"
         />
       ) : (
-        <div className="aspect-[4/3] w-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-          <FlameIcon size={40} className="text-amber-400" strokeWidth={1} />
+        <div className="aspect-[4/3] w-full bg-gradient-to-br from-primary/8 to-primary/15 flex items-center justify-center">
+          <FlameIcon size={40} className="text-primary/40" strokeWidth={1} />
         </div>
       )}
 
@@ -81,8 +81,8 @@ export function RecipeItem({ code, name, summary, calories, preperationTime, ima
       {image ? (
         <img className="w-14 h-14 rounded-lg object-cover shrink-0" src={image} alt={name} />
       ) : (
-        <div className="w-14 h-14 rounded-lg bg-amber-100 flex items-center justify-center shrink-0">
-          <FlameIcon size={20} className="text-amber-400" strokeWidth={1} />
+        <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <FlameIcon size={20} className="text-primary/50" strokeWidth={1} />
         </div>
       )}
       <div className="flex-1 min-w-0">

@@ -449,7 +449,7 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
   return (
     <>
       <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-        <DialogContent className="max-w-xl flex flex-col max-h-[90vh]">
+        <DialogContent className="max-w-xl flex flex-col max-h-[90vh] bg-card">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <ScanTextIcon size={16} />

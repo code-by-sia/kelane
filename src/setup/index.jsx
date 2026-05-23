@@ -48,10 +48,10 @@ export default function SetupPage() {
   const setStep = useSetupStore((s) => s.setStep);
 
   return (
-    <div className="flex flex-col h-screen bg-neutral-50">
+    <div className="flex flex-col h-screen bg-background">
 
       {/* ── App header ── */}
-      <header className="shrink-0 flex items-center gap-2 px-4 sm:px-6 lg:px-12 py-4 bg-white border-b">
+      <header className="shrink-0 flex items-center gap-2 px-4 sm:px-6 lg:px-12 py-4 bg-card border-b">
         <ChefHatIcon size={18} className="text-primary" />
         <span className="text-base font-semibold">Kelane</span>
       </header>
@@ -62,7 +62,7 @@ export default function SetupPage() {
         <div className="flex-1 flex flex-col overflow-hidden">
 
           {/* Mobile-only progress strip */}
-          <div className="md:hidden shrink-0 bg-white border-b px-4 py-3 flex flex-col gap-2">
+          <div className="md:hidden shrink-0 bg-card border-b px-4 py-3 flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">{SETUP_STEPS[step]?.title}</span>
               <span className="text-xs text-muted-foreground">
@@ -89,7 +89,7 @@ export default function SetupPage() {
         </div>
 
         {/* ── Desktop step rail ── */}
-        <aside className="hidden md:flex flex-col justify-between shrink-0 w-72 p-10 pb-4 bg-white border-l">
+        <aside className="hidden md:flex flex-col justify-between shrink-0 w-72 p-10 pb-4 bg-card border-l">
           <Steps
             steps={SETUP_STEPS}
             value={step}

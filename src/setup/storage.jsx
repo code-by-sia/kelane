@@ -12,7 +12,7 @@ export default function DataStorage({ onNext }) {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex items-start gap-4 p-5 rounded-xl border bg-white">
+        <div className="flex items-start gap-4 p-5 rounded-xl border bg-card">
           <DatabaseIcon size={28} className="text-primary shrink-0 mt-0.5" />
           <div>
             <p className="font-medium mb-1">Browser localStorage</p>
@@ -23,7 +23,7 @@ export default function DataStorage({ onNext }) {
             </p>
           </div>
         </div>
-        <div className="flex items-start gap-4 p-5 rounded-xl border bg-neutral-50">
+        <div className="flex items-start gap-4 p-5 rounded-xl border bg-muted/40">
           <CloudOffIcon size={28} className="text-muted-foreground shrink-0 mt-0.5" />
           <div>
             <p className="font-medium mb-1 text-muted-foreground">Cloud sync</p>

@@ -44,8 +44,8 @@ function RecipeCard({ recipe, fridgeItems }) {
       {recipe.image ? (
         <img src={recipe.image} alt={recipe.name} className="aspect-[4/3] w-full object-cover" />
       ) : (
-        <div className="aspect-[4/3] w-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-          <ShoppingCartIcon size={32} strokeWidth={0.8} className="text-amber-400" />
+        <div className="aspect-[4/3] w-full bg-gradient-to-br from-primary/8 to-primary/15 flex items-center justify-center">
+          <ShoppingCartIcon size={32} strokeWidth={0.8} className="text-primary/40" />
         </div>
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />

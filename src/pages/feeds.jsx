@@ -344,7 +344,7 @@ export default function FeedsPage() {
             className={`group flex items-center gap-2 px-4 py-2.5 cursor-pointer hover:bg-accent transition-colors border-b last:border-b-0 ${selectedFeed?.id === feed.id ? "bg-accent" : ""}`}
             onClick={() => navigate(`/feeds/${feed.id}`)}
           >
-            <RssIcon size={13} className="shrink-0 text-orange-500" />
+            <RssIcon size={13} className="shrink-0 text-primary" />
             <span className="flex-1 text-sm truncate">{feed.title}</span>
             <Button
               variant="ghost"

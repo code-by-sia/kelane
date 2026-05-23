@@ -15,7 +15,7 @@ export default function Welcome({ onNext }) {
         </p>
       </div>
 
-      <div className="bg-white border rounded-xl p-6 h-72 overflow-y-auto text-sm space-y-4 text-muted-foreground leading-relaxed">
+      <div className="bg-card border rounded-xl p-6 h-72 overflow-y-auto text-sm space-y-4 text-muted-foreground leading-relaxed">
         <p>
           <strong className="text-foreground">Kelane</strong> is a client-side
           recipe management application. All your data — recipes, groceries,
