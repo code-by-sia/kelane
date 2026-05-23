@@ -31,6 +31,22 @@ const schema = z.object({
   ),
 });
 
+/** Coerce ingredients to a plain string array regardless of what the LLM returned. */
+function toIngredientArray(val) {
+  if (!val) return [];
+  if (Array.isArray(val)) return val.map(String).filter(Boolean);
+  if (typeof val === "string") return val.split(/\n|;/).map((s) => s.trim()).filter(Boolean);
+  return [];
+}
+
+/** Coerce steps to an array of step-like objects or strings. */
+function toStepArray(val) {
+  if (!val) return [];
+  if (Array.isArray(val)) return val.filter(Boolean);
+  if (typeof val === "string") return val.split(/\n/).map((s) => s.trim()).filter(Boolean);
+  return [];
+}
+
 function defaultValues(recipe) {
   if (!recipe) {
     return {
@@ -51,10 +67,10 @@ function defaultValues(recipe) {
     calories: recipe.calories ?? "",
     preperationTime: recipe.preperationTime ?? "",
     categories: recipe.categories ?? [],
-    ingredients: (recipe.ingredients ?? []).map((v) => ({ value: v })),
-    steps: (recipe.steps ?? []).map((s) => ({
-      action: s.action,
-      duration: s.duration ?? "",
+    ingredients: toIngredientArray(recipe.ingredients).map((v) => ({ value: v })),
+    steps: toStepArray(recipe.steps).map((s) => ({
+      action: typeof s === "string" ? s : s.action,
+      duration: (typeof s === "object" ? s.duration : null) ?? "",
     })),
   };
 }

@@ -388,9 +388,38 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
     html
       .replace(/<script[\s\S]*?<\/script>/gi, "")
       .replace(/<style[\s\S]*?<\/style>/gi, "")
-      .replace(/<[^>]+>/g, " ")
-      .replace(/\s{2,}/g, " ")
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/p>|<\/li>|<\/div>/gi, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/[ \t]{2,}/g, " ")
+      .replace(/\n{3,}/g, "\n\n")
       .trim();
+
+  /**
+   * Paste handler for the rich-text tab.
+   * If the clipboard contains text/html, we try JSON-LD first (no LLM needed),
+   * then fall back to stripping the HTML to clean plain text for the textarea.
+   */
+  const handleRichPaste = (e) => {
+    const html = e.clipboardData?.getData("text/html");
+    if (!html) return; // no HTML in clipboard — let the default plain-text paste work
+
+    // 1. JSON-LD in copied HTML? Extract instantly, no LLM.
+    const ld = extractJsonLdRecipe(html);
+    if (ld) {
+      e.preventDefault();
+      const recipe = mapJsonLdToRecipe(ld);
+      if (!recipe.image) recipe.image = extractMetaImage(html) ?? "";
+      setExtracted(recipe);
+      setExtractedSource("json-ld");
+      return;
+    }
+
+    // 2. No structured data — strip tags and populate the textarea with clean text
+    e.preventDefault();
+    const text = htmlToText(html);
+    setPastedText(text);
+  };
 
   /** Run the LLM extractor and merge in a discovered image URL */
   const runLlm = async (text, imageUrl = "") => {
@@ -517,9 +546,10 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
           ) : (
             <textarea
               className="scanner-textarea"
-              placeholder="Paste the recipe page text here…"
+              placeholder="Paste the recipe page text or copy a whole recipe page here…"
               value={pastedText}
               onChange={(e) => setPastedText(e.target.value)}
+              onPaste={handleRichPaste}
             />
           )}
 

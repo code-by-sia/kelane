@@ -50,6 +50,47 @@ Field rules:
 • tools — equipment list, e.g. ["large pot", "whisk", "oven"]
 • Return ONLY the JSON. If a value cannot be found in the text, use null or [].`;
 
+/**
+ * Coerce a potentially-malformed LLM field into a clean array of strings.
+ * Handles: null/undefined → [], string → split on newlines, array → flatten strings.
+ */
+function toStringArray(val) {
+  if (!val) return [];
+  if (Array.isArray(val)) return val.map((v) => String(v).trim()).filter(Boolean);
+  if (typeof val === "string")
+    return val.split(/\n|;/).map((s) => s.trim()).filter(Boolean);
+  return [];
+}
+
+/**
+ * Normalise the raw parsed LLM JSON so that array fields are always real arrays
+ * even when the model returns a string, null, or some other non-array value.
+ */
+function normalizeExtracted(parsed) {
+  return {
+    ...parsed,
+    ingredients: toStringArray(parsed.ingredients),
+    categories: toStringArray(parsed.categories),
+    tools: toStringArray(parsed.tools),
+    steps: (() => {
+      const raw = parsed.steps;
+      if (!raw) return [];
+      const arr = Array.isArray(raw) ? raw : String(raw).split(/\n/).filter(Boolean);
+      return arr.map((s, i) => {
+        if (typeof s === "string") {
+          return { id: String(i + 1), action: s.trim(), duration: null, dependsOn: i > 0 ? [String(i)] : [] };
+        }
+        return {
+          id: s.id ?? String(i + 1),
+          action: String(s.action ?? s.text ?? "").trim(),
+          duration: s.duration ?? null,
+          dependsOn: Array.isArray(s.dependsOn) ? s.dependsOn : [],
+        };
+      }).filter((s) => s.action);
+    })(),
+  };
+}
+
 export function useWebLLM() {
   // Read model from settings; fall back to default if not set.
   const modelId = useSettingsStore((s) => s.modelId) || DEFAULT_MODEL_ID;
@@ -153,7 +194,7 @@ export function useWebLLM() {
 
         const parsed = JSON.parse(jsonText);
         setStatus("ready");
-        return parsed;
+        return normalizeExtracted(parsed);
       } catch (err) {
         setStatus("ready");
         throw err;
