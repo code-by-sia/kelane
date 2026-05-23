@@ -32,10 +32,13 @@ export function MyRecipesPage() {
       return [...recipes]
         .filter((r) => r.date && new Date(r.date) > new Date(Date.now() - A_WEEK))
         .sort((a, b) => new Date(b.date) - new Date(a.date));
-    const favs = getFavoriteRecipes();
-    const flagged = getFlaggedRecipes();
-    const seen = new Set(favs.map((r) => r.code));
-    return [...favs, ...flagged.filter((r) => !seen.has(r.code))];
+    // "all" — every recipe, newest first
+    return [...recipes].sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return new Date(b.date) - new Date(a.date);
+    });
   }, [filter, recipes, getFavoriteRecipes, getFlaggedRecipes]);
 
   const filterBar = (

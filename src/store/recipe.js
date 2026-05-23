@@ -16,7 +16,9 @@ const useRecipeStore = create(
         }));
       },
 
-      getRecipe: (code) => get().recipes.find((r) => r.code === code * 1),
+      // Compare as strings so both legacy numeric codes and UUID-based string
+      // codes (from the recipe scanner) resolve correctly.
+      getRecipe: (code) => get().recipes.find((r) => String(r.code) === String(code)),
       getRecipesInCategory: (category) =>
         get().recipes.filter((it) => it.categories.includes(category)),
       getFlaggedRecipes: () => get().recipes.filter((recipe) => recipe.flagged),

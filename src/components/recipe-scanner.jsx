@@ -16,6 +16,7 @@
  */
 
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import {
   BrainCircuitIcon,
   CheckIcon,
@@ -38,6 +39,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RecipeFormDialog } from "@/components/recipe-form";
+import { toast } from "sonner";
 import { useWebLLM } from "@/hooks/use-web-llm";
 import useRecipeStore from "@/store/recipe";
 import { getProxyPrefix } from "@/store/settings";
@@ -349,6 +351,7 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
   const [scanError, setScanError] = useState(null);
   const [importOpen, setImportOpen] = useState(false);
 
+  const go = useNavigate();
   const { extract, status, progress, errorMessage } = useWebLLM();
   const addRecipe = useRecipeStore((s) => s.addRecipe);
   const settingsState = useSettingsStore();
@@ -464,8 +467,11 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
   const handleImportDirect = () => {
     if (!extracted) return;
     const code = crypto.randomUUID().split("-")[0];
-    addRecipe({ ...extracted, code });
+    addRecipe({ ...extracted, code, date: new Date().toISOString() });
     onClose();
+    toast.success(`"${extracted.name || "Recipe"}" imported`, {
+      action: { label: "View", onClick: () => go(`/my-recipes/${code}`) },
+    });
   };
 
   const reset = () => {
