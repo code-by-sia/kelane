@@ -35,7 +35,7 @@ export default function StepAction({ duration, status, dependsOn, onChange }) {
   if (status === "unknown") {
     if (dependsOn.length === 0)
       return (
-        <Button className="w-24 bg-rose-800" onClick={(_) => onChange("START")}>
+        <Button className="w-24 bg-amber-700" onClick={(_) => onChange("START")}>
           <PlayIcon className="me-auto" /> Start
         </Button>
       );

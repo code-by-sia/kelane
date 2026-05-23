@@ -39,32 +39,30 @@ function RecipeCard({ recipe, fridgeItems }) {
   return (
     <div
       onClick={() => navigate(href)}
-      className="flex gap-3 p-3 rounded-xl border bg-card hover:bg-accent/40 cursor-pointer transition-colors"
+      className="group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
     >
-      {recipe.image && (
-        <img
-          src={recipe.image}
-          alt={recipe.name}
-          className="w-16 h-16 rounded-lg object-cover shrink-0"
-        />
+      {recipe.image ? (
+        <img src={recipe.image} alt={recipe.name} className="aspect-[4/3] w-full object-cover" />
+      ) : (
+        <div className="aspect-[4/3] w-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+          <ShoppingCartIcon size={32} strokeWidth={0.8} className="text-amber-400" />
+        </div>
       )}
-      <div className="flex-1 min-w-0">
-        <p className="font-medium truncate text-sm">{recipe.name}</p>
-        <div className="flex items-center gap-2 mt-1">
-          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+        <p className="font-semibold text-sm leading-tight truncate">{recipe.name}</p>
+        <div className="flex items-center gap-2 mt-1.5">
+          <div className="flex-1 h-1 bg-white/30 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full ${pct === 1 ? "bg-green-500" : pct >= 0.6 ? "bg-amber-400" : "bg-rose-300"}`}
+              className={`h-full rounded-full ${pct === 1 ? "bg-green-400" : pct >= 0.6 ? "bg-amber-400" : "bg-red-400"}`}
               style={{ width: `${Math.round(pct * 100)}%` }}
             />
           </div>
-          <span className="text-xs text-muted-foreground shrink-0">
-            {Math.round(pct * 100)}%
-          </span>
+          <span className="text-xs text-white/80 shrink-0">{Math.round(pct * 100)}%</span>
         </div>
         {missing.length > 0 && (
-          <p className="text-xs text-muted-foreground mt-1 truncate">
-            Missing: {missing.slice(0, 3).join(", ")}
-            {missing.length > 3 ? ` +${missing.length - 3}` : ""}
+          <p className="text-xs text-white/60 mt-0.5 truncate">
+            Need: {missing.slice(0, 2).join(", ")}{missing.length > 2 ? ` +${missing.length - 2}` : ""}
           </p>
         )}
       </div>
@@ -82,7 +80,7 @@ function Section({ title, recipes, fridgeItems, emptyText }) {
           {recipes.length}
         </Badge>
       </h2>
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         {recipes.map((r) => (
           <RecipeCard key={r.code} recipe={r} fridgeItems={fridgeItems} />
         ))}
@@ -196,7 +194,7 @@ export default function ExplorePage() {
                   </span>{" "}
                   — expiring within {EXPIRY_WARN_DAYS} days.
                 </p>
-                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
                   {preventExpiry.map((r) => (
                     <RecipeCard key={r.code} recipe={r} fridgeItems={fridgeItems} />
                   ))}
@@ -235,34 +233,27 @@ export default function ExplorePage() {
                 Recently Cooked
               </h2>
             </div>
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
               {recentlyCooked.map(({ entry, recipe }) => {
                 if (!recipe) return null;
                 const cat = recipe.categories?.[0];
-                const href = cat
-                  ? `/categories/${cat}/${recipe.code}`
-                  : `/uncategorized`;
+                const href = cat ? `/categories/${cat}/${recipe.code}` : `/uncategorized`;
                 return (
                   <div
                     key={entry.id}
                     onClick={() => navigate(href)}
-                    className="flex gap-3 p-3 rounded-xl border bg-card hover:bg-accent/40 cursor-pointer transition-colors"
+                    className="group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
                   >
-                    {recipe.image && (
-                      <img
-                        src={recipe.image}
-                        alt={recipe.name}
-                        className="w-14 h-14 rounded-lg object-cover shrink-0"
-                      />
+                    {recipe.image ? (
+                      <img src={recipe.image} alt={recipe.name} className="aspect-[4/3] w-full object-cover" />
+                    ) : (
+                      <div className="aspect-[4/3] w-full bg-gradient-to-br from-amber-100 to-amber-200" />
                     )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium truncate text-sm">
-                        {recipe.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {formatDistanceToNow(parseISO(entry.completedAt), {
-                          addSuffix: true,
-                        })}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-2.5 text-white">
+                      <p className="font-semibold text-xs leading-tight line-clamp-2">{recipe.name}</p>
+                      <p className="text-xs text-white/60 mt-0.5">
+                        {formatDistanceToNow(parseISO(entry.completedAt), { addSuffix: true })}
                       </p>
                     </div>
                   </div>

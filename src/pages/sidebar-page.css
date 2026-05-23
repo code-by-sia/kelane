@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Sidebar icons use amber instead of rose */
 .side-bar .lucide {
-    @apply stroke-rose-600;
+    @apply stroke-amber-400;
 }

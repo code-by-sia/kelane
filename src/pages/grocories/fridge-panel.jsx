@@ -21,8 +21,8 @@ function expiryDisplay(expiresAt) {
       />
     );
   const days = differenceInDays(parseISO(expiresAt), new Date());
-  if (days < 0) return <Badge variant="destructive">Expired</Badge>;
-  if (days === 0) return <Badge variant="destructive">Today</Badge>;
+  if (days < 0) return <Badge variant="destructive" className="badge-urgent">Expired</Badge>;
+  if (days === 0) return <Badge variant="destructive" className="badge-urgent">Today</Badge>;
   if (days === 1)
     return <Badge className="bg-orange-400 text-white border-transparent">Tomorrow</Badge>;
   if (days < 7)

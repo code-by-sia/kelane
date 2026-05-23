@@ -129,7 +129,7 @@ function GroceriesSheet({ recipe }) {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline">
-          <CitrusIcon className="stroke-rose-600" size={18} />
+          <CitrusIcon className="stroke-amber-500" size={18} />
           Grocories
         </Button>
       </SheetTrigger>
@@ -209,7 +209,7 @@ function GroceriesSheet({ recipe }) {
                   <div key={ing} className="flex items-center gap-2 py-1">
                     <XCircleIcon
                       size={16}
-                      className="shrink-0 text-rose-400"
+                      className="shrink-0 text-amber-400"
                     />
                     <span className="flex-1 text-sm">{ing}</span>
                     <Button
@@ -440,50 +440,60 @@ export function RecipeViewer({ recipeId }) {
 
   return (
     <div className="relative flex-1">
-      <div
-        style={{
-          backgroundImage: `url('${recipe?.image}')`,
-          maskImage: `linear-gradient(to bottom, black, transparent)`,
-        }}
-        className={`h-32 w-full bg-cover bg-center`}
-      ></div>
-      <h1 className="flex flex-col mb-2 mx-6 z-10 font-extralight -mt-4">
-        <span className="text-3xl">{recipe?.name}</span>
-      </h1>
-      {/* Stats bar — scrollable on mobile */}
-      <div className="flex gap-1 mx-3 overflow-x-auto text-gray-600 z-10 scrollbar-none">
-        <Button variant="ghost" className="shrink-0">
-          <FlameIcon size={16} />
-          {recipe?.calories >= 1000
-            ? Math.round(recipe.calories / 1000) + " kilo"
-            : recipe?.calories || "N/A"}{" "}
-          kcal
-        </Button>
-        <Button variant="ghost" className="shrink-0">
-          {recipe.guests || 1} <Users2Icon size={16} />
-        </Button>
-        <Button variant="ghost" className="shrink-0">
-          <ClockFadingIcon size={16} />
-          {recipe.preperationTime} min
-        </Button>
-        <Button variant="ghost" className="shrink-0">
-          <SaladIcon size={16} />
-          {recipe.ingredients?.length} ing
-        </Button>
-        <Button variant="ghost" className="shrink-0">
-          <MicrowaveIcon size={16} />
-          {recipe.tools?.length} tools
-        </Button>
+      {/* Hero image */}
+      <div className="relative">
+        {recipe?.image ? (
+          <img
+            src={recipe.image}
+            alt={recipe.name}
+            className="w-full h-40 object-cover"
+          />
+        ) : (
+          <div className="w-full h-40 bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+            <FlameIcon size={48} strokeWidth={0.8} className="text-amber-400" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
       </div>
-      {/* Action buttons — wrap on small screens */}
-      <div className="flex flex-wrap gap-2 m-3 text-rose-950">
-        <Button variant="outline" onClick={() => go(`/cook/${recipeId}`)}>
-          <CookingPotIcon className="stroke-rose-600" size={18} />
+
+      {/* Title */}
+      <h1 className="font-semibold text-2xl px-5 pt-3 pb-1 leading-tight">
+        {recipe?.name}
+      </h1>
+
+      {/* ── Stats grid (replacing ghost-button row) ── */}
+      <div className="grid grid-cols-4 divide-x border-y mx-5 my-3 rounded-lg overflow-hidden">
+        {[
+          {
+            icon: FlameIcon,
+            value: recipe?.calories
+              ? recipe.calories >= 1000
+                ? `${(recipe.calories / 1000).toFixed(1)}k`
+                : recipe.calories
+              : "—",
+            label: "kcal",
+          },
+          { icon: Users2Icon, value: recipe?.guests || 1, label: "serv" },
+          { icon: ClockFadingIcon, value: recipe?.preperationTime ? `${recipe.preperationTime}` : "—", label: "min" },
+          { icon: SaladIcon, value: recipe?.ingredients?.length ?? "—", label: "ing" },
+        ].map(({ icon: Icon, value, label }) => (
+          <div key={label} className="flex flex-col items-center py-2.5 px-1 bg-muted/30">
+            <Icon size={14} className="text-muted-foreground mb-0.5" />
+            <span className="font-semibold text-sm leading-none">{value}</span>
+            <span className="text-xs text-muted-foreground mt-0.5">{label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Action buttons ── */}
+      <div className="flex flex-wrap gap-2 mx-5 mb-3">
+        <Button onClick={() => go(`/cook/${recipeId}`)}>
+          <CookingPotIcon size={15} />
           Cook
         </Button>
         <GroceriesSheet recipe={recipe} />
         <Button variant="outline" onClick={() => setEditOpen(true)}>
-          <PencilIcon className="stroke-rose-600" size={18} />
+          <PencilIcon size={15} />
           Edit
         </Button>
         <Button
@@ -491,7 +501,7 @@ export function RecipeViewer({ recipeId }) {
           onClick={() => setDietOpen(true)}
           className={appliedDiet ? "border-green-500 text-green-700" : ""}
         >
-          <AppleIcon className="stroke-rose-600" size={18} />
+          <AppleIcon size={15} />
           {appliedDiet
             ? `${DIETS.find((d) => d.id === appliedDiet)?.emoji} ${DIETS.find((d) => d.id === appliedDiet)?.label}`
             : "Adjust to diet"}
@@ -499,8 +509,8 @@ export function RecipeViewer({ recipeId }) {
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline">
-              <RulerIcon className="stroke-rose-600" size={18} />
-              Adjust{scaledGuests !== null && scaledGuests !== (recipe.guests || 1)
+              <RulerIcon size={15} />
+              Scale{scaledGuests !== null && scaledGuests !== (recipe.guests || 1)
                 ? ` (${scaledGuests})`
                 : ""}
             </Button>
@@ -548,10 +558,11 @@ export function RecipeViewer({ recipeId }) {
           setAppliedDiet(dietId);
         }}
       />
-      <p className="p-3 px-5">
-        <strong className="block pb-2">Summary:</strong>
-        {recipe?.summary || "No description available"}
-      </p>
+      {recipe?.summary && (
+        <p className="px-5 pb-3 text-sm text-muted-foreground leading-relaxed">
+          {recipe.summary}
+        </p>
+      )}
       {recipe.ingredients?.length > 0 && (() => {
         const baseGuests = recipe.guests || 1;
         const targetGuests = scaledGuests ?? baseGuests;
