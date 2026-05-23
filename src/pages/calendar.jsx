@@ -322,7 +322,7 @@ function WeekView({ anchorDate, onDayClick }) {
   );
 
   return (
-    <div className="flex-1 overflow-auto">
+    <div className="flex-1 overflow-auto bg-card">
       <table className="w-full h-full border-collapse table-fixed min-w-[600px]">
         <colgroup>
           <col className="w-24" />
@@ -335,7 +335,7 @@ function WeekView({ anchorDate, onDayClick }) {
         <thead>
           <tr>
             {/* Slot label column header */}
-            <th className="border-b border-r p-2 text-left">
+            <th className="border-b border-r p-2 text-left bg-muted/30">
               <span className="text-xs text-muted-foreground font-normal">
                 Slot
               </span>
@@ -347,8 +347,8 @@ function WeekView({ anchorDate, onDayClick }) {
               return (
                 <th
                   key={dk}
-                  className={`border-b border-r p-2 text-center cursor-pointer hover:bg-accent/40 transition-colors ${
-                    isToday ? "bg-primary/5" : ""
+                  className={`border-b border-r p-2 text-center cursor-pointer hover:bg-muted/50 transition-colors ${
+                    isToday ? "bg-primary/8" : "bg-card"
                   }`}
                   onClick={() => onDayClick(dk)}
                 >
@@ -378,7 +378,7 @@ function WeekView({ anchorDate, onDayClick }) {
           {SLOTS.map((slot) => (
             <tr key={slot} className="h-[80px]">
               {/* Slot label */}
-              <td className="border-b border-r p-2 align-middle">
+              <td className="border-b border-r p-2 align-middle bg-muted/20">
                 <div className="flex items-center gap-1.5">
                   <span
                     className={`w-2 h-2 rounded-full shrink-0 ${SLOT_COLORS[slot]}`}
@@ -400,8 +400,8 @@ function WeekView({ anchorDate, onDayClick }) {
                 return (
                   <td
                     key={dk}
-                    className={`border-b border-r p-1 align-top cursor-pointer hover:bg-accent/30 transition-colors group ${
-                      isToday ? "bg-primary/5" : ""
+                    className={`border-b border-r p-1 align-top cursor-pointer hover:bg-muted/50 transition-colors group ${
+                      isToday ? "bg-primary/8" : "bg-card"
                     }`}
                     onClick={() => onDayClick(dk)}
                   >
@@ -665,7 +665,7 @@ export default function CalendarPage() {
       }
     >
       {/* ── Sub-toolbar ─────────────────────────────────────────────── */}
-      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border-b bg-background shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border-b bg-card shrink-0">
         {/* Nav arrows */}
         <Button variant="ghost" size="icon-sm" onClick={goBack}>
           <ChevronLeftIcon size={16} />
@@ -689,7 +689,7 @@ export default function CalendarPage() {
               key={id}
               variant="outline"
               size="sm"
-              className={`gap-1.5 cursor-pointer ${view === id ? "bg-gray-600 text-white hover:bg-gray-700 hover:text-white" : ""}`}
+              className={`gap-1.5 cursor-pointer ${view === id ? "bg-foreground text-background hover:bg-foreground/90 hover:text-background" : ""}`}
               onClick={() => changeView(id)}
             >
               <Icon size={13} />
