@@ -18,32 +18,37 @@ import { CreateMLCEngine } from "@mlc-ai/web-llm";
 import useSettingsStore from "@/store/settings";
 import { DEFAULT_MODEL_ID } from "@/data/llm-models";
 
-// System prompt that instructs the model to output ONLY a JSON recipe.
-const SYSTEM_PROMPT = `You are a recipe extraction assistant. Extract recipe information from the provided text and return ONLY a valid JSON object — no markdown, no explanation, no extra text.
+// System prompt — instructs the model to output ONLY a valid JSON recipe.
+const SYSTEM_PROMPT = `You are a structured recipe extraction assistant. Parse the provided text and return ONLY a valid JSON object — no markdown, no code fences, no explanation.
 
-The JSON must match this exact schema:
+Use exactly this schema:
 {
-  "name": "Recipe Name",
-  "summary": "Brief description",
-  "calories": 450,
-  "guests": 4,
-  "preperationTime": 30,
+  "name": "string — exact recipe title",
+  "summary": "string — 1-2 sentence description of the dish and its key flavour profile",
+  "calories": number|null,
+  "guests": number|null,
+  "preperationTime": number|null,
   "image": "",
-  "categories": [],
-  "ingredients": ["200g flour", "2 eggs", "1 tsp salt"],
-  "steps": [
-    { "id": "1", "action": "Mix flour and eggs", "duration": 5, "dependsOn": [] }
-  ],
-  "tools": ["mixing bowl", "whisk"]
+  "categories": ["string"],
+  "ingredients": ["string"],
+  "steps": [{ "id": "string", "action": "string", "duration": number|null, "dependsOn": ["string"] }],
+  "tools": ["string"]
 }
 
-Rules:
-- calories and guests must be numbers (integers). Use null if unknown.
-- preperationTime is total cook+prep time in minutes (integer). Use null if unknown.
-- ingredients is an array of strings, each with quantity + unit + name.
-- steps is an array with sequential id strings starting at "1".
-- dependsOn in each step is an array of step id strings that must complete first.
-- Return ONLY the JSON object, nothing else.`;
+Field rules:
+• calories — total kcal per serving; integer or null
+• guests — number of servings; integer or null
+• preperationTime — total prep + cook time in minutes; integer or null
+• categories — cuisine or dish-type tags, e.g. ["Italian", "Pasta", "Vegetarian"]
+• ingredients — one string per ingredient; always include quantity + unit when given, e.g. "250 g flour", "2 large eggs", "1 tsp salt". Keep the original wording where possible.
+• steps — 6–15 steps for a typical recipe; each step must:
+    - cover exactly ONE distinct task (chop, mix, bake — not a paragraph)
+    - start with an imperative verb (Mix, Bake, Simmer, Chop …)
+    - be a complete instruction in 1–3 sentences
+    - have a realistic duration in minutes (e.g. "Boil water" ≈ 5, "Simmer sauce" ≈ 20, "Rest dough" ≈ 60)
+    - list dependsOn IDs for all prerequisite steps (sequential steps depend on the previous one; independent prep steps may have an empty dependsOn or share a common prerequisite)
+• tools — equipment list, e.g. ["large pot", "whisk", "oven"]
+• Return ONLY the JSON. If a value cannot be found in the text, use null or [].`;
 
 export function useWebLLM() {
   // Read model from settings; fall back to default if not set.
@@ -115,8 +120,9 @@ export function useWebLLM() {
       setStatus("extracting");
 
       try {
-        // Trim to ~8000 chars to stay within context window
-        const trimmed = rawText.slice(0, 8000);
+        // Trim to ~12 000 chars — enough for most recipe pages while staying
+        // safely within the 1B/3B models' usable context window.
+        const trimmed = rawText.slice(0, 12000);
 
         const chunks = [];
         const stream = await engine.chat.completions.create({
