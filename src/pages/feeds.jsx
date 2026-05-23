@@ -328,7 +328,12 @@ export default function FeedsPage() {
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           My Feeds
         </span>
-        <Button variant="ghost" size="icon-sm" onClick={() => setAddingFeed((v) => !v)} title="Add feed">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => setAddingFeed((v) => !v)}
+          title="Add feed"
+        >
           <PlusIcon size={14} />
         </Button>
       </div>
@@ -342,9 +347,13 @@ export default function FeedsPage() {
             <RssIcon size={13} className="shrink-0 text-orange-500" />
             <span className="flex-1 text-sm truncate">{feed.title}</span>
             <Button
-              variant="ghost" size="icon-sm"
+              variant="ghost"
+              size="icon-sm"
               className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive shrink-0"
-              onClick={(e) => { e.stopPropagation(); handleRemoveFeed(feed.id); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemoveFeed(feed.id);
+              }}
               title="Remove feed"
             >
               <TrashIcon size={13} />
@@ -353,12 +362,23 @@ export default function FeedsPage() {
         ))}
         {feeds.length === 0 && !addingFeed && (
           <div className="flex flex-col items-center gap-2 py-10 px-4 text-center">
-            <RssIcon size={28} strokeWidth={0.8} className="text-muted-foreground/40" />
-            <p className="text-xs text-muted-foreground">No feeds yet — add one to get started.</p>
+            <RssIcon
+              size={28}
+              strokeWidth={0.8}
+              className="text-muted-foreground/40"
+            />
+            <p className="text-xs text-muted-foreground">
+              No feeds yet — add one to get started.
+            </p>
           </div>
         )}
       </div>
-      {addingFeed && <AddFeedForm onAdd={handleAddFeed} onCancel={() => setAddingFeed(false)} />}
+      {addingFeed && (
+        <AddFeedForm
+          onAdd={handleAddFeed}
+          onCancel={() => setAddingFeed(false)}
+        />
+      )}
     </div>
   );
 
@@ -368,20 +388,40 @@ export default function FeedsPage() {
         <>
           <div className="flex items-center gap-2 px-4 py-3 border-b shrink-0">
             {showBack && (
-              <Button variant="ghost" size="icon-sm" onClick={() => navigate("/feeds")} title="Back" className="-ml-1 mr-1">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => navigate("/feeds")}
+                title="Back"
+                className="-ml-1 mr-1"
+              >
                 <ArrowLeftIcon size={16} />
               </Button>
             )}
             <RssIcon size={14} className="text-orange-500 shrink-0" />
-            <span className="font-medium text-sm truncate flex-1">{selectedFeed.title}</span>
+            <span className="font-medium text-sm truncate flex-1">
+              {selectedFeed.title}
+            </span>
             {viaCorsProxy && (
-              <Badge variant="outline" className="text-xs text-amber-700 border-amber-300 shrink-0 gap-1">
+              <Badge
+                variant="outline"
+                className="text-xs text-amber-700 border-amber-300 shrink-0 gap-1"
+              >
                 <ShieldOffIcon size={10} />
                 via {activePreset.label.replace(" (recommended)", "")}
               </Badge>
             )}
-            <Button variant="ghost" size="icon-sm" className="shrink-0" onClick={() => loadFeed(selectedFeed)} disabled={loadingFeed}>
-              <RefreshCwIcon size={13} className={loadingFeed ? "animate-spin" : ""} />
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="shrink-0"
+              onClick={() => loadFeed(selectedFeed)}
+              disabled={loadingFeed}
+            >
+              <RefreshCwIcon
+                size={13}
+                className={loadingFeed ? "animate-spin" : ""}
+              />
             </Button>
           </div>
 
@@ -394,15 +434,31 @@ export default function FeedsPage() {
             )}
             {feedError && !loadingFeed && !corsBlocked && (
               <div className="flex flex-col items-center gap-3 py-16 text-center px-6">
-                <TriangleAlertIcon size={32} strokeWidth={0.8} className="text-amber-400" />
+                <TriangleAlertIcon
+                  size={32}
+                  strokeWidth={0.8}
+                  className="text-amber-400"
+                />
                 <p className="font-medium text-sm">Could not load feed</p>
-                <p className="text-xs text-muted-foreground max-w-xs">{feedError}</p>
-                <Button size="sm" variant="outline" onClick={() => loadFeed(selectedFeed)}>Try again</Button>
+                <p className="text-xs text-muted-foreground max-w-xs">
+                  {feedError}
+                </p>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => loadFeed(selectedFeed)}
+                >
+                  Try again
+                </Button>
               </div>
             )}
             {feedError && !loadingFeed && corsBlocked && (
               <div className="flex flex-col items-center gap-4 py-12 px-6 max-w-md mx-auto w-full">
-                <ShieldOffIcon size={36} strokeWidth={0.8} className="text-amber-500 shrink-0" />
+                <ShieldOffIcon
+                  size={36}
+                  strokeWidth={0.8}
+                  className="text-amber-500 shrink-0"
+                />
                 <div className="text-center">
                   <p className="font-medium text-sm">Blocked by CORS policy</p>
                   <p className="text-xs text-muted-foreground mt-1 max-w-xs">
@@ -410,31 +466,68 @@ export default function FeedsPage() {
                   </p>
                 </div>
                 <div className="w-full flex flex-col gap-2">
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Choose proxy</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    Choose proxy
+                  </p>
                   <div className="flex flex-col gap-1.5">
                     {PROXY_PRESETS.map((preset) => (
-                      <label key={preset.id} className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${proxyPresetId === preset.id ? "border-foreground/30 bg-accent" : "border-border hover:bg-accent/50"}`}>
-                        <input type="radio" name="proxy-preset-feeds" value={preset.id} checked={proxyPresetId === preset.id} onChange={() => setProxyPreset(preset.id)} className="mt-0.5 accent-foreground" />
+                      <label
+                        key={preset.id}
+                        className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${proxyPresetId === preset.id ? "border-foreground/30 bg-accent" : "border-border hover:bg-accent/50"}`}
+                      >
+                        <input
+                          type="radio"
+                          name="proxy-preset-feeds"
+                          value={preset.id}
+                          checked={proxyPresetId === preset.id}
+                          onChange={() => setProxyPreset(preset.id)}
+                          className="mt-0.5 accent-foreground"
+                        />
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium leading-tight">{preset.label}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5 leading-tight">{preset.hint}</p>
+                          <p className="text-xs font-medium leading-tight">
+                            {preset.label}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-0.5 leading-tight">
+                            {preset.hint}
+                          </p>
                         </div>
                       </label>
                     ))}
                   </div>
                   {proxyPresetId === "custom" && (
-                    <Input placeholder="https://your-proxy.example.com/?url=" value={customProxyPrefix} onChange={(e) => setCustomProxyPrefix(e.target.value)} className="h-8 text-xs mt-1" autoFocus />
+                    <Input
+                      placeholder="https://your-proxy.example.com/?url="
+                      value={customProxyPrefix}
+                      onChange={(e) => setCustomProxyPrefix(e.target.value)}
+                      className="h-8 text-xs mt-1"
+                      autoFocus
+                    />
                   )}
                   {proxyPresetId === "local" && (
-                    <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted text-xs text-muted-foreground font-mono">$ npm run proxy</div>
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted text-xs text-muted-foreground font-mono">
+                      $ npm run proxy
+                    </div>
                   )}
                 </div>
                 <div className="flex gap-2 w-full">
-                  <Button size="sm" className="flex-1" onClick={retryWithProxy} disabled={proxyPresetId === "custom" && !customProxyPrefix.trim()}>
+                  <Button
+                    size="sm"
+                    className="flex-1"
+                    onClick={retryWithProxy}
+                    disabled={
+                      proxyPresetId === "custom" && !customProxyPrefix.trim()
+                    }
+                  >
                     <ShieldOffIcon size={13} />
                     Retry via {activePreset.label.replace(" (recommended)", "")}
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => loadFeed(selectedFeed)}>Direct</Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => loadFeed(selectedFeed)}
+                  >
+                    Direct
+                  </Button>
                 </div>
               </div>
             )}
@@ -444,16 +537,25 @@ export default function FeedsPage() {
                 <p className="text-sm">No items found in this feed.</p>
               </div>
             )}
-            {!loadingFeed && items.map((item, i) => (
-              <FeedItem key={`${item.link}-${i}`} item={item} onImport={setImportItem} />
-            ))}
+            {!loadingFeed &&
+              items.map((item, i) => (
+                <FeedItem
+                  key={`${item.link}-${i}`}
+                  item={item}
+                  onImport={setImportItem}
+                />
+              ))}
           </div>
         </>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 text-muted-foreground">
           <RssIcon size={48} strokeWidth={0.5} />
           <p className="text-sm">Select a feed or add one to get started.</p>
-          <Button variant="outline" size="sm" onClick={() => setAddingFeed(true)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setAddingFeed(true)}
+          >
             <PlusIcon size={14} /> Add Feed
           </Button>
         </div>
@@ -473,8 +575,16 @@ export default function FeedsPage() {
       </div>
 
       {/* ── Desktop: two-panel resizable layout ──────────────────────── */}
-      <ResizablePanelGroup orientation="horizontal" className="hidden md:flex flex-1 overflow-hidden">
-        <ResizablePanel defaultSize={25} minSize={20} maxSize={40} className="flex flex-col">
+      <ResizablePanelGroup
+        orientation="horizontal"
+        className="hidden md:flex flex-1 overflow-hidden"
+      >
+        <ResizablePanel
+          defaultSize={256}
+          minSize={200}
+          maxSize={400}
+          className="flex flex-col"
+        >
           <FeedListPanel className="flex-1" />
         </ResizablePanel>
         <ResizableHandle withHandle />
