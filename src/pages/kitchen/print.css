@@ -1,0 +1,139 @@
+@reference "../../index.css";
+
+/* ── Page shell ── */
+.print-page {
+    @apply min-h-screen bg-background;
+}
+
+/* ── Toolbar (screen only) ── */
+.print-toolbar {
+    @apply sticky top-0 z-10 flex items-center gap-2 px-4 py-2.5 border-b bg-background/90 backdrop-blur-sm;
+}
+
+/* ── Article ── */
+.print-article {
+    @apply max-w-2xl mx-auto px-6 py-8;
+}
+
+/* ── Header ── */
+.print-header {
+    @apply mb-5;
+}
+
+.print-title {
+    @apply text-3xl font-bold leading-tight mb-1;
+}
+
+.print-summary {
+    @apply text-base text-muted-foreground mt-2 leading-relaxed;
+}
+
+/* ── Meta row ── */
+.print-meta {
+    @apply flex flex-wrap gap-x-5 gap-y-1.5 mt-3;
+}
+
+.print-meta__item {
+    @apply flex items-center gap-1.5 text-sm text-muted-foreground;
+}
+
+/* ── Hero image ── */
+.print-image {
+    @apply w-full max-h-72 object-cover rounded-xl mb-6 shadow-sm;
+}
+
+/* ── Two-column body ── */
+.print-body {
+    @apply grid gap-8;
+    grid-template-columns: 1fr 2fr;
+}
+
+@media (max-width: 540px) {
+    .print-body {
+        @apply grid-cols-1;
+    }
+}
+
+/* ── Section ── */
+.print-section__heading {
+    @apply text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3 pb-1.5 border-b;
+}
+
+/* ── Ingredients ── */
+.print-ingredients {
+    @apply flex flex-col gap-2;
+}
+
+.print-ingredient {
+    @apply flex items-start gap-2 text-sm;
+}
+
+.print-ingredient__dot {
+    @apply w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5;
+}
+
+/* ── Steps ── */
+.print-steps {
+    @apply flex flex-col gap-4;
+}
+
+.print-step {
+    @apply flex gap-3;
+}
+
+.print-step__num {
+    @apply w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold
+           flex items-center justify-center shrink-0 mt-0.5;
+}
+
+.print-step__body {
+    @apply flex-1;
+}
+
+.print-step__action {
+    @apply text-sm leading-relaxed;
+}
+
+.print-step__duration {
+    @apply flex items-center gap-1 text-xs text-muted-foreground mt-1;
+}
+
+/* ── Footer (print only) ── */
+.print-footer {
+    @apply mt-10 pt-4 border-t text-xs text-muted-foreground text-center;
+}
+
+/* ── Print media overrides ── */
+@media print {
+    .print-page {
+        background: white;
+    }
+
+    .print-article {
+        padding: 0;
+        max-width: none;
+    }
+
+    .print-title {
+        font-size: 1.75rem;
+    }
+
+    .print-image {
+        max-height: 180px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .print-step__num {
+        background: #000;
+        color: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .print-ingredient__dot {
+        background: #000;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}

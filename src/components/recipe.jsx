@@ -7,11 +7,14 @@ import {
   CheckIcon,
   CitrusIcon,
   ClockFadingIcon,
+  ClipboardCopyIcon,
   CookingPotIcon,
+  DownloadIcon,
   FlameIcon,
   LibraryBigIcon,
   MicrowaveIcon,
   PencilIcon,
+  PrinterIcon,
   RulerIcon,
   SaladIcon,
   UndoIcon,
@@ -402,6 +405,37 @@ function AdjustToDietDialog({ open, onClose, ingredients, onApply }) {
   );
 }
 
+function recipeToPlainText(recipe) {
+  const lines = [];
+  lines.push(recipe.name);
+  if (recipe.summary) lines.push("", recipe.summary);
+  if (recipe.preperationTime) lines.push(`Prep time: ${recipe.preperationTime} min`);
+  if (recipe.calories) lines.push(`Calories: ${recipe.calories} kcal`);
+  if (recipe.guests) lines.push(`Servings: ${recipe.guests}`);
+  if (recipe.ingredients?.length) {
+    lines.push("", "Ingredients:");
+    recipe.ingredients.forEach((ing) => lines.push(`  - ${ing}`));
+  }
+  if (recipe.steps?.length) {
+    lines.push("", "Steps:");
+    recipe.steps.forEach((step, i) =>
+      lines.push(`  ${i + 1}. ${step.action}${step.duration ? ` (${step.duration} min)` : ""}`),
+    );
+  }
+  return lines.join("\n");
+}
+
+function downloadRecipeJson(recipe) {
+  const json = JSON.stringify(recipe, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${recipe.name.replace(/[^a-z0-9]/gi, "-").toLowerCase()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function scaleIngredient(str, factor) {
   if (factor === 1) return str;
   const match = str.match(/^(\d+\.?\d*)\s*(g|kg|ml|l|tbsp|tsp|cup)?\s*(.+)$/i);
@@ -542,6 +576,28 @@ export function RecipeViewer({ recipeId }) {
             )}
           </PopoverContent>
         </Popover>
+        {/* Print */}
+        <Button variant="outline" onClick={() => go(`/cook/${recipeId}/print`)}>
+          <PrinterIcon size={15} className="text-primary" />
+          Print
+        </Button>
+        {/* Copy as text */}
+        <Button
+          variant="outline"
+          onClick={() => {
+            navigator.clipboard.writeText(recipeToPlainText(recipe))
+              .then(() => toast.success("Recipe copied to clipboard"))
+              .catch(() => toast.error("Clipboard access denied"));
+          }}
+        >
+          <ClipboardCopyIcon size={15} className="text-primary" />
+          Copy
+        </Button>
+        {/* Export JSON */}
+        <Button variant="outline" onClick={() => downloadRecipeJson(recipe)}>
+          <DownloadIcon size={15} className="text-primary" />
+          Export
+        </Button>
       </div>
       <RecipeFormDialog open={editOpen} onOpenChange={setEditOpen} recipe={recipe} />
       <AdjustToDietDialog

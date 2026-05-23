@@ -10,6 +10,7 @@ import "./index.css";
 const HomePage            = lazy(() => import("./pages/welcome"));
 const SetupPage           = lazy(() => import("./setup/index"));
 const CookPage            = lazy(() => import("./pages/kitchen/cook"));
+const PrintPage           = lazy(() => import("./pages/kitchen/print"));
 const CategoriesPage      = lazy(() => import("./pages/categories/categories-page"));
 const RecipiesPage        = lazy(() => import("./pages/categories/recipies-page"));
 const SelectedCategoryPage= lazy(() => import("./pages/categories/selected-category").then(m => ({ default: m.SelectedCategoryPage })));
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/"                           element={<HomePage />} />
           <Route path="/setup"                      element={<SetupPage />} />
           <Route path="/cook/:recipeId"             element={<CookPage />} />
+          <Route path="/cook/:recipeId/print"       element={<PrintPage />} />
           <Route path="/categories"                 element={<CategoriesPage />} />
           <Route path="/categories/:id"             element={<RecipiesPage />} />
           <Route path="/categories/:id/:recipeId"   element={<RecipiesPage />} />
