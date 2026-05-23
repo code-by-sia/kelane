@@ -576,23 +576,27 @@ export default function FeedsPage() {
       </div>
 
       {/* ── Desktop: two-panel resizable layout ──────────────────────── */}
-      <ResizablePanelGroup
-        orientation="horizontal"
-        className="hidden md:flex flex-1 overflow-hidden"
-      >
-        <ResizablePanel
-          defaultSize={256}
-          minSize={200}
-          maxSize={400}
-          className="flex flex-col"
+      {/* Wrapper div owns the "hidden md:flex" so react-resizable-panels'
+          inline display:flex can't escape past it on mobile. */}
+      <div className="hidden md:flex flex-1 overflow-hidden">
+        <ResizablePanelGroup
+          orientation="horizontal"
+          className="flex-1"
         >
-          <FeedListPanel className="flex-1" />
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75} minSize={40} className="flex flex-col">
-          <FeedItemsPanel className="flex-1" />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+          <ResizablePanel
+            defaultSize={256}
+            minSize={200}
+            maxSize={400}
+            className="flex flex-col"
+          >
+            <FeedListPanel className="flex-1" />
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={75} minSize={40} className="flex flex-col">
+            <FeedItemsPanel className="flex-1" />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
 
       <RecipeFormDialog
         open={!!importItem}
