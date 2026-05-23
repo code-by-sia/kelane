@@ -9,8 +9,8 @@ import {
   TriangleAlertIcon,
   UtensilsIcon,
 } from "lucide-react";
-import { toast } from "sonner";
 import SidebarPage from "@/pages/sidebar-page";
+import { RecipeScanner } from "@/components/recipe-scanner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -138,6 +138,7 @@ export default function BrowserPage() {
   }
 
   const [iframeSrc, setIframeSrc] = useState("");
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   const navigate = (raw, withProxy = false) => {
     const url = normalizeUrl(raw);
@@ -185,13 +186,11 @@ export default function BrowserPage() {
   };
 
   const extractRecipe = () => {
-    toast.info(
-      "WebLLM recipe extraction is not yet integrated. This will use an in-browser AI model to parse the page content into a structured recipe.",
-      { duration: 5000 },
-    );
+    setScannerOpen(true);
   };
 
   return (
+    <>
     <SidebarPage>
       <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
         {/* ── Toolbar ─────────────────────────────────────────────────── */}
@@ -341,5 +340,11 @@ export default function BrowserPage() {
         </div>
       </div>
     </SidebarPage>
+    <RecipeScanner
+      open={scannerOpen}
+      onClose={() => setScannerOpen(false)}
+      initialUrl={targetUrl}
+    />
+    </>
   );
 }

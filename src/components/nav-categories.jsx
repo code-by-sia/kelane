@@ -36,6 +36,7 @@ import {
   CompassIcon,
   EllipsisIcon,
   HistoryIcon,
+  ScanTextIcon,
   ShareIcon,
   TagIcon,
   TimerIcon,
@@ -45,16 +46,20 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
+import { useState } from "react";
+import { RecipeScanner } from "@/components/recipe-scanner";
 
 import useRecipeStore from "@/store/recipe";
 
 export function NavCategories() {
   const { isMobile } = useSidebar();
   const { pathname } = useLocation();
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   const categories = useRecipeStore((state) => state.categories);
 
   return (
+    <>
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Recipes</SidebarGroupLabel>
       <SidebarMenu>
@@ -93,7 +98,15 @@ export function NavCategories() {
             </a>
           </SidebarMenuButton>
         </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton onClick={() => setScannerOpen(true)}>
+            <ScanTextIcon />
+            <span>Scan Recipe</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
+    <RecipeScanner open={scannerOpen} onClose={() => setScannerOpen(false)} />
+    </>
   );
 }
