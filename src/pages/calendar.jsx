@@ -30,14 +30,6 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import SidebarPage from "@/pages/sidebar-page";
@@ -73,6 +65,7 @@ function AddMealRow({ dateKey, onAdd }) {
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
+  const searchRef = React.useRef(null);
 
   const filtered = recipes.filter((r) =>
     r.name.toLowerCase().includes(search.toLowerCase()),
@@ -86,13 +79,19 @@ function AddMealRow({ dateKey, onAdd }) {
     setOpen(false);
   };
 
+  const openDropdown = () => {
+    setOpen(true);
+    // Focus the search input after render
+    setTimeout(() => searchRef.current?.focus(), 0);
+  };
+
   return (
-    <div className="flex flex-col gap-2 pt-2 border-t mt-2">
+    <div className="flex flex-col gap-2 pt-3 border-t">
       <div className="flex gap-2">
         <select
           value={slot}
           onChange={(e) => setSlot(e.target.value)}
-          className="border rounded-md px-2 text-sm bg-background h-9"
+          className="border rounded-md px-2 text-sm bg-background h-9 shrink-0"
         >
           {SLOTS.map((s) => (
             <option key={s} value={s}>
@@ -100,43 +99,65 @@ function AddMealRow({ dateKey, onAdd }) {
             </option>
           ))}
         </select>
-        <div className="flex-1 relative">
+
+        {/* Recipe picker — plain dropdown to avoid Radix Dialog focus-trap issues */}
+        <div className="flex-1 relative min-w-0">
           <Button
             variant="outline"
             size="sm"
-            className="w-full justify-start text-sm font-normal"
-            onClick={() => setOpen((o) => !o)}
+            className="w-full justify-start text-sm font-normal truncate"
+            onClick={openDropdown}
           >
             {selected ? selected.name : "Search recipe…"}
           </Button>
+
           {open && (
-            <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-md border bg-popover shadow-md">
-              <Command>
-                <CommandInput
-                  placeholder="Search…"
-                  value={search}
-                  onValueChange={setSearch}
-                />
-                <CommandList>
-                  <CommandEmpty>No recipes found.</CommandEmpty>
-                  <CommandGroup>
-                    {filtered.map((r) => (
-                      <CommandItem
+            <>
+              {/* Invisible backdrop — closes dropdown on outside click */}
+              <div
+                className="fixed inset-0 z-40"
+                onMouseDown={() => setOpen(false)}
+              />
+              <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-md border bg-popover shadow-lg overflow-hidden">
+                <div className="border-b px-3 py-2">
+                  <input
+                    ref={searchRef}
+                    className="w-full text-sm bg-transparent outline-none placeholder:text-muted-foreground"
+                    placeholder="Search recipes…"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
+                  />
+                </div>
+                <ul className="max-h-52 overflow-y-auto py-1">
+                  {filtered.length === 0 ? (
+                    <li className="px-3 py-4 text-sm text-center text-muted-foreground">
+                      No recipes found.
+                    </li>
+                  ) : (
+                    filtered.map((r) => (
+                      <li
                         key={r.code}
-                        onSelect={() => {
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent transition-colors"
+                        onMouseDown={(e) => {
+                          // preventDefault keeps focus out of the Sheet focus-trap
+                          // so this fires reliably even inside a Radix Dialog
+                          e.preventDefault();
                           setSelected(r);
+                          setSearch("");
                           setOpen(false);
                         }}
                       >
                         {r.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </div>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
+            </>
           )}
         </div>
+
         <Button size="sm" disabled={!selected} onClick={handleAdd}>
           <PlusIcon size={14} />
         </Button>
@@ -164,8 +185,8 @@ function DaySheet({ dateKey, onClose }) {
 
   return (
     <Sheet open={!!dateKey} onOpenChange={onClose}>
-      <SheetContent className="flex flex-col gap-4">
-        <SheetHeader>
+      <SheetContent className="flex flex-col gap-0">
+        <SheetHeader className="px-5 py-4 border-b">
           <SheetTitle className="flex items-center gap-2">
             <UtensilsIcon size={16} />
             {displayDate}
@@ -173,10 +194,10 @@ function DaySheet({ dateKey, onClose }) {
           <SheetDescription>Meal plan for this day</SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto flex flex-col gap-5 px-5 py-4">
           {SLOTS.map((slot) => (
             <section key={slot}>
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 mb-1.5">
                 <span className={`w-2 h-2 rounded-full ${SLOT_COLORS[slot]}`} />
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   {slot}
@@ -223,7 +244,10 @@ function DaySheet({ dateKey, onClose }) {
             </section>
           ))}
         </div>
-        <AddMealRow dateKey={dateKey} onAdd={addMeal} />
+
+        <div className="px-5 pb-5 border-t pt-3">
+          <AddMealRow dateKey={dateKey} onAdd={addMeal} />
+        </div>
       </SheetContent>
     </Sheet>
   );
