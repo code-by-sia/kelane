@@ -18,21 +18,6 @@ const SETUP_STEPS = [
   { title: "All Set",    subtitle: "Start cooking",         icon: 6 },
 ];
 
-function Side({ step, setStep }) {
-  return (
-    <aside className="flex flex-col justify-between p-12 pb-4 bg-white border-s h-full">
-      <Steps
-        steps={SETUP_STEPS}
-        value={step}
-        onChange={(index) => setStep(index)}
-      />
-      <footer className="p-3 text-foreground/30 text-xs text-center font-mono">
-        &copy; {new Date().getFullYear()} Kelane
-      </footer>
-    </aside>
-  );
-}
-
 function SetupComplete() {
   const navigate = useNavigate();
   const completeSetup = useSetupStore((s) => s.completeSetup);
@@ -43,7 +28,7 @@ function SetupComplete() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-6">
+    <div className="flex flex-col items-center justify-center min-h-full gap-6">
       <ChefHatIcon size={64} strokeWidth={0.8} className="text-primary" />
       <div className="text-center">
         <h1 className="text-3xl font-light mb-2">You're all set!</h1>
@@ -63,23 +48,58 @@ export default function SetupPage() {
   const setStep = useSetupStore((s) => s.setStep);
 
   return (
-    <div className="flex flex-col flex-1 justify-center h-screen bg-neutral-50">
-      <header className="p-4 bg-white border-b px-12">
-        <div className="flex items-center gap-2">
-          <ChefHatIcon size={18} className="text-primary" />
-          <span className="text-base font-semibold">Kelane</span>
-        </div>
+    <div className="flex flex-col h-screen bg-neutral-50">
+
+      {/* ── App header ── */}
+      <header className="shrink-0 flex items-center gap-2 px-4 sm:px-6 lg:px-12 py-4 bg-white border-b">
+        <ChefHatIcon size={18} className="text-primary" />
+        <span className="text-base font-semibold">Kelane</span>
       </header>
+
       <main className="flex-1 flex overflow-hidden">
-        <div className="flex-1 m-6 mx-12 overflow-y-auto">
-          {step === 0 && <Welcome        onNext={() => setStep(1)} />}
-          {step === 1 && <AppearanceSetup onNext={() => setStep(2)} />}
-          {step === 2 && <Preferences    onNext={() => setStep(3)} />}
-          {step === 3 && <DataStorage    onNext={() => setStep(4)} />}
-          {step === 4 && <UserSetup      onNext={() => setStep(5)} />}
-          {step === 5 && <SetupComplete />}
+
+        {/* ── Step content ── */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+
+          {/* Mobile-only progress strip */}
+          <div className="md:hidden shrink-0 bg-white border-b px-4 py-3 flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">{SETUP_STEPS[step]?.title}</span>
+              <span className="text-xs text-muted-foreground">
+                {step + 1} of {SETUP_STEPS.length}
+              </span>
+            </div>
+            <div className="h-1 bg-muted rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary rounded-full transition-all duration-300"
+                style={{ width: `${Math.round(((step + 1) / SETUP_STEPS.length) * 100)}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Scrollable step */}
+          <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-12 lg:py-8">
+            {step === 0 && <Welcome        onNext={() => setStep(1)} />}
+            {step === 1 && <AppearanceSetup onNext={() => setStep(2)} />}
+            {step === 2 && <Preferences    onNext={() => setStep(3)} />}
+            {step === 3 && <DataStorage    onNext={() => setStep(4)} />}
+            {step === 4 && <UserSetup      onNext={() => setStep(5)} />}
+            {step === 5 && <SetupComplete />}
+          </div>
         </div>
-        <Side step={step} setStep={setStep} />
+
+        {/* ── Desktop step rail ── */}
+        <aside className="hidden md:flex flex-col justify-between shrink-0 w-72 p-10 pb-4 bg-white border-l">
+          <Steps
+            steps={SETUP_STEPS}
+            value={step}
+            onChange={(index) => setStep(index)}
+          />
+          <footer className="p-3 text-foreground/30 text-xs text-center font-mono">
+            &copy; {new Date().getFullYear()} Kelane
+          </footer>
+        </aside>
+
       </main>
     </div>
   );

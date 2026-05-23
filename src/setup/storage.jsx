@@ -3,7 +3,7 @@ import { DatabaseIcon, CloudOffIcon } from "lucide-react";
 
 export default function DataStorage({ onNext }) {
   return (
-    <div className="flex flex-col justify-center h-full max-w-2xl mx-auto gap-6">
+    <div className="flex flex-col justify-center min-h-full max-w-2xl mx-auto gap-6">
       <div>
         <h1 className="text-2xl font-light mb-1">Your data stays with you</h1>
         <p className="text-muted-foreground text-sm">
