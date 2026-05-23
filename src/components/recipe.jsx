@@ -2,7 +2,9 @@ import { useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import {
   AppleIcon,
+  ArrowRightIcon,
   CheckCircle2Icon,
+  CheckIcon,
   CitrusIcon,
   ClockFadingIcon,
   CookingPotIcon,
@@ -12,9 +14,12 @@ import {
   PencilIcon,
   RulerIcon,
   SaladIcon,
+  UndoIcon,
   Users2Icon,
   XCircleIcon,
+  XIcon,
 } from "lucide-react";
+import { DIETS, findSubstitutions } from "@/lib/diet-substitutions";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -31,6 +36,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "./ui/dialog";
 import {
   Popover,
   PopoverContent,
@@ -243,6 +255,158 @@ function GroceriesSheet({ recipe }) {
   );
 }
 
+// ── Adjust to diet dialog ─────────────────────────────────────────────────
+
+function AdjustToDietDialog({ open, onClose, ingredients, onApply }) {
+  const [selectedDiet, setSelectedDiet] = useState(DIETS[0].id);
+  // dismissed[ingredientIndex] = true means user said "keep original"
+  const [dismissed, setDismissed] = useState({});
+
+  const substitutions = useMemo(
+    () => findSubstitutions(ingredients ?? [], selectedDiet),
+    [ingredients, selectedDiet],
+  );
+
+  // Reset dismissals when diet changes
+  const handleDietChange = (id) => {
+    setSelectedDiet(id);
+    setDismissed({});
+  };
+
+  const toggleDismiss = (idx) =>
+    setDismissed((d) => ({ ...d, [idx]: !d[idx] }));
+
+  const activeSubs = substitutions.filter((s) => !dismissed[s.ingredientIndex]);
+
+  const apply = () => {
+    // Build updated ingredients list
+    const updated = [...(ingredients ?? [])];
+    for (const sub of activeSubs) {
+      // Preserve any leading quantity from the original ingredient string
+      const original = sub.original;
+      const qtyMatch = original.match(/^(\d+\.?\d*\s*(?:g|kg|ml|l|tbsp|tsp|cup|pcs)?)\s+/i);
+      updated[sub.ingredientIndex] = qtyMatch
+        ? `${qtyMatch[1]} ${sub.replacement}`
+        : sub.replacement;
+    }
+    onApply(updated, selectedDiet);
+    onClose();
+  };
+
+  const diet = DIETS.find((d) => d.id === selectedDiet);
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-lg flex flex-col max-h-[85vh]">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <AppleIcon size={16} className="text-green-600" />
+            Adjust to diet
+          </DialogTitle>
+          <DialogDescription>
+            Select a diet — substitutions are previewed below. Accept or dismiss
+            each suggestion before applying.
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* Diet selector */}
+        <div className="flex flex-wrap gap-2">
+          {DIETS.map((d) => (
+            <button
+              key={d.id}
+              onClick={() => handleDietChange(d.id)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+                selectedDiet === d.id
+                  ? "bg-foreground text-background border-foreground"
+                  : "border-border hover:bg-accent"
+              }`}
+            >
+              <span>{d.emoji}</span>
+              {d.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Substitution list */}
+        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col gap-1">
+          {substitutions.length === 0 ? (
+            <div className="flex flex-col items-center gap-2 py-10 text-center text-muted-foreground">
+              <CheckIcon size={32} strokeWidth={0.8} className="text-green-500" />
+              <p className="text-sm">
+                No changes needed — all ingredients already suit the{" "}
+                <strong>{diet?.label}</strong> diet.
+              </p>
+            </div>
+          ) : (
+            <>
+              <p className="text-xs text-muted-foreground mb-1">
+                {activeSubs.length} of {substitutions.length} substitution
+                {substitutions.length !== 1 ? "s" : ""} active
+              </p>
+              {substitutions.map((sub) => {
+                const isDismissed = !!dismissed[sub.ingredientIndex];
+                return (
+                  <div
+                    key={sub.ingredientIndex}
+                    className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+                      isDismissed ? "opacity-50 bg-muted/30" : "bg-accent/30"
+                    }`}
+                  >
+                    <div className="flex-1 min-w-0 flex items-center gap-2">
+                      <span
+                        className={`truncate ${isDismissed ? "line-through text-muted-foreground" : ""}`}
+                      >
+                        {sub.original}
+                      </span>
+                      {!isDismissed && (
+                        <>
+                          <ArrowRightIcon
+                            size={13}
+                            className="shrink-0 text-muted-foreground"
+                          />
+                          <span className="font-medium text-green-700 truncate">
+                            {sub.replacement}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => toggleDismiss(sub.ingredientIndex)}
+                      title={isDismissed ? "Restore substitution" : "Keep original"}
+                      className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {isDismissed ? (
+                        <UndoIcon size={14} />
+                      ) : (
+                        <XIcon size={14} />
+                      )}
+                    </button>
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2 pt-2 border-t">
+          <Button variant="outline" className="flex-1" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            className="flex-1"
+            onClick={apply}
+            disabled={activeSubs.length === 0 && substitutions.length === 0}
+          >
+            <CheckIcon size={14} />
+            Apply {activeSubs.length > 0 ? `${activeSubs.length} swap${activeSubs.length !== 1 ? "s" : ""}` : ""}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function scaleIngredient(str, factor) {
   if (factor === 1) return str;
   const match = str.match(/^(\d+\.?\d*)\s*(g|kg|ml|l|tbsp|tsp|cup)?\s*(.+)$/i);
@@ -258,6 +422,10 @@ export function RecipeViewer({ recipeId }) {
   const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
   const [editOpen, setEditOpen] = useState(false);
   const [scaledGuests, setScaledGuests] = useState(null); // null = use recipe default
+  const [dietOpen, setDietOpen] = useState(false);
+  // dietIngredients = null means show recipe original; non-null overrides
+  const [dietIngredients, setDietIngredients] = useState(null);
+  const [appliedDiet, setAppliedDiet] = useState(null);
 
   if (!recipe)
     return (
@@ -316,9 +484,15 @@ export function RecipeViewer({ recipeId }) {
           <PencilIcon className="stroke-rose-600" size={18} />
           Edit
         </Button>
-        <Button variant="outline">
+        <Button
+          variant="outline"
+          onClick={() => setDietOpen(true)}
+          className={appliedDiet ? "border-green-500 text-green-700" : ""}
+        >
           <AppleIcon className="stroke-rose-600" size={18} />
-          Adjust to diet
+          {appliedDiet
+            ? `${DIETS.find((d) => d.id === appliedDiet)?.emoji} ${DIETS.find((d) => d.id === appliedDiet)?.label}`
+            : "Adjust to diet"}
         </Button>
         <Popover>
           <PopoverTrigger asChild>
@@ -363,6 +537,15 @@ export function RecipeViewer({ recipeId }) {
         </Popover>
       </div>
       <RecipeFormDialog open={editOpen} onOpenChange={setEditOpen} recipe={recipe} />
+      <AdjustToDietDialog
+        open={dietOpen}
+        onClose={() => setDietOpen(false)}
+        ingredients={recipe.ingredients}
+        onApply={(updated, dietId) => {
+          setDietIngredients(updated);
+          setAppliedDiet(dietId);
+        }}
+      />
       <p className="p-3 px-5">
         <strong className="block pb-2">Summary:</strong>
         {recipe?.summary || "No description available"}
@@ -371,23 +554,41 @@ export function RecipeViewer({ recipeId }) {
         const baseGuests = recipe.guests || 1;
         const targetGuests = scaledGuests ?? baseGuests;
         const factor = targetGuests / baseGuests;
+        const displayIngredients = dietIngredients ?? recipe.ingredients;
+        const diet = DIETS.find((d) => d.id === appliedDiet);
         return (
           <div className="px-5 pb-3">
-            <div className="flex items-baseline gap-2 pb-2">
+            <div className="flex items-baseline gap-2 pb-2 flex-wrap">
               <strong>Ingredients</strong>
               {factor !== 1 && (
                 <span className="text-xs text-muted-foreground">
                   scaled ×{Math.round(factor * 10) / 10} for {targetGuests} serving{targetGuests !== 1 ? "s" : ""}
                 </span>
               )}
+              {diet && (
+                <span className="text-xs font-medium text-green-700 flex items-center gap-1">
+                  {diet.emoji} {diet.label}
+                  <button
+                    className="text-muted-foreground hover:text-foreground ml-1"
+                    title="Reset to original ingredients"
+                    onClick={() => { setDietIngredients(null); setAppliedDiet(null); }}
+                  >
+                    <XIcon size={11} />
+                  </button>
+                </span>
+              )}
             </div>
             <ul className="flex flex-col gap-1">
-              {recipe.ingredients.map((ing, i) => (
-                <li key={i} className="text-sm flex items-start gap-2">
-                  <span className="text-muted-foreground mt-0.5">·</span>
-                  {scaleIngredient(ing, factor)}
-                </li>
-              ))}
+              {displayIngredients.map((ing, i) => {
+                const wasSwapped = dietIngredients && dietIngredients[i] !== recipe.ingredients[i];
+                return (
+                  <li key={i} className={`text-sm flex items-start gap-2 ${wasSwapped ? "text-green-700" : ""}`}>
+                    <span className="text-muted-foreground mt-0.5">·</span>
+                    {scaleIngredient(ing, factor)}
+                    {wasSwapped && <span className="text-xs text-muted-foreground ml-1 shrink-0">(swapped)</span>}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         );
