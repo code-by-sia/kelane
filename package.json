@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "proxy": "node proxy-server.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
