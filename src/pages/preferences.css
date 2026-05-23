@@ -92,6 +92,16 @@
     @apply flex items-center gap-1 shrink-0;
 }
 
+/* ── Network / proxy ── */
+.prefs-proxy-hint {
+    @apply flex flex-col gap-1.5 p-3 rounded-lg bg-muted/50 border;
+}
+
+.prefs-proxy-code {
+    @apply block font-mono text-sm text-foreground bg-background
+           border rounded-md px-3 py-1.5;
+}
+
 /* ── Dietary grid ── */
 .prefs-dietary-grid {
     @apply grid grid-cols-2 gap-3;

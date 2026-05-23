@@ -1,12 +1,13 @@
-import { BrainCircuitIcon, CheckIcon, PaletteIcon, SaladIcon, ZapIcon } from "lucide-react";
+import { BrainCircuitIcon, CheckIcon, GlobeIcon, PaletteIcon, SaladIcon, ZapIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SidebarPage from "@/pages/sidebar-page";
 import { ThemePicker } from "@/components/theme-picker";
 import useSetupStore from "@/store/setup";
-import useSettingsStore from "@/store/settings";
+import useSettingsStore, { PROXY_PRESETS } from "@/store/settings";
 import { LLM_MODELS } from "@/data/llm-models";
 import "./preferences.css";
 
@@ -28,6 +29,10 @@ export default function PreferencesPage() {
   const setDietaryTags = useSetupStore((s) => s.setDietaryTags);
   const modelId = useSettingsStore((s) => s.modelId);
   const setModel = useSettingsStore((s) => s.setModel);
+  const proxyPresetId = useSettingsStore((s) => s.proxyPresetId);
+  const customProxyPrefix = useSettingsStore((s) => s.customProxyPrefix);
+  const setProxyPreset = useSettingsStore((s) => s.setProxyPreset);
+  const setCustomProxyPrefix = useSettingsStore((s) => s.setCustomProxyPrefix);
 
   const toggleTag = (id) =>
     setDietaryTags(
@@ -53,6 +58,10 @@ export default function PreferencesPage() {
           <TabsTrigger value="dietary" className="prefs-tab-trigger">
             <SaladIcon size={13} />
             Dietary
+          </TabsTrigger>
+          <TabsTrigger value="network" className="prefs-tab-trigger">
+            <GlobeIcon size={13} />
+            Network
           </TabsTrigger>
         </TabsList>
 
@@ -130,6 +139,72 @@ export default function PreferencesPage() {
                 </label>
               ))}
             </div>
+          </div>
+        </TabsContent>
+
+        {/* ── Network / proxy ── */}
+        <TabsContent value="network" className="prefs-tab-content">
+          <div className="prefs-tab-inner--gap">
+            <div>
+              <p className="text-sm font-medium mb-0.5">CORS Proxy</p>
+              <p className="text-sm text-muted-foreground">
+                Used when fetching RSS feeds or recipe pages that block direct browser access.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              {PROXY_PRESETS.map((preset) => {
+                const active = proxyPresetId === preset.id;
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => setProxyPreset(preset.id)}
+                    className={`prefs-model-card ${active ? "prefs-model-card--active" : "prefs-model-card--idle"}`}
+                  >
+                    <div className={`prefs-model-radio ${active ? "prefs-model-radio--active" : "prefs-model-radio--idle"}`}>
+                      {active && <CheckIcon size={12} className="text-primary-foreground" strokeWidth={3} />}
+                    </div>
+                    <div className="prefs-model-meta">
+                      <div className="prefs-model-name-row">
+                        <span className="prefs-model-name">{preset.label}</span>
+                        {preset.id === "allorigins" && (
+                          <Badge variant="outline" className="text-[10px] h-4 px-1.5">default</Badge>
+                        )}
+                      </div>
+                      {preset.hint && (
+                        <span className="prefs-model-desc">{preset.hint}</span>
+                      )}
+                      {preset.prefix && (
+                        <span className="prefs-model-desc font-mono">{preset.prefix}</span>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {proxyPresetId === "custom" && (
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-xs text-muted-foreground">Proxy prefix URL</Label>
+                <Input
+                  placeholder="https://my-proxy.example.com/?url="
+                  value={customProxyPrefix}
+                  onChange={(e) => setCustomProxyPrefix(e.target.value)}
+                  className="font-mono text-sm"
+                />
+                <p className="text-xs text-muted-foreground">
+                  The target URL will be appended (URL-encoded) to this prefix.
+                </p>
+              </div>
+            )}
+
+            {proxyPresetId === "local" && (
+              <div className="prefs-proxy-hint">
+                <p className="text-xs text-muted-foreground">Start the local proxy in a terminal:</p>
+                <code className="prefs-proxy-code">npm run proxy</code>
+              </div>
+            )}
           </div>
         </TabsContent>
 

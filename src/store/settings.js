@@ -33,7 +33,7 @@ const useSettingsStore = create(
   persist(
     (set) => ({
       // "local" | "corsproxy" | "allorigins" | "custom"
-      proxyPresetId: "local",
+      proxyPresetId: "allorigins",
       // When proxyPresetId === "custom", this is the full prefix to prepend
       customProxyPrefix: "",
 
