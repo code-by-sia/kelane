@@ -7,6 +7,7 @@ import Step from "./step";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
 import useHistoryStore from "@/store/history";
+import "./cook.css";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -99,7 +100,7 @@ export default function CookPage() {
       <div className="min-h-screen bg-background flex flex-col">
 
         {/* ── Sticky header ── */}
-        <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b flex items-center gap-3 px-4 h-14 shrink-0">
+        <header className="cook-header">
           <Button
             variant="ghost"
             size="icon"
@@ -126,11 +127,11 @@ export default function CookPage() {
           {/* Progress bar */}
           {steps.length > 0 && (
             <div
-              className="w-16 h-1.5 bg-muted rounded-full overflow-hidden shrink-0"
+              className="cook-progress-track"
               title={`${Math.round(progress * 100)}% done`}
             >
               <div
-                className="h-full bg-primary rounded-full transition-all duration-500"
+                className="cook-progress-fill"
                 style={{ width: `${Math.round(progress * 100)}%` }}
               />
             </div>
@@ -152,17 +153,17 @@ export default function CookPage() {
 
         {/* ── Hero image ── */}
         {recipe?.image && (
-          <div className="relative h-44 sm:h-56 shrink-0 overflow-hidden">
+          <div className="cook-hero">
             <img
               src={recipe.image}
               alt={recipe.name}
               className="w-full h-full object-cover"
             />
             {/* Gradient fade to page background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/20 to-background" />
+            <div className="cook-hero__overlay" />
 
             {/* Recipe metadata pills */}
-            <div className="absolute bottom-3 left-4 flex flex-wrap gap-2">
+            <div className="cook-hero__pills">
               {recipe.preperationTime && (
                 <MetaPill icon={<ClockIcon size={11} />}>
                   {recipe.preperationTime} min
@@ -183,7 +184,7 @@ export default function CookPage() {
         )}
 
         {/* ── Steps list ── */}
-        <div className="flex-1 flex flex-col gap-1.5 px-4 py-4 max-w-2xl w-full mx-auto">
+        <div className="cook-steps">
           {/* Summary text before steps */}
           {recipe?.summary && (
             <p className="text-sm text-muted-foreground leading-relaxed mb-3 px-1">
@@ -218,8 +219,8 @@ export default function CookPage() {
 
         {/* ── Completion overlay ── */}
         {allDone && (
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-background/95 backdrop-blur-sm p-6">
-            <div className="size-24 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+          <div className="cook-done-overlay">
+            <div className="cook-done-icon">
               <CheckCircle2Icon
                 size={52}
                 className="text-green-500"
@@ -261,15 +262,11 @@ export default function CookPage() {
                         return next;
                       })
                     }
-                    className="flex items-center gap-3 py-3 text-left w-full hover:bg-accent rounded-md px-1 transition-colors"
+                    className="cook-ing-item"
                   >
                     {/* Checkbox indicator */}
                     <div
-                      className={`size-4 rounded border shrink-0 flex items-center justify-center transition-colors ${
-                        checked
-                          ? "bg-primary border-primary"
-                          : "border-muted-foreground/40"
-                      }`}
+                      className={`cook-ing-checkbox ${checked ? "cook-ing-checkbox--checked" : "cook-ing-checkbox--unchecked"}`}
                     >
                       {checked && (
                         <CheckIcon
@@ -300,7 +297,7 @@ export default function CookPage() {
 // ── MetaPill helper ───────────────────────────────────────────────────────────
 function MetaPill({ icon, children }) {
   return (
-    <span className="flex items-center gap-1 text-xs text-white/90 bg-black/35 rounded-full px-2.5 py-1 backdrop-blur-sm font-medium">
+    <span className="cook-meta-pill">
       {icon}
       {children}
     </span>

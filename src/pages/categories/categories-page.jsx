@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import SidebarPage from "../sidebar-page";
+import "./categories-page.css";
 import {
   BookmarkXIcon,
   FolderOpenIcon,
@@ -23,10 +24,10 @@ function CategoryMosaicCard({ name, count, images, isSpecial = false }) {
   return (
     <a
       href={href}
-      className="group rounded-xl border overflow-hidden hover:shadow-md hover:border-primary/30 transition-all cursor-pointer"
+      className="cat-mosaic group"
     >
       {/* Image mosaic */}
-      <div className="h-28 bg-muted overflow-hidden">
+      <div className="cat-mosaic__media">
         {imgs.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">
             {isSpecial ? (
@@ -42,7 +43,7 @@ function CategoryMosaicCard({ name, count, images, isSpecial = false }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="grid grid-cols-2 grid-rows-2 h-full gap-px bg-border">
+          <div className="cat-photo-grid">
             {imgs.map((src, i) => (
               <img
                 key={i}
@@ -56,7 +57,7 @@ function CategoryMosaicCard({ name, count, images, isSpecial = false }) {
       </div>
 
       {/* Label */}
-      <div className="px-3 py-2.5 flex items-center gap-2">
+      <div className="cat-mosaic__label">
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{name}</p>
           <p className="text-xs text-muted-foreground">
@@ -79,7 +80,7 @@ function CategoryListRow({ name, count, images, isSpecial = false }) {
   return (
     <a
       href={href}
-      className="flex items-center gap-4 px-5 py-3 hover:bg-accent transition-colors border-b last:border-b-0"
+      className="cat-list-row"
     >
       {/* Stacked avatars or icon */}
       <div className="shrink-0 w-20 flex items-center">
@@ -90,13 +91,13 @@ function CategoryListRow({ name, count, images, isSpecial = false }) {
             <FolderOpenIcon size={20} className="text-muted-foreground" />
           )
         ) : (
-          <div className="flex -space-x-2.5">
+          <div className="cat-list-row__avatars">
             {imgs.map((src, i) => (
               <img
                 key={i}
                 src={src}
                 alt=""
-                className="w-8 h-8 rounded-full object-cover border-2 border-background"
+                className="cat-list-row__avatar"
                 style={{ zIndex: imgs.length - i }}
               />
             ))}
@@ -121,9 +122,9 @@ function CategoryGalleryCard({ name, count, images, isSpecial = false }) {
   return (
     <a
       href={href}
-      className="group rounded-xl border overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all cursor-pointer"
+      className="cat-gallery group"
     >
-      <div className="h-44 bg-muted overflow-hidden relative">
+      <div className="cat-gallery__media">
         {imgs.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">
             {isSpecial ? (
@@ -139,7 +140,7 @@ function CategoryGalleryCard({ name, count, images, isSpecial = false }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="grid grid-cols-2 grid-rows-2 h-full gap-px bg-border">
+          <div className="cat-photo-grid">
             {imgs.map((src, i) => (
               <img
                 key={i}
@@ -151,9 +152,9 @@ function CategoryGalleryCard({ name, count, images, isSpecial = false }) {
           </div>
         )}
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+        <div className="cat-gallery__overlay" />
         {/* Name on image */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 py-3 text-white">
+        <div className="cat-gallery__body">
           <p className="font-semibold text-sm leading-tight drop-shadow">{name}</p>
           <p className="text-xs text-white/70">
             {count} recipe{count !== 1 ? "s" : ""}
@@ -234,11 +235,7 @@ export default function CategoriesPage() {
                 key={id}
                 variant="outline"
                 size="sm"
-                className={`cursor-pointer ${
-                  view === id
-                    ? "bg-gray-600 text-white hover:bg-gray-700 hover:text-white"
-                    : ""
-                }`}
+                className={`cursor-pointer ${view === id ? "view-btn--active" : ""}`}
                 onClick={() => changeView(id)}
               >
                 <Icon />

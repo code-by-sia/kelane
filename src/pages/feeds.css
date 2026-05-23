@@ -1,0 +1,48 @@
+@reference "../index.css";
+
+/* ── Feed sidebar list item ── */
+.feed-list-item {
+    @apply flex items-center gap-2 px-4 py-2.5 cursor-pointer
+           hover:bg-accent transition-colors border-b last:border-b-0;
+}
+
+.feed-list-item--active {
+    @apply bg-accent;
+}
+
+/* ── Article row ── */
+.feed-item {
+    @apply flex gap-3 p-4 border-b last:border-b-0 hover:bg-accent/30 transition-colors;
+}
+
+.feed-item__thumb {
+    @apply w-20 h-20 rounded-lg object-cover shrink-0 bg-muted;
+}
+
+/* ── Generic error panel ── */
+.feed-error {
+    @apply flex flex-col items-center gap-3 py-16 text-center px-6;
+}
+
+/* ── CORS error panel ── */
+.feed-cors-error {
+    @apply flex flex-col items-center gap-4 py-12 px-6 max-w-md mx-auto w-full;
+}
+
+/* ── Proxy option row ── */
+.feed-proxy-option {
+    @apply flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors;
+}
+
+.feed-proxy-option--active {
+    @apply border-foreground/30 bg-accent;
+}
+
+.feed-proxy-option--idle {
+    @apply border-border hover:bg-accent/50;
+}
+
+/* ── Add feed inline form ── */
+.feed-add-form {
+    @apply flex flex-col gap-2 p-3 border-t bg-muted/30;
+}

@@ -9,6 +9,7 @@ import useSetupStore from "@/store/setup";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
 import useHistoryStore from "@/store/history";
+import "./welcome.css";
 
 const EXPIRY_WARN_DAYS = 5;
 
@@ -39,20 +40,20 @@ function RecipeCard({ recipe, fridgeItems }) {
   return (
     <div
       onClick={() => navigate(href)}
-      className="group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+      className="home-recipe-card"
     >
       {recipe.image ? (
         <img src={recipe.image} alt={recipe.name} className="aspect-[4/3] w-full object-cover" />
       ) : (
-        <div className="aspect-[4/3] w-full bg-gradient-to-br from-primary/8 to-primary/15 flex items-center justify-center">
+        <div className="home-recipe-card__placeholder">
           <ShoppingCartIcon size={32} strokeWidth={0.8} className="text-primary/40" />
         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+      <div className="home-recipe-card__overlay" />
+      <div className="home-recipe-card__body">
         <p className="font-semibold text-sm leading-tight truncate">{recipe.name}</p>
         <div className="flex items-center gap-2 mt-1.5">
-          <div className="flex-1 h-1 bg-white/30 rounded-full overflow-hidden">
+          <div className="home-recipe-card__progress-track">
             <div
               className={`h-full rounded-full ${pct === 1 ? "bg-green-400" : pct >= 0.6 ? "bg-amber-400" : "bg-red-400"}`}
               style={{ width: `${Math.round(pct * 100)}%` }}
@@ -73,8 +74,8 @@ function RecipeCard({ recipe, fridgeItems }) {
 function Section({ title, recipes, fridgeItems, emptyText }) {
   if (recipes.length === 0) return null;
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
+    <section className="home-section">
+      <h2 className="home-section__heading">
         {title}
         <Badge variant="outline" className="ml-2 text-xs font-normal normal-case tracking-normal">
           {recipes.length}
@@ -173,10 +174,10 @@ export default function ExplorePage() {
         ) : (
           <>
             {preventExpiry.length > 0 && (
-              <section className="flex flex-col gap-3">
+              <section className="home-section">
                 <div className="flex items-center gap-2">
                   <AlertTriangleIcon size={14} className="text-amber-500 shrink-0" />
-                  <h2 className="font-semibold text-sm uppercase tracking-wide text-amber-700">
+                  <h2 className="home-expiry-heading">
                     Use before they expire
                   </h2>
                   <Badge
@@ -226,10 +227,10 @@ export default function ExplorePage() {
 
         {/* Recently cooked — shown regardless of fridge state */}
         {recentlyCooked.length > 0 && (
-          <section className="flex flex-col gap-3">
+          <section className="home-section">
             <div className="flex items-center gap-2">
               <ClockIcon size={14} className="text-muted-foreground shrink-0" />
-              <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
+              <h2 className="home-section__heading">
                 Recently Cooked
               </h2>
             </div>
@@ -242,14 +243,14 @@ export default function ExplorePage() {
                   <div
                     key={entry.id}
                     onClick={() => navigate(href)}
-                    className="group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+                    className="home-recipe-card"
                   >
                     {recipe.image ? (
                       <img src={recipe.image} alt={recipe.name} className="aspect-[4/3] w-full object-cover" />
                     ) : (
-                      <div className="aspect-[4/3] w-full bg-gradient-to-br from-amber-100 to-amber-200" />
+                      <div className="home-recipe-card__placeholder" />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="home-recipe-card__overlay--light" />
                     <div className="absolute bottom-0 left-0 right-0 p-2.5 text-white">
                       <p className="font-semibold text-xs leading-tight line-clamp-2">{recipe.name}</p>
                       <p className="text-xs text-white/60 mt-0.5">

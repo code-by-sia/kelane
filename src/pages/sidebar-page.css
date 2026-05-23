@@ -8,7 +8,11 @@
  * The tinted --background wash belongs only to the toolbar, not the whole
  * content area. Cards and surfaces already use --card (white); making the
  * inset itself white removes the washed-out tint from the scrollable body.
+ *
+ * overflow-hidden clips the site-header's bg-background so it doesn't bleed
+ * past the inset's rounded-xl corners on desktop (inset sidebar variant).
  */
 [data-slot="sidebar-inset"] {
     background: var(--card);
+    overflow: hidden;
 }

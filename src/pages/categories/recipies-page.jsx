@@ -1,5 +1,6 @@
 import SidebarPage from "../sidebar-page";
 import Repeat from "@/components/repeat";
+import "./recipies-page.css";
 import {
   ChevronRight,
   ClockIcon,
@@ -23,7 +24,7 @@ export function RecipeCard({ code, name, summary, calories, preperationTime, ima
     <a
       href={`/categories/${id}/${code}`}
       onClick={(e) => { e.preventDefault(); navigate(`/categories/${id}/${code}`); }}
-      className="group relative rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-200 hover:scale-[1.02] block"
+      className="recipe-card"
     >
       {/* Image */}
       {image ? (
@@ -33,23 +34,23 @@ export function RecipeCard({ code, name, summary, calories, preperationTime, ima
           className="aspect-[4/3] w-full object-cover"
         />
       ) : (
-        <div className="aspect-[4/3] w-full bg-gradient-to-br from-primary/8 to-primary/15 flex items-center justify-center">
+        <div className="recipe-card__placeholder">
           <FlameIcon size={40} className="text-primary/40" strokeWidth={1} />
         </div>
       )}
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      <div className="recipe-card__overlay" />
 
       {/* Favourite badge top-right */}
       {liked && (
-        <div className="absolute top-2.5 right-2.5">
+        <div className="recipe-card__heart">
           <HeartIcon size={16} className="fill-red-500 stroke-red-400" />
         </div>
       )}
 
       {/* Text on gradient */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+      <div className="recipe-card__body">
         <p className="font-semibold text-sm leading-tight line-clamp-2">{name}</p>
         <div className="flex items-center gap-3 mt-1">
           {preperationTime && (
@@ -76,12 +77,12 @@ export function RecipeItem({ code, name, summary, calories, preperationTime, ima
   return (
     <a
       href={`/categories/${id}/${code}`}
-      className="flex items-center gap-3 p-3 rounded-xl hover:bg-accent transition-colors cursor-pointer w-full"
+      className="recipe-item"
     >
       {image ? (
-        <img className="w-14 h-14 rounded-lg object-cover shrink-0" src={image} alt={name} />
+        <img className="recipe-item__thumb" src={image} alt={name} />
       ) : (
-        <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+        <div className="recipe-item__thumb-placeholder">
           <FlameIcon size={20} className="text-primary/50" strokeWidth={1} />
         </div>
       )}

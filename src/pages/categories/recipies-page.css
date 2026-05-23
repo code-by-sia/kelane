@@ -1,0 +1,38 @@
+@reference "../../index.css";
+
+/* ── Grid card ── */
+.recipe-card {
+    @apply relative rounded-xl overflow-hidden cursor-pointer shadow-sm
+           hover:shadow-lg transition-all duration-200 hover:scale-[1.02] block;
+}
+
+.recipe-card__placeholder {
+    @apply aspect-[4/3] w-full bg-gradient-to-br from-primary/8 to-primary/15
+           flex items-center justify-center;
+}
+
+.recipe-card__overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent;
+}
+
+.recipe-card__heart {
+    @apply absolute top-2.5 right-2.5;
+}
+
+.recipe-card__body {
+    @apply absolute bottom-0 left-0 right-0 p-3 text-white;
+}
+
+/* ── List item ── */
+.recipe-item {
+    @apply flex items-center gap-3 p-3 rounded-xl hover:bg-accent
+           transition-colors cursor-pointer w-full;
+}
+
+.recipe-item__thumb {
+    @apply w-14 h-14 rounded-lg object-cover shrink-0;
+}
+
+.recipe-item__thumb-placeholder {
+    @apply w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center shrink-0;
+}

@@ -2,6 +2,7 @@ import { CheckIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import useSettingsStore from "@/store/settings";
 import { THEMES } from "@/data/themes";
+import "./theme-picker.css";
 
 // ── Individual swatch card ─────────────────────────────────────────────────────
 export function ThemeCard({ theme, active, onSelect }) {
@@ -9,22 +10,14 @@ export function ThemeCard({ theme, active, onSelect }) {
     <button
       type="button"
       onClick={() => onSelect(theme.id)}
-      className={cn(
-        "relative flex flex-col rounded-xl border-2 overflow-hidden cursor-pointer transition-all text-left",
-        active
-          ? "border-primary shadow-md ring-2 ring-primary/20"
-          : "border-border hover:border-muted-foreground/40 hover:shadow-sm",
-      )}
+      className={cn("theme-card", active ? "theme-card--active" : "theme-card--idle")}
     >
       {/* Mini app-frame preview */}
-      <div className="flex h-16">
+      <div className="theme-card__preview">
         {/* Sidebar strip */}
-        <div className="w-9 shrink-0" style={{ background: theme.swatchSidebar }} />
+        <div className="theme-card__sidebar" style={{ background: theme.swatchSidebar }} />
         {/* Content area */}
-        <div
-          className="flex-1 flex items-end p-2 gap-1.5"
-          style={{ background: theme.swatchBg }}
-        >
+        <div className="theme-card__content" style={{ background: theme.swatchBg }}>
           {/* Simulated primary button */}
           <div
             className="h-3.5 w-12 rounded-md"
@@ -39,14 +32,14 @@ export function ThemeCard({ theme, active, onSelect }) {
       </div>
 
       {/* Name & description */}
-      <div className="px-3 py-2 bg-card border-t">
+      <div className="theme-card__label">
         <p className="text-sm font-medium leading-tight">{theme.name}</p>
         <p className="text-xs text-muted-foreground mt-0.5">{theme.description}</p>
       </div>
 
       {/* Active checkmark */}
       {active && (
-        <div className="absolute top-2 right-2 size-5 rounded-full bg-primary flex items-center justify-center shadow-sm">
+        <div className="theme-card__check">
           <CheckIcon size={11} className="text-primary-foreground" strokeWidth={2.5} />
         </div>
       )}

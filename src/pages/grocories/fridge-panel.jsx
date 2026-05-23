@@ -8,6 +8,7 @@ import { SmartExpiryPicker } from "@/components/smart-expiry-picker";
 import { IngredientInput } from "@/components/ingredient-input";
 import { NutritionButton } from "@/components/nutrition-popover";
 import useGroceriesStore from "@/store/groceries";
+import "./groceries.css";
 
 const UNITS = ["pcs", "g", "kg", "ml", "L", "tbsp", "tsp", "cup"];
 
@@ -191,7 +192,7 @@ export default function FridgePanel() {
 
       {/* Batch action bar */}
       {selected.size > 0 && (
-        <div className="border-t px-4 py-2 flex items-center gap-2 bg-accent">
+        <div className="grocery-batch-bar">
           <Checkbox checked={allSelected} onCheckedChange={toggleAll} />
           <span className="text-sm flex-1">{selected.size} selected</span>
           <Button size="sm" variant="ghost" onClick={clearSelection}>
@@ -228,13 +229,13 @@ export default function FridgePanel() {
               <select
                 value={form.unit}
                 onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
-                className="border rounded-md px-2 text-sm bg-background"
+                className="border rounded-md px-2 text-sm bg-card"
               >
                 {UNITS.map((u) => <option key={u}>{u}</option>)}
               </select>
             </div>
 
-            <div className="border rounded-lg p-2.5 bg-muted/30">
+            <div className="grocery-expiry-section">
               <p className="text-xs text-muted-foreground mb-1.5">Expiry date (optional)</p>
               <SmartExpiryPicker
                 value={form.expiresAt}

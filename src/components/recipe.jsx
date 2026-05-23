@@ -51,6 +51,7 @@ import {
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
 import { RecipeFormDialog } from "./recipe-form";
+import "./recipe.css";
 
 function parseIngredient(str) {
   const match = str.match(/^(\d+\.?\d*)\s*(g|kg|ml|l|tbsp|tsp|cup)?\s*(.+)$/i);
@@ -315,11 +316,7 @@ function AdjustToDietDialog({ open, onClose, ingredients, onApply }) {
             <button
               key={d.id}
               onClick={() => handleDietChange(d.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
-                selectedDiet === d.id
-                  ? "bg-foreground text-background border-foreground"
-                  : "border-border hover:bg-accent"
-              }`}
+              className={`diet-btn ${selectedDiet === d.id ? "diet-btn--active" : "diet-btn--idle"}`}
             >
               <span>{d.emoji}</span>
               {d.label}
@@ -348,9 +345,7 @@ function AdjustToDietDialog({ open, onClose, ingredients, onApply }) {
                 return (
                   <div
                     key={sub.ingredientIndex}
-                    className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
-                      isDismissed ? "opacity-50 bg-muted/30" : "bg-accent/30"
-                    }`}
+                    className={`diet-sub-item ${isDismissed ? "diet-sub-item--dismissed" : "diet-sub-item--active"}`}
                   >
                     <div className="flex-1 min-w-0 flex items-center gap-2">
                       <span
@@ -449,8 +444,8 @@ export function RecipeViewer({ recipeId }) {
             className="w-full h-40 object-cover"
           />
         ) : (
-          <div className="w-full h-40 bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-            <FlameIcon size={48} strokeWidth={0.8} className="text-amber-400" />
+          <div className="recipe-no-image">
+            <FlameIcon size={48} strokeWidth={0.8} className="text-primary/40" />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
@@ -461,8 +456,8 @@ export function RecipeViewer({ recipeId }) {
         {recipe?.name}
       </h1>
 
-      {/* ── Stats grid (replacing ghost-button row) ── */}
-      <div className="grid grid-cols-4 divide-x border-y mx-5 my-3 rounded-lg overflow-hidden">
+      {/* ── Stats grid ── */}
+      <div className="recipe-stats">
         {[
           {
             icon: FlameIcon,
@@ -477,7 +472,7 @@ export function RecipeViewer({ recipeId }) {
           { icon: ClockFadingIcon, value: recipe?.preperationTime ? `${recipe.preperationTime}` : "—", label: "min" },
           { icon: SaladIcon, value: recipe?.ingredients?.length ?? "—", label: "ing" },
         ].map(({ icon: Icon, value, label }) => (
-          <div key={label} className="flex flex-col items-center py-2.5 px-1 bg-muted/30">
+          <div key={label} className="recipe-stat">
             <Icon size={14} className="text-muted-foreground mb-0.5" />
             <span className="font-semibold text-sm leading-none">{value}</span>
             <span className="text-xs text-muted-foreground mt-0.5">{label}</span>
@@ -521,7 +516,7 @@ export function RecipeViewer({ recipeId }) {
               <button
                 type="button"
                 onClick={() => setScaledGuests((g) => Math.max(1, (g ?? recipe.guests ?? 1) - 1))}
-                className="w-8 h-8 rounded-md border flex items-center justify-center text-lg hover:bg-accent cursor-pointer"
+                className="scale-counter-btn"
               >
                 −
               </button>
@@ -531,7 +526,7 @@ export function RecipeViewer({ recipeId }) {
               <button
                 type="button"
                 onClick={() => setScaledGuests((g) => (g ?? recipe.guests ?? 1) + 1)}
-                className="w-8 h-8 rounded-md border flex items-center justify-center text-lg hover:bg-accent cursor-pointer"
+                className="scale-counter-btn"
               >
                 +
               </button>

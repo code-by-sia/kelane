@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import SidebarPage from "@/pages/sidebar-page";
 import { RecipeFormDialog } from "@/components/recipe-form";
 import useFeedsStore from "@/store/feeds";
+import "./feeds.css";
 import useSettingsStore, {
   PROXY_PRESETS,
   getProxyPrefix,
@@ -99,12 +100,12 @@ function FeedItem({ item, onImport }) {
   } catch {}
 
   return (
-    <div className="flex gap-3 p-4 border-b last:border-b-0 hover:bg-accent/30 transition-colors">
+    <div className="feed-item">
       {item.image && (
         <img
           src={item.image}
           alt=""
-          className="w-20 h-20 rounded-lg object-cover shrink-0 bg-muted"
+          className="feed-item__thumb"
           onError={(e) => (e.currentTarget.style.display = "none")}
         />
       )}
@@ -176,7 +177,7 @@ function AddFeedForm({ onAdd, onCancel }) {
   };
 
   return (
-    <div className="flex flex-col gap-2 p-3 border-t bg-muted/30">
+    <div className="feed-add-form">
       <Input
         placeholder="Feed URL (RSS or Atom)"
         value={url}
@@ -341,7 +342,7 @@ export default function FeedsPage() {
         {feeds.map((feed) => (
           <div
             key={feed.id}
-            className={`group flex items-center gap-2 px-4 py-2.5 cursor-pointer hover:bg-accent transition-colors border-b last:border-b-0 ${selectedFeed?.id === feed.id ? "bg-accent" : ""}`}
+            className={`feed-list-item group ${selectedFeed?.id === feed.id ? "feed-list-item--active" : ""}`}
             onClick={() => navigate(`/feeds/${feed.id}`)}
           >
             <RssIcon size={13} className="shrink-0 text-primary" />
@@ -398,7 +399,7 @@ export default function FeedsPage() {
                 <ArrowLeftIcon size={16} />
               </Button>
             )}
-            <RssIcon size={14} className="text-orange-500 shrink-0" />
+            <RssIcon size={14} className="text-primary shrink-0" />
             <span className="font-medium text-sm truncate flex-1">
               {selectedFeed.title}
             </span>
@@ -433,7 +434,7 @@ export default function FeedsPage() {
               </div>
             )}
             {feedError && !loadingFeed && !corsBlocked && (
-              <div className="flex flex-col items-center gap-3 py-16 text-center px-6">
+              <div className="feed-error">
                 <TriangleAlertIcon
                   size={32}
                   strokeWidth={0.8}
@@ -453,7 +454,7 @@ export default function FeedsPage() {
               </div>
             )}
             {feedError && !loadingFeed && corsBlocked && (
-              <div className="flex flex-col items-center gap-4 py-12 px-6 max-w-md mx-auto w-full">
+              <div className="feed-cors-error">
                 <ShieldOffIcon
                   size={36}
                   strokeWidth={0.8}
@@ -473,7 +474,7 @@ export default function FeedsPage() {
                     {PROXY_PRESETS.map((preset) => (
                       <label
                         key={preset.id}
-                        className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${proxyPresetId === preset.id ? "border-foreground/30 bg-accent" : "border-border hover:bg-accent/50"}`}
+                        className={`feed-proxy-option ${proxyPresetId === preset.id ? "feed-proxy-option--active" : "feed-proxy-option--idle"}`}
                       >
                         <input
                           type="radio"

@@ -1,0 +1,11 @@
+@reference "../../index.css";
+
+/* ── Batch action bar (shared by fridge & to-buy panels) ── */
+.grocery-batch-bar {
+    @apply border-t px-4 py-2 flex items-center gap-2 bg-accent;
+}
+
+/* ── Expiry date section inside add/edit forms ── */
+.grocery-expiry-section {
+    @apply border rounded-lg p-2.5 bg-muted/30;
+}

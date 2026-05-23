@@ -1,0 +1,47 @@
+@reference "../../index.css";
+
+/* ── Completed step — compact row ── */
+.step-done {
+    @apply flex items-center gap-3 px-1 py-1.5;
+}
+
+.step-done__badge {
+    @apply size-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0;
+}
+
+/* ── Active step — large card ── */
+.step-active {
+    @apply rounded-2xl border-2 border-primary/25 bg-card shadow-xl p-5 flex flex-col gap-4;
+}
+
+.step-active__badge {
+    @apply size-6 rounded-full bg-primary flex items-center justify-center shrink-0;
+}
+
+/* ── Can-start step — outlined card ── */
+.step-start {
+    @apply rounded-xl border border-border bg-card/50 px-4 py-3.5 flex items-center gap-3;
+}
+
+.step-start__badge {
+    @apply size-6 rounded-full border-2 border-muted-foreground/25 flex items-center justify-center shrink-0;
+}
+
+/* ── Waiting step — dimmed row ── */
+.step-waiting {
+    @apply flex items-center gap-3 px-1 py-2 opacity-35;
+}
+
+.step-waiting__badge {
+    @apply size-6 rounded-full border border-muted-foreground/30 flex items-center justify-center shrink-0;
+}
+
+/* ── Ingredient chips ── */
+.ing-chips {
+    @apply flex flex-wrap gap-1.5;
+}
+
+.ing-chip {
+    @apply text-xs bg-primary/8 text-primary border border-primary/20
+           rounded-full px-2.5 py-0.5 font-medium;
+}

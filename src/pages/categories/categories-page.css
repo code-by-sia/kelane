@@ -1,0 +1,57 @@
+@reference "../../index.css";
+
+/* ── Mosaic card ── */
+.cat-mosaic {
+    @apply rounded-xl border overflow-hidden hover:shadow-md
+           hover:border-primary/30 transition-all cursor-pointer;
+}
+
+.cat-mosaic__media {
+    @apply h-28 bg-muted overflow-hidden;
+}
+
+.cat-mosaic__label {
+    @apply px-3 py-2.5 flex items-center gap-2;
+}
+
+/* ── 2×2 photo grid (shared by mosaic + gallery) ── */
+.cat-photo-grid {
+    @apply grid grid-cols-2 grid-rows-2 h-full gap-px bg-border;
+}
+
+/* ── List row ── */
+.cat-list-row {
+    @apply flex items-center gap-4 px-5 py-3 hover:bg-accent
+           transition-colors border-b last:border-b-0;
+}
+
+.cat-list-row__avatars {
+    @apply flex -space-x-2.5;
+}
+
+.cat-list-row__avatar {
+    @apply w-8 h-8 rounded-full object-cover border-2 border-background;
+}
+
+/* ── Gallery card ── */
+.cat-gallery {
+    @apply rounded-xl border overflow-hidden hover:shadow-lg
+           hover:border-primary/30 transition-all cursor-pointer;
+}
+
+.cat-gallery__media {
+    @apply h-44 bg-muted overflow-hidden relative;
+}
+
+.cat-gallery__overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none;
+}
+
+.cat-gallery__body {
+    @apply absolute bottom-0 left-0 right-0 px-4 py-3 text-white;
+}
+
+/* ── Active view toggle button ── */
+.view-btn--active {
+    @apply bg-foreground text-background hover:bg-foreground/90 hover:text-background;
+}

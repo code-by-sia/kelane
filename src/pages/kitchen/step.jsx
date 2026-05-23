@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { CheckIcon, PlayIcon, HourglassIcon, TimerIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { playDoneMelody } from "@/lib/beep";
+import "./step.css";
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -88,12 +89,9 @@ function TimerRing({ total, remaining }) {
 function IngredientChips({ ingredients }) {
   if (!ingredients?.length) return null;
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <div className="ing-chips">
       {ingredients.map((ing) => (
-        <span
-          key={ing}
-          className="text-xs bg-primary/8 text-primary border border-primary/20 rounded-full px-2.5 py-0.5 font-medium"
-        >
+        <span key={ing} className="ing-chip">
           {ing}
         </span>
       ))}
@@ -137,8 +135,8 @@ export default function Step({ step, stepNumber, totalSteps, onStart, onDone }) 
   // ── Completed — compact row ──────────────────────────────────────────────
   if (isDone) {
     return (
-      <div className="flex items-center gap-3 px-1 py-1.5">
-        <div className="size-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+      <div className="step-done">
+        <div className="step-done__badge">
           <CheckIcon size={11} className="text-green-600" strokeWidth={2.5} />
         </div>
         <p className="flex-1 text-sm text-muted-foreground line-through truncate">
@@ -156,11 +154,11 @@ export default function Step({ step, stepNumber, totalSteps, onStart, onDone }) 
     return (
       <div
         ref={cardRef}
-        className="rounded-2xl border-2 border-primary/25 bg-card shadow-xl p-5 flex flex-col gap-4"
+        className="step-active"
       >
         {/* Header */}
         <div className="flex items-center gap-2">
-          <div className="size-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+          <div className="step-active__badge">
             <span className="text-[11px] font-bold text-primary-foreground">
               {stepNumber}
             </span>
@@ -207,8 +205,8 @@ export default function Step({ step, stepNumber, totalSteps, onStart, onDone }) 
   // ── Can start — outlined card with Start button ──────────────────────────
   if (canStart) {
     return (
-      <div className="rounded-xl border border-border bg-card/50 px-4 py-3.5 flex items-center gap-3">
-        <div className="size-6 rounded-full border-2 border-muted-foreground/25 flex items-center justify-center shrink-0">
+      <div className="step-start">
+        <div className="step-start__badge">
           <span className="text-xs font-semibold text-muted-foreground">
             {stepNumber}
           </span>
@@ -231,8 +229,8 @@ export default function Step({ step, stepNumber, totalSteps, onStart, onDone }) 
 
   // ── Waiting — dimmed row ─────────────────────────────────────────────────
   return (
-    <div className="flex items-center gap-3 px-1 py-2 opacity-35">
-      <div className="size-6 rounded-full border border-muted-foreground/30 flex items-center justify-center shrink-0">
+    <div className="step-waiting">
+      <div className="step-waiting__badge">
         <span className="text-xs text-muted-foreground">{stepNumber}</span>
       </div>
       <p className="flex-1 text-sm text-muted-foreground leading-snug">
