@@ -70,10 +70,7 @@ export function MobileNav() {
 
   return (
     <>
-      <nav
-        className="mobile-nav"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-      >
+      <nav className="mobile-nav">
         {PRIMARY_TABS.map((tab) => (
           <NavItem key={tab.href} href={tab.href} icon={tab.icon} label={tab.label} active={isActive(tab.href)} />
         ))}

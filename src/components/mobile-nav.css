@@ -6,12 +6,18 @@
 .mobile-nav {
     @apply md:hidden fixed bottom-0 left-0 right-0 z-50
            bg-background/95 backdrop-blur-sm border-t
-           flex items-stretch h-16;
+           flex items-end;
+    /* Extend below the 4rem tab row to fill the iOS home-indicator safe area.
+       Padding-bottom lives here (not as an inline style) so it doesn't shrink
+       the tab row when box-sizing: border-box is in play. */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .mobile-nav__item {
+    /* Explicit h-16 on the items, not the container, so the icon + label
+       always get the full 64px regardless of safe-area padding. */
     @apply flex flex-col items-center justify-center gap-0.5
-           flex-1 py-2 text-[10px] font-medium transition-colors cursor-pointer;
+           flex-1 h-16 py-2 text-[10px] font-medium transition-colors cursor-pointer;
 }
 
 .mobile-nav__item--active {
