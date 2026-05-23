@@ -1,13 +1,14 @@
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
-import { differenceInDays, parseISO } from "date-fns";
-import { AlertTriangleIcon, RefrigeratorIcon, ShoppingCartIcon } from "lucide-react";
+import { differenceInDays, formatDistanceToNow, parseISO } from "date-fns";
+import { AlertTriangleIcon, ClockIcon, RefrigeratorIcon, ShoppingCartIcon } from "lucide-react";
 import SidebarPage from "@/pages/sidebar-page";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import useSetupStore from "@/store/setup";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
+import useHistoryStore from "@/store/history";
 
 const EXPIRY_WARN_DAYS = 5;
 
@@ -94,7 +95,9 @@ export default function ExplorePage() {
   const navigate = useNavigate();
   const completed = useSetupStore((s) => s.completed);
   const recipes = useRecipeStore((s) => s.recipes);
+  const getRecipe = useRecipeStore((s) => s.getRecipe);
   const fridgeItems = useGroceriesStore((s) => s.fridgeItems);
+  const historyEntries = useHistoryStore((s) => s.entries);
 
   useEffect(() => {
     if (!completed) navigate("/setup");
@@ -136,6 +139,21 @@ export default function ExplorePage() {
       expiringNames: expiringItems.map((i) => i.name),
     };
   }, [recipes, fridgeItems]);
+
+  // Deduplicated recently cooked recipes (last 6 unique, completed sessions only)
+  const recentlyCooked = useMemo(() => {
+    const seen = new Set();
+    return historyEntries
+      .filter((e) => !!e.completedAt)
+      .filter((e) => {
+        if (seen.has(e.recipeCode)) return false;
+        seen.add(e.recipeCode);
+        return true;
+      })
+      .slice(0, 6)
+      .map((entry) => ({ entry, recipe: getRecipe(entry.recipeCode) }))
+      .filter(({ recipe }) => !!recipe);
+  }, [historyEntries, getRecipe]);
 
   return (
     <SidebarPage title="Explore">
@@ -206,6 +224,52 @@ export default function ExplorePage() {
               </p>
             )}
           </>
+        )}
+
+        {/* Recently cooked — shown regardless of fridge state */}
+        {recentlyCooked.length > 0 && (
+          <section className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <ClockIcon size={14} className="text-muted-foreground shrink-0" />
+              <h2 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">
+                Recently Cooked
+              </h2>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {recentlyCooked.map(({ entry, recipe }) => {
+                if (!recipe) return null;
+                const cat = recipe.categories?.[0];
+                const href = cat
+                  ? `/categories/${cat}/${recipe.code}`
+                  : `/uncategorized`;
+                return (
+                  <div
+                    key={entry.id}
+                    onClick={() => navigate(href)}
+                    className="flex gap-3 p-3 rounded-xl border bg-card hover:bg-accent/40 cursor-pointer transition-colors"
+                  >
+                    {recipe.image && (
+                      <img
+                        src={recipe.image}
+                        alt={recipe.name}
+                        className="w-14 h-14 rounded-lg object-cover shrink-0"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate text-sm">
+                        {recipe.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {formatDistanceToNow(parseISO(entry.completedAt), {
+                          addSuffix: true,
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
         )}
       </div>
     </SidebarPage>

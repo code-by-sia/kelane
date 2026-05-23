@@ -31,12 +31,11 @@ import {
 import { useLocation } from "react-router";
 import {
   ArchiveIcon,
+  BookHeartIcon,
   ChevronRight,
   Clock9Icon,
   CompassIcon,
   EllipsisIcon,
-  FlagIcon,
-  HeartIcon,
   HistoryIcon,
   ShareIcon,
   TagIcon,
@@ -85,18 +84,13 @@ export function NavCategories() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={pathname === `/want-to-cook`}>
-            <a href="/want-to-cook">
-              <FlagIcon />
-              <span>Want to Cook</span>
-            </a>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={pathname === `/favorites`}>
-            <a href="/favorites">
-              <HeartIcon />
-              <span>Favorites</span>
+          <SidebarMenuButton
+            asChild
+            isActive={pathname.startsWith(`/my-recipes`)}
+          >
+            <a href="/my-recipes">
+              <BookHeartIcon />
+              <span>My Recipes</span>
             </a>
           </SidebarMenuButton>
         </SidebarMenuItem>
