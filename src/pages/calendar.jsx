@@ -651,52 +651,49 @@ export default function CalendarPage() {
     <SidebarPage
       title="Meal Calendar"
       header={
-        <Button size="sm" variant="outline" onClick={generateShoppingList}>
-          <ShoppingCartIcon size={14} />
-          Shopping list (7 days)
-        </Button>
+        <>
+          {/* Desktop: full label */}
+          <Button size="sm" variant="outline" onClick={generateShoppingList} className="hidden sm:flex">
+            <ShoppingCartIcon size={14} />
+            Shopping list (7 days)
+          </Button>
+          {/* Mobile: icon only */}
+          <Button size="icon-sm" variant="outline" onClick={generateShoppingList} className="sm:hidden" title="Generate shopping list">
+            <ShoppingCartIcon size={15} />
+          </Button>
+        </>
       }
     >
       {/* ── Sub-toolbar ─────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 px-4 py-2 border-b bg-background shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 border-b bg-background shrink-0">
         {/* Nav arrows */}
         <Button variant="ghost" size="icon-sm" onClick={goBack}>
           <ChevronLeftIcon size={16} />
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={goToday}
-          disabled={isAtToday}
-          className="text-xs"
-        >
+        <Button variant="ghost" size="sm" onClick={goToday} disabled={isAtToday} className="text-xs hidden sm:inline-flex">
           Today
         </Button>
         <Button variant="ghost" size="icon-sm" onClick={goForward}>
           <ChevronRightIcon size={16} />
         </Button>
 
-        {/* Period label */}
-        <span className="flex-1 text-sm font-medium text-center px-2">
+        {/* Period label — shorter on mobile */}
+        <span className="flex-1 text-xs sm:text-sm font-medium text-center px-1 truncate">
           {periodLabel}
         </span>
 
-        {/* View toggle */}
+        {/* View toggle — icons only on mobile */}
         <ButtonGroup>
           {VIEWS.map(({ id, label, icon: Icon }) => (
             <Button
               key={id}
               variant="outline"
               size="sm"
-              className={`gap-1.5 cursor-pointer ${
-                view === id
-                  ? "bg-gray-600 text-white hover:bg-gray-700 hover:text-white"
-                  : ""
-              }`}
+              className={`gap-1.5 cursor-pointer ${view === id ? "bg-gray-600 text-white hover:bg-gray-700 hover:text-white" : ""}`}
               onClick={() => changeView(id)}
             >
               <Icon size={13} />
-              {label}
+              <span className="hidden sm:inline">{label}</span>
             </Button>
           ))}
         </ButtonGroup>

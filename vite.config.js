@@ -52,9 +52,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // Cache app shell + assets
+        // The web-llm bundle is very large — raise the limit so the build doesn't error.
+        // Large JS chunks won't be precached but will be cached on first runtime access.
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10 MiB
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
-        // Don't cache API calls or feed fetches
         navigateFallback: "/",
         navigateFallbackDenylist: [/^\/api/, /^\/proxy/],
         runtimeCaching: [
@@ -89,6 +90,17 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split the massive web-llm bundle into its own chunk
+          "web-llm": ["@mlc-ai/web-llm"],
+          "vendor-react": ["react", "react-dom", "react-router"],
+        },
+      },
     },
   },
 });

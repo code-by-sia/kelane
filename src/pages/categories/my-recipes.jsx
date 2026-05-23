@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Clock9Icon, FlagIcon, HeartIcon } from "lucide-react";
+import { ArrowLeftIcon, Clock9Icon, FlagIcon, HeartIcon } from "lucide-react";
 import { RecipeViewer } from "@/components/recipe";
 import { RecipeList } from "@/components/recipe-list";
 import SidebarPage from "@/pages/sidebar-page";
 import useRecipeStore from "@/store/recipe";
+import { Button } from "@/components/ui/button";
 
 const A_WEEK = 7 * 24 * 60 * 60 * 1000;
 
@@ -31,12 +32,30 @@ export function MyRecipesPage() {
       return [...recipes]
         .filter((r) => r.date && new Date(r.date) > new Date(Date.now() - A_WEEK))
         .sort((a, b) => new Date(b.date) - new Date(a.date));
-    // "all" → union of favorites + want-to-cook, favorites first
     const favs = getFavoriteRecipes();
     const flagged = getFlaggedRecipes();
     const seen = new Set(favs.map((r) => r.code));
     return [...favs, ...flagged.filter((r) => !seen.has(r.code))];
   }, [filter, recipes, getFavoriteRecipes, getFlaggedRecipes]);
+
+  const filterBar = (
+    <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
+      {FILTERS.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          onClick={() => setFilter(id)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer shrink-0 ${
+            filter === id
+              ? "bg-foreground text-background"
+              : "bg-muted hover:bg-muted/80 text-muted-foreground"
+          }`}
+        >
+          {Icon && <Icon size={11} />}
+          {label}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <SidebarPage
@@ -48,32 +67,34 @@ export function MyRecipesPage() {
           </small>
         </div>
       }
-      header={
-        <div className="flex items-center gap-1">
-          {FILTERS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setFilter(id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
-                filter === id
-                  ? "bg-foreground text-background"
-                  : "bg-muted hover:bg-muted/80 text-muted-foreground"
-              }`}
-            >
-              {Icon && <Icon size={11} />}
-              {label}
-            </button>
-          ))}
-        </div>
-      }
+      header={filterBar}
     >
-      <div className="flex divide-x h-full">
-        <RecipeList
-          recipes={filtered}
-          onSelect={(code) => go(`/my-recipes/${code}`)}
-        />
-        <RecipeViewer recipeId={recipeId} />
-      </div>
+      {/* ── Mobile: recipe selected → full-screen detail ── */}
+      {recipeId ? (
+        <>
+          {/* Back button row, mobile only */}
+          <div className="md:hidden flex items-center gap-2 px-3 py-2 border-b shrink-0">
+            <Button variant="ghost" size="icon-sm" onClick={() => go("/my-recipes")} title="Back">
+              <ArrowLeftIcon size={16} />
+            </Button>
+            <span className="text-sm font-medium text-muted-foreground">My Recipes</span>
+          </div>
+          <div className="flex divide-x flex-1 min-h-0 overflow-hidden">
+            {/* List hidden on mobile when recipe is open */}
+            <div className="hidden md:flex">
+              <RecipeList recipes={filtered} onSelect={(code) => go(`/my-recipes/${code}`)} />
+            </div>
+            <div className="flex flex-col flex-1 overflow-y-auto">
+              <RecipeViewer recipeId={recipeId} />
+            </div>
+          </div>
+        </>
+      ) : (
+        /* No recipe selected — list fills full width */
+        <div className="flex divide-x flex-1 min-h-0 overflow-hidden">
+          <RecipeList recipes={filtered} onSelect={(code) => go(`/my-recipes/${code}`)} />
+        </div>
+      )}
     </SidebarPage>
   );
 }

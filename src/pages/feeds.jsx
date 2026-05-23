@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { ArrowLeftIcon } from "lucide-react";
 import { format } from "date-fns";
 import {
   BookMarkedIcon,
@@ -215,6 +217,7 @@ function AddFeedForm({ onAdd, onCancel }) {
 export default function FeedsPage() {
   const { feedId } = useParams();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const feeds = useFeedsStore((s) => s.feeds);
   const addFeed = useFeedsStore((s) => s.addFeed);
@@ -288,12 +291,12 @@ export default function FeedsPage() {
     }
   }, [selectedFeed, proxyPrefix]);
 
-  // Auto-navigate to first feed when no feedId
+  // Auto-navigate to first feed when no feedId — desktop only
   useEffect(() => {
-    if (!feedId && feeds.length > 0) {
+    if (!feedId && feeds.length > 0 && !isMobile) {
       navigate(`/feeds/${feeds[0].id}`, { replace: true });
     }
-  }, [feedId, feeds, navigate]);
+  }, [feedId, feeds, navigate, isMobile]);
 
   // Load whenever selected feed changes
   useEffect(() => {
@@ -317,274 +320,169 @@ export default function FeedsPage() {
     }
   };
 
-  return (
-    <SidebarPage title="Feeds">
-      <ResizablePanelGroup
-        orientation="horizontal"
-        className="flex-1 overflow-hidden"
-      >
-        {/* ── Left: feed list ─────────────────────────────────────── */}
-        <ResizablePanel
-          defaultSize={128}
-          minSize={128}
-          maxSize={256}
-          className="flex flex-col"
-        >
-          <div className="flex items-center justify-between px-4 py-3 border-b shrink-0  min-w-64">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              My Feeds
-            </span>
+  // ── Shared panels ────────────────────────────────────────────────────────
+
+  const FeedListPanel = ({ className = "" }) => (
+    <div className={`flex flex-col min-h-0 ${className}`}>
+      <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          My Feeds
+        </span>
+        <Button variant="ghost" size="icon-sm" onClick={() => setAddingFeed((v) => !v)} title="Add feed">
+          <PlusIcon size={14} />
+        </Button>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {feeds.map((feed) => (
+          <div
+            key={feed.id}
+            className={`group flex items-center gap-2 px-4 py-2.5 cursor-pointer hover:bg-accent transition-colors border-b last:border-b-0 ${selectedFeed?.id === feed.id ? "bg-accent" : ""}`}
+            onClick={() => navigate(`/feeds/${feed.id}`)}
+          >
+            <RssIcon size={13} className="shrink-0 text-orange-500" />
+            <span className="flex-1 text-sm truncate">{feed.title}</span>
             <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => setAddingFeed((v) => !v)}
-              title="Add feed"
+              variant="ghost" size="icon-sm"
+              className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive shrink-0"
+              onClick={(e) => { e.stopPropagation(); handleRemoveFeed(feed.id); }}
+              title="Remove feed"
             >
-              <PlusIcon size={14} />
+              <TrashIcon size={13} />
+            </Button>
+          </div>
+        ))}
+        {feeds.length === 0 && !addingFeed && (
+          <div className="flex flex-col items-center gap-2 py-10 px-4 text-center">
+            <RssIcon size={28} strokeWidth={0.8} className="text-muted-foreground/40" />
+            <p className="text-xs text-muted-foreground">No feeds yet — add one to get started.</p>
+          </div>
+        )}
+      </div>
+      {addingFeed && <AddFeedForm onAdd={handleAddFeed} onCancel={() => setAddingFeed(false)} />}
+    </div>
+  );
+
+  const FeedItemsPanel = ({ showBack = false, className = "" }) => (
+    <div className={`flex flex-col min-h-0 ${className}`}>
+      {selectedFeed ? (
+        <>
+          <div className="flex items-center gap-2 px-4 py-3 border-b shrink-0">
+            {showBack && (
+              <Button variant="ghost" size="icon-sm" onClick={() => navigate("/feeds")} title="Back" className="-ml-1 mr-1">
+                <ArrowLeftIcon size={16} />
+              </Button>
+            )}
+            <RssIcon size={14} className="text-orange-500 shrink-0" />
+            <span className="font-medium text-sm truncate flex-1">{selectedFeed.title}</span>
+            {viaCorsProxy && (
+              <Badge variant="outline" className="text-xs text-amber-700 border-amber-300 shrink-0 gap-1">
+                <ShieldOffIcon size={10} />
+                via {activePreset.label.replace(" (recommended)", "")}
+              </Badge>
+            )}
+            <Button variant="ghost" size="icon-sm" className="shrink-0" onClick={() => loadFeed(selectedFeed)} disabled={loadingFeed}>
+              <RefreshCwIcon size={13} className={loadingFeed ? "animate-spin" : ""} />
             </Button>
           </div>
 
           <div className="flex-1 overflow-y-auto">
-            {feeds.map((feed) => (
-              <div
-                key={feed.id}
-                className={`group flex items-center gap-2 px-4 py-2.5 cursor-pointer hover:bg-accent transition-colors border-b last:border-b-0 ${
-                  selectedFeed?.id === feed.id ? "bg-accent" : ""
-                }`}
-                onClick={() => navigate(`/feeds/${feed.id}`)}
-              >
-                <RssIcon size={13} className="shrink-0 text-orange-500" />
-                <span className="flex-1 text-sm truncate">{feed.title}</span>
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive shrink-0"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveFeed(feed.id);
-                  }}
-                  title="Remove feed"
-                >
-                  <TrashIcon size={13} />
-                </Button>
-              </div>
-            ))}
-
-            {feeds.length === 0 && !addingFeed && (
-              <div className="flex flex-col items-center gap-2 py-10 px-4 text-center">
-                <RssIcon
-                  size={28}
-                  strokeWidth={0.8}
-                  className="text-muted-foreground/40"
-                />
-                <p className="text-xs text-muted-foreground">
-                  No feeds yet — add one to get started.
-                </p>
+            {loadingFeed && (
+              <div className="flex items-center justify-center gap-2 py-16 text-muted-foreground">
+                <LoaderIcon size={20} className="animate-spin" />
+                <span className="text-sm">Loading feed…</span>
               </div>
             )}
-          </div>
-
-          {addingFeed && (
-            <AddFeedForm
-              onAdd={handleAddFeed}
-              onCancel={() => setAddingFeed(false)}
-            />
-          )}
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
-        {/* ── Right: feed items ────────────────────────────────────── */}
-        <ResizablePanel defaultSize={72} minSize={40} className="flex flex-col">
-          {selectedFeed ? (
-            <>
-              {/* Feed header */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b shrink-0">
-                <RssIcon size={14} className="text-orange-500 shrink-0" />
-                <span className="font-medium text-sm truncate">
-                  {selectedFeed.title}
-                </span>
-                {viaCorsProxy && (
-                  <Badge
-                    variant="outline"
-                    className="text-xs text-amber-700 border-amber-300 shrink-0 gap-1"
-                  >
-                    <ShieldOffIcon size={10} />
-                    via {activePreset.label.replace(" (recommended)", "")}
-                  </Badge>
-                )}
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="ml-auto shrink-0"
-                  onClick={() => loadFeed(selectedFeed)}
-                  title="Refresh feed"
-                  disabled={loadingFeed}
-                >
-                  <RefreshCwIcon
-                    size={13}
-                    className={loadingFeed ? "animate-spin" : ""}
-                  />
-                </Button>
+            {feedError && !loadingFeed && !corsBlocked && (
+              <div className="flex flex-col items-center gap-3 py-16 text-center px-6">
+                <TriangleAlertIcon size={32} strokeWidth={0.8} className="text-amber-400" />
+                <p className="font-medium text-sm">Could not load feed</p>
+                <p className="text-xs text-muted-foreground max-w-xs">{feedError}</p>
+                <Button size="sm" variant="outline" onClick={() => loadFeed(selectedFeed)}>Try again</Button>
               </div>
-
-              {/* Items */}
-              <div className="flex-1 overflow-y-auto">
-                {loadingFeed && (
-                  <div className="flex items-center justify-center gap-2 py-16 text-muted-foreground">
-                    <LoaderIcon size={20} className="animate-spin" />
-                    <span className="text-sm">Loading feed…</span>
-                  </div>
-                )}
-
-                {feedError && !loadingFeed && !corsBlocked && (
-                  <div className="flex flex-col items-center gap-3 py-16 text-center px-6">
-                    <TriangleAlertIcon
-                      size={32}
-                      strokeWidth={0.8}
-                      className="text-amber-400"
-                    />
-                    <p className="font-medium text-sm">Could not load feed</p>
-                    <p className="text-xs text-muted-foreground max-w-xs">
-                      {feedError}
-                    </p>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => loadFeed(selectedFeed)}
-                    >
-                      Try again
-                    </Button>
-                  </div>
-                )}
-
-                {feedError && !loadingFeed && corsBlocked && (
-                  <div className="flex flex-col items-center gap-4 py-12 px-8 max-w-md mx-auto w-full">
-                    <ShieldOffIcon
-                      size={36}
-                      strokeWidth={0.8}
-                      className="text-amber-500 shrink-0"
-                    />
-                    <div className="text-center">
-                      <p className="font-medium text-sm">Blocked by CORS policy</p>
-                      <p className="text-xs text-muted-foreground mt-1 max-w-xs">
-                        The browser blocked this feed for security reasons. Use a CORS proxy to load it.
-                      </p>
-                    </div>
-
-                    {/* Proxy selector */}
-                    <div className="w-full flex flex-col gap-2">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                        Choose proxy
-                      </p>
-                      <div className="flex flex-col gap-1.5">
-                        {PROXY_PRESETS.map((preset) => (
-                          <label
-                            key={preset.id}
-                            className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-                              proxyPresetId === preset.id
-                                ? "border-foreground/30 bg-accent"
-                                : "border-border hover:bg-accent/50"
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name="proxy-preset-feeds"
-                              value={preset.id}
-                              checked={proxyPresetId === preset.id}
-                              onChange={() => setProxyPreset(preset.id)}
-                              className="mt-0.5 accent-foreground"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium leading-tight">
-                                {preset.label}
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-0.5 leading-tight">
-                                {preset.hint}
-                              </p>
-                            </div>
-                          </label>
-                        ))}
-                      </div>
-
-                      {proxyPresetId === "custom" && (
-                        <Input
-                          placeholder="https://your-proxy.example.com/?url="
-                          value={customProxyPrefix}
-                          onChange={(e) => setCustomProxyPrefix(e.target.value)}
-                          className="h-8 text-xs mt-1"
-                          autoFocus
-                        />
-                      )}
-
-                      {proxyPresetId === "local" && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted text-xs text-muted-foreground font-mono">
-                          $ npm run proxy
+            )}
+            {feedError && !loadingFeed && corsBlocked && (
+              <div className="flex flex-col items-center gap-4 py-12 px-6 max-w-md mx-auto w-full">
+                <ShieldOffIcon size={36} strokeWidth={0.8} className="text-amber-500 shrink-0" />
+                <div className="text-center">
+                  <p className="font-medium text-sm">Blocked by CORS policy</p>
+                  <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                    The browser blocked this feed. Use a CORS proxy to load it.
+                  </p>
+                </div>
+                <div className="w-full flex flex-col gap-2">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Choose proxy</p>
+                  <div className="flex flex-col gap-1.5">
+                    {PROXY_PRESETS.map((preset) => (
+                      <label key={preset.id} className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${proxyPresetId === preset.id ? "border-foreground/30 bg-accent" : "border-border hover:bg-accent/50"}`}>
+                        <input type="radio" name="proxy-preset-feeds" value={preset.id} checked={proxyPresetId === preset.id} onChange={() => setProxyPreset(preset.id)} className="mt-0.5 accent-foreground" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium leading-tight">{preset.label}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5 leading-tight">{preset.hint}</p>
                         </div>
-                      )}
-                    </div>
-
-                    <div className="flex gap-2 w-full">
-                      <Button
-                        size="sm"
-                        className="flex-1"
-                        onClick={retryWithProxy}
-                        disabled={
-                          proxyPresetId === "custom" && !customProxyPrefix.trim()
-                        }
-                      >
-                        <ShieldOffIcon size={13} />
-                        Retry via {activePreset.label.replace(" (recommended)", "")}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => loadFeed(selectedFeed)}
-                        title="Retry without proxy"
-                      >
-                        Direct
-                      </Button>
-                    </div>
+                      </label>
+                    ))}
                   </div>
-                )}
-
-                {!loadingFeed && !feedError && items.length === 0 && (
-                  <div className="flex flex-col items-center gap-2 py-16 text-muted-foreground text-center">
-                    <BookMarkedIcon size={28} strokeWidth={0.7} />
-                    <p className="text-sm">No items found in this feed.</p>
-                  </div>
-                )}
-
-                {!loadingFeed &&
-                  items.map((item, i) => (
-                    <FeedItem
-                      key={`${item.link}-${i}`}
-                      item={item}
-                      onImport={setImportItem}
-                    />
-                  ))}
+                  {proxyPresetId === "custom" && (
+                    <Input placeholder="https://your-proxy.example.com/?url=" value={customProxyPrefix} onChange={(e) => setCustomProxyPrefix(e.target.value)} className="h-8 text-xs mt-1" autoFocus />
+                  )}
+                  {proxyPresetId === "local" && (
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted text-xs text-muted-foreground font-mono">$ npm run proxy</div>
+                  )}
+                </div>
+                <div className="flex gap-2 w-full">
+                  <Button size="sm" className="flex-1" onClick={retryWithProxy} disabled={proxyPresetId === "custom" && !customProxyPrefix.trim()}>
+                    <ShieldOffIcon size={13} />
+                    Retry via {activePreset.label.replace(" (recommended)", "")}
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => loadFeed(selectedFeed)}>Direct</Button>
+                </div>
               </div>
-            </>
-          ) : (
-            <div className="flex-1 flex flex-col items-center justify-center gap-3 text-muted-foreground">
-              <RssIcon size={48} strokeWidth={0.5} />
-              <p className="text-sm">
-                Select a feed or add one to get started.
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setAddingFeed(true)}
-              >
-                <PlusIcon size={14} />
-                Add Feed
-              </Button>
-            </div>
-          )}
+            )}
+            {!loadingFeed && !feedError && items.length === 0 && (
+              <div className="flex flex-col items-center gap-2 py-16 text-muted-foreground text-center">
+                <BookMarkedIcon size={28} strokeWidth={0.7} />
+                <p className="text-sm">No items found in this feed.</p>
+              </div>
+            )}
+            {!loadingFeed && items.map((item, i) => (
+              <FeedItem key={`${item.link}-${i}`} item={item} onImport={setImportItem} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 text-muted-foreground">
+          <RssIcon size={48} strokeWidth={0.5} />
+          <p className="text-sm">Select a feed or add one to get started.</p>
+          <Button variant="outline" size="sm" onClick={() => setAddingFeed(true)}>
+            <PlusIcon size={14} /> Add Feed
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <SidebarPage title="Feeds">
+      {/* ── Mobile: master-detail stack ──────────────────────────────── */}
+      <div className="flex flex-col flex-1 min-h-0 md:hidden">
+        {!feedId ? (
+          <FeedListPanel className="flex-1" />
+        ) : (
+          <FeedItemsPanel showBack className="flex-1" />
+        )}
+      </div>
+
+      {/* ── Desktop: two-panel resizable layout ──────────────────────── */}
+      <ResizablePanelGroup orientation="horizontal" className="hidden md:flex flex-1 overflow-hidden">
+        <ResizablePanel defaultSize={25} minSize={20} maxSize={40} className="flex flex-col">
+          <FeedListPanel className="flex-1" />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={75} minSize={40} className="flex flex-col">
+          <FeedItemsPanel className="flex-1" />
         </ResizablePanel>
       </ResizablePanelGroup>
 
-      {/* Recipe import dialog */}
       <RecipeFormDialog
         open={!!importItem}
         onOpenChange={(open) => !open && setImportItem(null)}

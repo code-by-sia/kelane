@@ -10,7 +10,7 @@ import {
 
 export function RecipeList({ recipes, onSelect = (code) => {} }) {
   return (
-    <div className="flex w-full max-w-md flex-col gap-6 p-6">
+    <div className="flex w-full md:max-w-md flex-col gap-4 sm:gap-6 p-4 sm:p-6 overflow-y-auto">
       <ItemGroup className=" gap-2">
         {recipes.map((recipe) => (
           <Item

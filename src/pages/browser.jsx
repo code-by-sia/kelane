@@ -197,66 +197,42 @@ export default function BrowserPage() {
     <SidebarPage>
       <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
         {/* ── Toolbar ─────────────────────────────────────────────────── */}
-        <div className="flex items-center gap-2 px-3 py-2 border-b bg-background shrink-0">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={refresh}
-            disabled={!targetUrl}
-            title="Refresh"
-          >
-            <RefreshCwIcon
-              size={14}
-              className={loading ? "animate-spin" : ""}
-            />
+        <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 border-b bg-background shrink-0">
+          <Button variant="ghost" size="icon-sm" onClick={refresh} disabled={!targetUrl} title="Refresh">
+            <RefreshCwIcon size={14} className={loading ? "animate-spin" : ""} />
           </Button>
 
-          <form
-            onSubmit={handleSubmit}
-            className="flex-1 flex items-center gap-2"
-          >
-            <div className="flex-1 relative">
+          <form onSubmit={handleSubmit} className="flex-1 flex items-center gap-1 sm:gap-2 min-w-0">
+            <div className="flex-1 relative min-w-0">
               {usingProxy && targetUrl ? (
-                <ShieldOffIcon
-                  size={13}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-500"
-                  title="Loading via proxy"
-                />
+                <ShieldOffIcon size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-500" title="Loading via proxy" />
               ) : (
-                <GlobeIcon
-                  size={13}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
-                />
+                <GlobeIcon size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
               )}
               <Input
                 className="pl-8 h-8 text-sm"
-                placeholder="Enter a URL, e.g. bbcgoodfood.com/recipes/…"
+                placeholder="bbcgoodfood.com/recipes/…"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
               />
             </div>
-            <Button type="submit" size="sm" variant="outline">
-              <ArrowRightIcon size={14} /> Go
+            <Button type="submit" size="sm" variant="outline" className="shrink-0">
+              <ArrowRightIcon size={14} />
+              <span className="hidden sm:inline">Go</span>
             </Button>
           </form>
 
           {/* Proxy badge when active */}
           {usingProxy && targetUrl && (
-            <span className="text-xs text-amber-600 font-medium shrink-0 flex items-center gap-1">
-              <ShieldOffIcon size={11} />
-              proxy
+            <span className="text-xs text-amber-600 font-medium shrink-0 flex items-center gap-1 hidden sm:flex">
+              <ShieldOffIcon size={11} /> proxy
             </span>
           )}
 
-          <Button
-            size="sm"
-            variant="default"
-            onClick={extractRecipe}
-            disabled={!targetUrl || blocked}
-            title="Extract recipe from this page using AI"
-          >
+          {/* Extract Recipe — label on desktop, icon-only on mobile */}
+          <Button size="sm" variant="default" onClick={extractRecipe} disabled={!targetUrl || blocked} title="Extract recipe from this page using AI" className="shrink-0">
             <UtensilsIcon size={14} />
-            Extract Recipe
+            <span className="hidden sm:inline">Extract Recipe</span>
           </Button>
 
           <ProxySettings />
