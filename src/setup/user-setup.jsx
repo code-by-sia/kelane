@@ -15,7 +15,11 @@ export default function UserSetup({ onNext }) {
   const setProfile = useSetupStore((s) => s.setProfile);
   const profile = useSetupStore((s) => s.profile);
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(schema),
     defaultValues: { name: profile.name, email: profile.email },
   });
@@ -34,19 +38,31 @@ export default function UserSetup({ onNext }) {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 max-w-sm">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 max-w-sm"
+      >
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="name">Your name *</Label>
-          <Input id="name" placeholder="e.g. Sia" {...register("name")} />
+          <Input id="name" placeholder="e.g. Chef" {...register("name")} />
           {errors.name && (
-            <span className="text-xs text-destructive">{errors.name.message}</span>
+            <span className="text-xs text-destructive">
+              {errors.name.message}
+            </span>
           )}
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">Email (optional)</Label>
-          <Input id="email" type="email" placeholder="you@example.com" {...register("email")} />
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            {...register("email")}
+          />
           {errors.email && (
-            <span className="text-xs text-destructive">{errors.email.message}</span>
+            <span className="text-xs text-destructive">
+              {errors.email.message}
+            </span>
           )}
         </div>
         <div className="flex justify-end">

@@ -19,8 +19,8 @@ import { SearchTrigger } from "./recipe-search";
 
 const data = {
   user: {
-    name: "Samal",
-    email: "me@siamand.cc",
+    name: "Chef",
+    email: "chef@samalstudios.com",
     avatar: "/avatars/sia.jpg",
   },
 
