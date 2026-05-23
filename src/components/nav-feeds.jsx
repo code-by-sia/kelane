@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+
+const FEEDS_OPEN_KEY = "sidebar.feeds.open";
 import { IconDots, IconTrash } from "@tabler/icons-react";
 import {
   DropdownMenu,
@@ -104,6 +106,14 @@ export function NavFeeds() {
   const removeFeed = useFeedsStore((s) => s.removeFeed);
 
   const [addingFeed, setAddingFeed] = useState(false);
+  const [feedsOpen, setFeedsOpen] = useState(
+    () => localStorage.getItem(FEEDS_OPEN_KEY) === "true",
+  );
+
+  const toggleFeeds = useCallback((v) => {
+    setFeedsOpen(v);
+    localStorage.setItem(FEEDS_OPEN_KEY, String(v));
+  }, []);
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -111,7 +121,12 @@ export function NavFeeds() {
 
       <SidebarMenu>
         {/* ── RSS Feeds collapsible ── */}
-        <Collapsible asChild defaultOpen className="group/collapsible">
+        <Collapsible
+          asChild
+          open={feedsOpen}
+          onOpenChange={toggleFeeds}
+          className="group/collapsible"
+        >
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
               <SidebarMenuButton tooltip="Feeds">

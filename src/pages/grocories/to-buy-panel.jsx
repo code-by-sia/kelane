@@ -149,44 +149,72 @@ export default function ToBuyPanel() {
         {toBuyItems.length === 0 && (
           <p className="text-sm text-muted-foreground p-4">Nothing to buy.</p>
         )}
-        {toBuyItems.map((item) => (
-          <div key={item.id} className="flex items-center gap-2 px-4 py-2">
-            <Checkbox
-              checked={selected.has(item.id)}
-              onCheckedChange={() => toggleSelect(item.id)}
-            />
-            <Checkbox
-              checked={item.checked}
-              onCheckedChange={() => toggleToBuyItem(item.id)}
-            />
-            <span
-              className={`flex-1 text-sm ${item.checked ? "line-through text-muted-foreground" : "font-medium"}`}
+        {toBuyItems.map((item) => {
+          const isSelected = selected.has(item.id);
+          const inBatchMode = selected.size > 0;
+          return (
+            <div
+              key={item.id}
+              className={`group flex items-center gap-2 px-4 py-2 transition-colors ${
+                isSelected ? "bg-accent/40" : ""
+              }`}
             >
-              {item.name}
-            </span>
-            {item.quantity && (
-              <span className="text-xs text-muted-foreground shrink-0">
-                {item.quantity} {item.unit}
+              {/* Selection checkbox — hidden until hover or batch mode is active.
+                  Uses a fixed-width wrapper so layout doesn't shift. */}
+              <div
+                className={`shrink-0 transition-opacity ${
+                  inBatchMode || isSelected
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100"
+                }`}
+              >
+                <Checkbox
+                  checked={isSelected}
+                  onCheckedChange={() => toggleSelect(item.id)}
+                />
+              </div>
+
+              {/* Primary action: mark as bought */}
+              <Checkbox
+                checked={item.checked}
+                onCheckedChange={() => toggleToBuyItem(item.id)}
+              />
+
+              <span
+                className={`flex-1 text-sm ${
+                  item.checked
+                    ? "line-through text-muted-foreground"
+                    : "font-medium"
+                }`}
+              >
+                {item.name}
               </span>
-            )}
-            <NutritionButton name={item.name} />
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              title="Move to fridge"
-              onClick={() => moveToFridge(item.id)}
-            >
-              <RefrigeratorIcon size={14} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => removeToBuyItem(item.id)}
-            >
-              <Trash2Icon size={14} />
-            </Button>
-          </div>
-        ))}
+
+              {item.quantity && (
+                <span className="text-xs text-muted-foreground shrink-0">
+                  {item.quantity} {item.unit}
+                </span>
+              )}
+
+              <NutritionButton name={item.name} />
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                title="Move to fridge"
+                onClick={() => moveToFridge(item.id)}
+              >
+                <RefrigeratorIcon size={14} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => removeToBuyItem(item.id)}
+              >
+                <Trash2Icon size={14} />
+              </Button>
+            </div>
+          );
+        })}
       </div>
 
       {selected.size > 0 && (
