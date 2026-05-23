@@ -1,0 +1,40 @@
+@reference "../index.css";
+
+/* ────────────────────────────────────────────────────────────
+   Mobile bottom navigation bar
+   ──────────────────────────────────────────────────────────── */
+.mobile-nav {
+    @apply md:hidden fixed bottom-0 left-0 right-0 z-50
+           bg-background/95 backdrop-blur-sm border-t
+           flex items-stretch h-16;
+}
+
+.mobile-nav__item {
+    @apply flex flex-col items-center justify-center gap-0.5
+           flex-1 py-2 text-[10px] font-medium transition-colors cursor-pointer;
+}
+
+.mobile-nav__item--active {
+    @apply text-primary;
+}
+
+.mobile-nav__item--idle {
+    @apply text-muted-foreground active:text-foreground;
+}
+
+/* ── "More" drawer ── */
+.mobile-nav__drawer-grid {
+    @apply grid grid-cols-4 gap-0 px-4;
+}
+
+.mobile-nav__drawer-item {
+    @apply flex flex-col items-center gap-1.5 py-4 rounded-xl transition-colors;
+}
+
+.mobile-nav__drawer-item--active {
+    @apply text-primary bg-primary/8;
+}
+
+.mobile-nav__drawer-item--idle {
+    @apply text-foreground hover:bg-muted active:bg-muted;
+}

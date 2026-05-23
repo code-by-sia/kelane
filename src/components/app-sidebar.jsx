@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-
-import { NavUser } from "@/components/nav-user";
+import { ChefHatIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,19 +11,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ChefHatIcon } from "lucide-react";
 import { NavCategories } from "./nav-categories";
 import { NavFeeds } from "./nav-feeds";
+import { NavUser } from "./nav-user";
 import { SearchTrigger } from "./recipe-search";
+import "./app-sidebar.css";
 
 function Logo() {
   return (
-    <div className="flex items-center gap-2 overflow-hidden">
-      <ChefHatIcon className="size-5 shrink-0" />
-      {/* Hidden when sidebar collapses to icon rail */}
-      <div className="group-data-[collapsible=icon]:hidden flex flex-col leading-none">
-        <strong className="text-sm font-semibold tracking-tight">Kelane</strong>
-        <small className="text-sidebar-foreground/50 text-[10px]">Recipes</small>
+    <div className="sidebar-logo">
+      <ChefHatIcon className="sidebar-logo__icon" />
+      <div className="sidebar-logo__text">
+        <strong className="sidebar-logo__title">Kelane</strong>
+        <small className="sidebar-logo__subtitle">Recipes</small>
       </div>
     </div>
   );
@@ -32,7 +31,7 @@ function Logo() {
 
 export function AppSidebar({ ...props }) {
   return (
-    <Sidebar collapsible="icon" {...props} className="side-bar">
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -48,8 +47,7 @@ export function AppSidebar({ ...props }) {
           </SidebarMenuItem>
         </SidebarMenu>
 
-        {/* Search bar — hidden in icon rail mode */}
-        <div className="px-0 pt-1 group-data-[collapsible=icon]:hidden">
+        <div className="sidebar-search">
           <SearchTrigger />
         </div>
       </SidebarHeader>

@@ -15,7 +15,6 @@ import {
   EllipsisIcon,
   ScanTextIcon,
   RssIcon,
-  GlobeIcon,
   TagIcon,
   HistoryIcon,
   SettingsIcon,
@@ -27,20 +26,20 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import "./mobile-nav.css";
 
 const PRIMARY_TABS = [
-  { label: "Explore", icon: CompassIcon, href: "/" },
-  { label: "Recipes", icon: BookHeartIcon, href: "/my-recipes" },
-  { label: "Groceries", icon: ShoppingBagIcon, href: "/groceries" },
-  { label: "Calendar", icon: CalendarDaysIcon, href: "/calendar" },
+  { label: "Explore",   icon: CompassIcon,      href: "/" },
+  { label: "Recipes",   icon: BookHeartIcon,    href: "/my-recipes" },
+  { label: "Groceries", icon: ShoppingBagIcon,  href: "/groceries" },
+  { label: "Calendar",  icon: CalendarDaysIcon, href: "/calendar" },
 ];
 
 const MORE_ITEMS = [
-  { label: "Categories", icon: TagIcon, href: "/categories" },
-  { label: "Feeds", icon: RssIcon, href: "/feeds" },
-  // { label: "Browser",    icon: GlobeIcon,    href: "/browser" },
-  { label: "History", icon: HistoryIcon, href: "/history" },
-  { label: "Preferences", icon: SettingsIcon, href: "/preferences" },
+  { label: "Categories", icon: TagIcon,      href: "/categories" },
+  { label: "Feeds",      icon: RssIcon,      href: "/feeds" },
+  { label: "History",    icon: HistoryIcon,  href: "/history" },
+  { label: "Preferences",icon: SettingsIcon, href: "/preferences" },
 ];
 
 function NavItem({ href, icon: Icon, label, active, onClick }) {
@@ -49,12 +48,7 @@ function NavItem({ href, icon: Icon, label, active, onClick }) {
     <Tag
       href={href}
       onClick={onClick}
-      className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-2 text-[10px] font-medium transition-colors
-        ${
-          active
-            ? "text-primary"
-            : "text-muted-foreground active:text-foreground"
-        }`}
+      className={`mobile-nav__item ${active ? "mobile-nav__item--active" : "mobile-nav__item--idle"}`}
     >
       <Icon size={22} strokeWidth={active ? 2.2 : 1.7} />
       <span>{label}</span>
@@ -67,7 +61,6 @@ export function MobileNav() {
   const [moreOpen, setMoreOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
 
-  // Determine which primary tab is active
   const isActive = (href) => {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
@@ -78,26 +71,13 @@ export function MobileNav() {
   return (
     <>
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t
-                   flex items-stretch h-16 safe-bottom"
+        className="mobile-nav"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         {PRIMARY_TABS.map((tab) => (
-          <NavItem
-            key={tab.href}
-            href={tab.href}
-            icon={tab.icon}
-            label={tab.label}
-            active={isActive(tab.href)}
-          />
+          <NavItem key={tab.href} href={tab.href} icon={tab.icon} label={tab.label} active={isActive(tab.href)} />
         ))}
-        {/* More — opens a drawer */}
-        <NavItem
-          icon={EllipsisIcon}
-          label="More"
-          active={isMoreActive}
-          onClick={() => setMoreOpen(true)}
-        />
+        <NavItem icon={EllipsisIcon} label="More" active={isMoreActive} onClick={() => setMoreOpen(true)} />
       </nav>
 
       {/* "More" drawer */}
@@ -107,35 +87,27 @@ export function MobileNav() {
             <DrawerTitle>More</DrawerTitle>
           </DrawerHeader>
           <div
-            className="grid grid-cols-4 gap-0 pb-8 px-4"
-            style={{
-              paddingBottom: "calc(env(safe-area-inset-bottom) + 2rem)",
-            }}
+            className="mobile-nav__drawer-grid"
+            style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 2rem)" }}
           >
             {MORE_ITEMS.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setMoreOpen(false)}
-                className={`flex flex-col items-center gap-1.5 py-4 rounded-xl transition-colors
-                  ${
-                    pathname.startsWith(item.href)
-                      ? "text-primary bg-primary/8"
-                      : "text-foreground hover:bg-muted active:bg-muted"
-                  }`}
+                className={`mobile-nav__drawer-item ${
+                  pathname.startsWith(item.href)
+                    ? "mobile-nav__drawer-item--active"
+                    : "mobile-nav__drawer-item--idle"
+                }`}
               >
                 <item.icon size={24} strokeWidth={1.7} />
                 <span className="text-xs font-medium">{item.label}</span>
               </a>
             ))}
-            {/* Scan Recipe action */}
             <button
-              onClick={() => {
-                setMoreOpen(false);
-                setScannerOpen(true);
-              }}
-              className="flex flex-col items-center gap-1.5 py-4 rounded-xl transition-colors
-                text-foreground hover:bg-muted active:bg-muted"
+              onClick={() => { setMoreOpen(false); setScannerOpen(true); }}
+              className="mobile-nav__drawer-item mobile-nav__drawer-item--idle"
             >
               <ScanTextIcon size={24} strokeWidth={1.7} />
               <span className="text-xs font-medium">Scan</span>

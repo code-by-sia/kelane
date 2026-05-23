@@ -4,15 +4,12 @@ import "./site-header.css";
 
 export function SiteHeader({ title, children }) {
   return (
-    <header className="site-header bg-background ">
-      <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
+    <header className="site-header">
+      <div className="site-header__inner">
         <SidebarTrigger className="-ml-1" />
-        <Separator
-          orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
-        />
-        <h1 className="text-base font-medium">{title}</h1>
-        <span className="flex-1" />
+        <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
+        <h1 className="site-header__title">{title}</h1>
+        <span className="site-header__spacer" />
         {children}
       </div>
     </header>

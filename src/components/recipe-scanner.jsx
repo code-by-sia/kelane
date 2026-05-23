@@ -42,6 +42,7 @@ import { useWebLLM } from "@/hooks/use-web-llm";
 import useRecipeStore from "@/store/recipe";
 import { getProxyPrefix } from "@/store/settings";
 import useSettingsStore from "@/store/settings";
+import "./recipe-scanner.css";
 
 // ── Structured-data helpers ───────────────────────────────────────────────
 
@@ -473,28 +474,12 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
           )}
 
           {/* Tab selector */}
-          <div className="flex gap-1 rounded-lg bg-muted p-1 self-start">
-            <button
-              onClick={() => setTab("url")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                tab === "url"
-                  ? "bg-background shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <GlobeIcon size={12} />
-              URL
+          <div className="scanner-tabs">
+            <button onClick={() => setTab("url")} className={`scanner-tab ${tab === "url" ? "scanner-tab--active" : "scanner-tab--idle"}`}>
+              <GlobeIcon size={12} /> URL
             </button>
-            <button
-              onClick={() => setTab("text")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                tab === "text"
-                  ? "bg-background shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <ClipboardPasteIcon size={12} />
-              Paste text
+            <button onClick={() => setTab("text")} className={`scanner-tab ${tab === "text" ? "scanner-tab--active" : "scanner-tab--idle"}`}>
+              <ClipboardPasteIcon size={12} /> Paste text
             </button>
           </div>
 
@@ -531,7 +516,7 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
             </div>
           ) : (
             <textarea
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground resize-none h-36 focus:outline-none focus:ring-2 focus:ring-ring"
+              className="scanner-textarea"
               placeholder="Paste the recipe page text here…"
               value={pastedText}
               onChange={(e) => setPastedText(e.target.value)}

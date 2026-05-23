@@ -418,11 +418,22 @@ html[data-theme="aubergine"] {
    UTILITIES
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Sidebar active item: amber left border (Slack-style indicator) */
+/* Sidebar active item — Slack-style: full-row rounded highlight, brighter text.
+   No left-border accent; the background fill carries the indicator. */
 [data-slot="sidebar-menu-button"][data-active="true"] {
-    border-left: 2px solid var(--color-sidebar-primary);
-    padding-left: calc(0.5rem - 2px);
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    background: color-mix(in oklch, var(--sidebar-primary) 14%, var(--sidebar));
+    color: var(--sidebar-accent-foreground);
+    font-weight: 600;
+}
+
+/* Sidebar group label — Slack-style: very small, uppercase, muted */
+[data-slot="sidebar-group-label"] {
+    font-size: 0.625rem;   /* 10px */
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.5;
+    height: 1.5rem;
 }
 
 /* Themed scrollbar — thumb uses --border so it shifts with the active theme */

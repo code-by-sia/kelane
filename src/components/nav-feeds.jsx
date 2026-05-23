@@ -40,8 +40,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import useFeedsStore from "@/store/feeds";
+import "./nav-feeds.css";
 
-// Inline add-feed mini form shown below the feeds list
 function AddFeedInline({ onDone }) {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
@@ -59,7 +59,7 @@ function AddFeedInline({ onDone }) {
   };
 
   return (
-    <div className="px-2 pb-2 flex flex-col gap-1.5">
+    <div className="feeds-add-form">
       <Input
         placeholder="Feed URL…"
         value={url}
@@ -74,21 +74,11 @@ function AddFeedInline({ onDone }) {
         onChange={(e) => setTitle(e.target.value)}
         className="h-7 text-xs"
       />
-      <div className="flex gap-1">
-        <Button
-          size="sm"
-          className="flex-1 h-7 text-xs"
-          disabled={!url.trim()}
-          onClick={handleAdd}
-        >
+      <div className="feeds-add-form__actions">
+        <Button size="sm" className="flex-1 h-7 text-xs" disabled={!url.trim()} onClick={handleAdd}>
           Add
         </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-7 text-xs"
-          onClick={onDone}
-        >
+        <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={onDone}>
           Cancel
         </Button>
       </div>
@@ -116,131 +106,89 @@ export function NavFeeds() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">Feeds &amp; Tools</SidebarGroupLabel>
+      <SidebarGroupLabel className="nav-group-label group-data-[collapsible=icon]:hidden">
+        Feeds &amp; Tools
+      </SidebarGroupLabel>
 
       <SidebarMenu>
-        {/* ── RSS Feeds collapsible (expanded) / direct link (icon mode) ── */}
+        {/* ── RSS Feeds: direct link (icon mode) or collapsible (expanded) ── */}
         {isCollapsed ? (
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              tooltip="Feeds"
-              isActive={pathname.startsWith("/feeds")}
-            >
-              <a href="/feeds">
-                <RssIcon />
-                <span>Feeds</span>
-              </a>
+            <SidebarMenuButton asChild tooltip="Feeds" isActive={pathname.startsWith("/feeds")}>
+              <a href="/feeds"><RssIcon /><span>Feeds</span></a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ) : (
-        <Collapsible
-          asChild
-          open={feedsOpen}
-          onOpenChange={toggleFeeds}
-          className="group/collapsible"
-        >
-          <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip="Feeds">
-                <RssIcon />
-                <span>Feeds</span>
-                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-              </SidebarMenuButton>
-            </CollapsibleTrigger>
+          <Collapsible asChild open={feedsOpen} onOpenChange={toggleFeeds} className="group/collapsible">
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton tooltip="Feeds">
+                  <RssIcon />
+                  <span>Feeds</span>
+                  <ChevronRight className="feeds-chevron" />
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
 
-            {/* + button in the collapsed trigger row */}
-            <SidebarMenuAction
-              title="Add feed"
-              onClick={() => setAddingFeed((v) => !v)}
-            >
-              <PlusIcon size={14} />
-            </SidebarMenuAction>
+              <SidebarMenuAction title="Add feed" onClick={() => setAddingFeed((v) => !v)}>
+                <PlusIcon size={14} />
+              </SidebarMenuAction>
 
-            <CollapsibleContent>
-              <SidebarMenuSub className="border-none">
-                {feeds.map((feed) => (
-                  <SidebarMenuSubItem key={feed.id}>
-                    <SidebarMenuSubButton
-                      asChild
-                      isActive={pathname === `/feeds/${feed.id}`}
-                    >
-                      <a href={`/feeds/${feed.id}`}>
-                        <BookMarkedIcon size={13} />
-                        <span>{feed.title}</span>
-                      </a>
-                    </SidebarMenuSubButton>
+              <CollapsibleContent>
+                <SidebarMenuSub className="border-none">
+                  {feeds.map((feed) => (
+                    <SidebarMenuSubItem key={feed.id}>
+                      <SidebarMenuSubButton asChild isActive={pathname === `/feeds/${feed.id}`}>
+                        <a href={`/feeds/${feed.id}`}>
+                          <BookMarkedIcon size={13} />
+                          <span>{feed.title}</span>
+                        </a>
+                      </SidebarMenuSubButton>
 
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <SidebarMenuAction
-                          showOnHover
-                          className="data-[state=open]:bg-accent rounded-sm"
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <SidebarMenuAction showOnHover className="data-[state=open]:bg-accent rounded-sm">
+                            <IconDots size={14} />
+                            <span className="sr-only">More</span>
+                          </SidebarMenuAction>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          className="w-fit rounded-lg"
+                          side={isMobile ? "bottom" : "right"}
+                          align={isMobile ? "end" : "start"}
                         >
-                          <IconDots size={14} />
-                          <span className="sr-only">More</span>
-                        </SidebarMenuAction>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        className="w-fit rounded-lg"
-                        side={isMobile ? "bottom" : "right"}
-                        align={isMobile ? "end" : "start"}
-                      >
-                        <DropdownMenuItem
-                          variant="destructive"
-                          onClick={() => removeFeed(feed.id)}
-                        >
-                          <IconTrash size={14} />
-                          <span>Remove Feed</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </SidebarMenuSubItem>
-                ))}
+                          <DropdownMenuItem variant="destructive" onClick={() => removeFeed(feed.id)}>
+                            <IconTrash size={14} />
+                            <span>Remove Feed</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </SidebarMenuSubItem>
+                  ))}
 
-                {feeds.length === 0 && (
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      className="text-muted-foreground text-xs italic"
-                      onClick={() => setAddingFeed(true)}
-                    >
-                      No feeds — click + to add
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                )}
-              </SidebarMenuSub>
+                  {feeds.length === 0 && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton className="feeds-empty-hint" onClick={() => setAddingFeed(true)}>
+                        No feeds — click + to add
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                </SidebarMenuSub>
 
-              {addingFeed && (
-                <AddFeedInline onDone={() => setAddingFeed(false)} />
-              )}
-            </CollapsibleContent>
-          </SidebarMenuItem>
-        </Collapsible>
+                {addingFeed && <AddFeedInline onDone={() => setAddingFeed(false)} />}
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
         )}
 
-        {/* ── Other tool links ── */}
         <SidebarMenuItem>
-          <SidebarMenuButton
-            asChild
-            tooltip="Calendar"
-            isActive={pathname === `/calendar`}
-          >
-            <a href="/calendar">
-              <CalendarDaysIcon />
-              <span>Calendar</span>
-            </a>
+          <SidebarMenuButton asChild tooltip="Calendar" isActive={pathname === "/calendar"}>
+            <a href="/calendar"><CalendarDaysIcon /><span>Calendar</span></a>
           </SidebarMenuButton>
         </SidebarMenuItem>
+
         <SidebarMenuItem>
-          <SidebarMenuButton
-            asChild
-            tooltip="Groceries"
-            isActive={pathname === `/groceries`}
-          >
-            <a href="/groceries">
-              <ShoppingBagIcon />
-              <span>Groceries</span>
-            </a>
+          <SidebarMenuButton asChild tooltip="Groceries" isActive={pathname === "/groceries"}>
+            <a href="/groceries"><ShoppingBagIcon /><span>Groceries</span></a>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

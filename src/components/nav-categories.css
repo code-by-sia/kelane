@@ -1,0 +1,9 @@
+@reference "../index.css";
+
+/* ────────────────────────────────────────────────────────────
+   Nav section label — Slack-style: all-caps, very muted
+   ──────────────────────────────────────────────────────────── */
+.nav-group-label {
+    @apply text-[10px] uppercase tracking-widest font-semibold
+           text-sidebar-foreground/50 h-6 px-2;
+}

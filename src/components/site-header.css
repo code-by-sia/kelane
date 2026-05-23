@@ -1,8 +1,22 @@
-@import "tailwindcss";
+@reference "../index.css";
 
+/* ────────────────────────────────────────────────────────────
+   SiteHeader — tinted toolbar band below the sidebar header
+   ──────────────────────────────────────────────────────────── */
 header.site-header {
-    @apply flex h-(--header-height) shrink-0 items-center gap-2 border-b;
-    @apply transition-[width,height] ease-linear;
-    @apply group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height);
-    @apply rounded-t-xl;
+    @apply flex h-(--header-height) shrink-0 items-center gap-2
+           border-b bg-background transition-[width,height] ease-linear
+           group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height);
+}
+
+.site-header__inner {
+    @apply flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6;
+}
+
+.site-header__title {
+    @apply text-base font-medium;
+}
+
+.site-header__spacer {
+    @apply flex-1;
 }

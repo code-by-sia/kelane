@@ -8,6 +8,7 @@ import { ThemePicker } from "@/components/theme-picker";
 import useSetupStore from "@/store/setup";
 import useSettingsStore from "@/store/settings";
 import { LLM_MODELS } from "@/data/llm-models";
+import "./preferences.css";
 
 const DIETARY_OPTIONS = [
   { id: "vegan",       label: "Vegan" },
@@ -39,32 +40,32 @@ export default function PreferencesPage() {
     <SidebarPage title="Preferences">
       <Tabs defaultValue="appearance" className="flex flex-col flex-1 min-h-0">
 
-        {/* ── Tab bar — sits in the tinted toolbar band ── */}
-        <TabsList className="w-full justify-start rounded-none border-b bg-background px-4 lg:px-6 h-11 gap-1 shrink-0">
-          <TabsTrigger value="appearance" className="gap-1.5 data-[state=active]:shadow-none">
+        {/* ── Tab bar ── */}
+        <TabsList className="prefs-tab-list">
+          <TabsTrigger value="appearance" className="prefs-tab-trigger">
             <PaletteIcon size={13} />
             Appearance
           </TabsTrigger>
-          <TabsTrigger value="ai" className="gap-1.5 data-[state=active]:shadow-none">
+          <TabsTrigger value="ai" className="prefs-tab-trigger">
             <BrainCircuitIcon size={13} />
             AI Model
           </TabsTrigger>
-          <TabsTrigger value="dietary" className="gap-1.5 data-[state=active]:shadow-none">
+          <TabsTrigger value="dietary" className="prefs-tab-trigger">
             <SaladIcon size={13} />
             Dietary
           </TabsTrigger>
         </TabsList>
 
         {/* ── Appearance ── */}
-        <TabsContent value="appearance" className="flex-1 overflow-y-auto mt-0">
-          <div className="p-4 sm:p-6 max-w-2xl">
+        <TabsContent value="appearance" className="prefs-tab-content">
+          <div className="prefs-tab-inner">
             <ThemePicker />
           </div>
         </TabsContent>
 
         {/* ── AI Model ── */}
-        <TabsContent value="ai" className="flex-1 overflow-y-auto mt-0">
-          <div className="p-4 sm:p-6 max-w-2xl flex flex-col gap-4">
+        <TabsContent value="ai" className="prefs-tab-content">
+          <div className="prefs-tab-inner--gap">
             <p className="text-sm text-muted-foreground">
               Used by the recipe scanner to extract recipes from text. Models run
               entirely on your device — nothing is sent to the cloud. The first
@@ -78,29 +79,23 @@ export default function PreferencesPage() {
                     key={model.id}
                     type="button"
                     onClick={() => setModel(model.id)}
-                    className={`flex items-center gap-4 p-4 rounded-xl border text-left cursor-pointer transition-colors ${
-                      active
-                        ? "border-primary/50 bg-primary/8"
-                        : "border-border bg-card hover:bg-accent"
-                    }`}
+                    className={`prefs-model-card ${active ? "prefs-model-card--active" : "prefs-model-card--idle"}`}
                   >
-                    <div className={`size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
-                      active ? "border-primary bg-primary" : "border-muted-foreground/40"
-                    }`}>
+                    <div className={`prefs-model-radio ${active ? "prefs-model-radio--active" : "prefs-model-radio--idle"}`}>
                       {active && <CheckIcon size={12} className="text-primary-foreground" strokeWidth={3} />}
                     </div>
 
-                    <div className="flex flex-col flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-sm">{model.name}</span>
+                    <div className="prefs-model-meta">
+                      <div className="prefs-model-name-row">
+                        <span className="prefs-model-name">{model.name}</span>
                         <Badge variant="outline" className="text-[10px] h-4 px-1.5 font-mono">
                           {model.size}
                         </Badge>
                       </div>
-                      <span className="text-xs text-muted-foreground mt-0.5">{model.description}</span>
+                      <span className="prefs-model-desc">{model.description}</span>
                     </div>
 
-                    <div className="flex items-center gap-1 shrink-0">
+                    <div className="prefs-model-speed">
                       <ZapIcon size={12} className={
                         model.speed === "fast"   ? "text-green-500" :
                         model.speed === "medium" ? "text-amber-500" :
@@ -116,20 +111,16 @@ export default function PreferencesPage() {
         </TabsContent>
 
         {/* ── Dietary preferences ── */}
-        <TabsContent value="dietary" className="flex-1 overflow-y-auto mt-0">
-          <div className="p-4 sm:p-6 max-w-2xl flex flex-col gap-4">
+        <TabsContent value="dietary" className="prefs-tab-content">
+          <div className="prefs-tab-inner--gap">
             <p className="text-sm text-muted-foreground">
               Kelane uses these to highlight suitable recipes.
             </p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="prefs-dietary-grid">
               {DIETARY_OPTIONS.map(({ id, label }) => (
                 <label
                   key={id}
-                  className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${
-                    dietaryTags.includes(id)
-                      ? "border-primary/50 bg-primary/8"
-                      : "border-border bg-card hover:bg-accent"
-                  }`}
+                  className={`prefs-dietary-label ${dietaryTags.includes(id) ? "prefs-dietary-label--active" : "prefs-dietary-label--idle"}`}
                 >
                   <Checkbox
                     checked={dietaryTags.includes(id)}
