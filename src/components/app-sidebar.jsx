@@ -67,7 +67,7 @@ export function AppSidebar({ ...props }) {
           <SearchTrigger />
         </div>
         <NavCategories />
-        <NavFeeds items={data.feeds} />
+        <NavFeeds />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

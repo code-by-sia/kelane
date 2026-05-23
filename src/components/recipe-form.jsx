@@ -65,7 +65,8 @@ export function RecipeFormDialog({ open, onOpenChange, recipe }) {
   const addRecipe = useRecipeStore((s) => s.addRecipe);
   const updateRecipe = useRecipeStore((s) => s.updateRecipe);
 
-  const isEdit = !!recipe;
+  // isEdit only when a full existing recipe (with code) is passed
+  const isEdit = !!recipe?.code;
 
   const {
     register,
