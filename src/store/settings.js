@@ -36,8 +36,8 @@ const useSettingsStore = create(
       // When proxyPresetId === "custom", this is the full prefix to prepend
       customProxyPrefix: "",
 
-      // "warm-kitchen" | "tomato"
-      themeId: "warm-kitchen",
+      // "tomato" | "warm-kitchen" | "sage" | "ocean" | "aubergine"
+      themeId: "tomato",
 
       setProxyPreset: (id) => set({ proxyPresetId: id }),
       setCustomProxyPrefix: (prefix) => set({ customProxyPrefix: prefix }),

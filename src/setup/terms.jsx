@@ -34,8 +34,10 @@ export default function Welcome({ onNext }) {
           no analytics.
         </p>
         <p>
-          <strong className="text-foreground">Open source:</strong> Kelane is
-          provided as-is. Use it freely for personal meal planning.
+          <strong className="text-foreground">Private &amp; proprietary:</strong>{" "}
+          Kelane is a private application. All code, design, and content are
+          proprietary. Unauthorised distribution or reproduction is not
+          permitted.
         </p>
         <p>
           By continuing, you acknowledge you have read and understood the above.

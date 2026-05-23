@@ -13,7 +13,7 @@ export default function DataStorage({ onNext }) {
 
       <div className="grid grid-cols-1 gap-4">
         <div className="flex items-start gap-4 p-5 rounded-xl border bg-white">
-          <DatabaseIcon size={28} className="text-rose-400 shrink-0 mt-0.5" />
+          <DatabaseIcon size={28} className="text-primary shrink-0 mt-0.5" />
           <div>
             <p className="font-medium mb-1">Browser localStorage</p>
             <p className="text-sm text-muted-foreground">

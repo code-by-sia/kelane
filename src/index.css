@@ -66,12 +66,12 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   LIGHT MODE  —  "Warm Kitchen" palette
-   Primary:  Amber-500  (food/warmth)
-   Sidebar:  Deep espresso  (Slack-style dark contrast rail)
-   Success:  Green-500  (freshness, in-stock)
+   :root FALLBACK  —  "Warm Kitchen" palette
+   Shown before ThemeProvider hydrates (avoids blank flash).
+   Also used as html[data-theme="warm-kitchen"].
    ───────────────────────────────────────────────────────────────────────── */
-:root {
+:root,
+html[data-theme="warm-kitchen"] {
     --radius: 0.625rem;
 
     /* ── App chrome ── */
@@ -125,25 +125,161 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   THEME: "Tomato"
+   THEME: "Tomato"  (default theme — set via data-theme="tomato")
    Primary:  oklch(0.586 0.253 17.585) — bold crimson/tomato red
    Sidebar:  Deep burgundy
    ───────────────────────────────────────────────────────────────────────── */
 html[data-theme="tomato"] {
+    /* App chrome — very subtly rosy tint */
+    --background:           oklch(0.990 0.004 17);
+    --foreground:           oklch(0.13  0.030 17);
+    --card:                 oklch(1.000 0.002 17);
+    --card-foreground:      oklch(0.13  0.030 17);
+    --popover:              oklch(1.000 0.002 17);
+    --popover-foreground:   oklch(0.13  0.030 17);
+
     /* Primary — tomato red */
     --primary:              oklch(0.586 0.253 17.585);
     --primary-foreground:   oklch(0.98  0     0);
+
+    /* Secondary / muted */
+    --secondary:            oklch(0.962 0.010 17);
+    --secondary-foreground: oklch(0.13  0.030 17);
+    --muted:                oklch(0.962 0.010 17);
+    --muted-foreground:     oklch(0.50  0.028 17);
+
+    /* Accent — rosy hover */
+    --accent:               oklch(0.956 0.016 17);
+    --accent-foreground:    oklch(0.13  0.030 17);
+
+    /* Borders */
+    --border:               oklch(0.914 0.014 17);
+    --input:                oklch(0.914 0.014 17);
     --ring:                 oklch(0.586 0.253 17.585);
 
     /* Sidebar — deep burgundy rail */
-    --sidebar:                      oklch(0.125 0.042 17);
-    --sidebar-foreground:           oklch(0.870 0.015 75);
+    --sidebar:                      oklch(0.122 0.043 17);
+    --sidebar-foreground:           oklch(0.870 0.012 50);
     --sidebar-primary:              oklch(0.586 0.253 17.585);
     --sidebar-primary-foreground:   oklch(0.98  0     0);
-    --sidebar-accent:               oklch(0.205 0.052 17);
-    --sidebar-accent-foreground:    oklch(0.970 0.008 85);
-    --sidebar-border:               oklch(0.245 0.048 17);
+    --sidebar-accent:               oklch(0.202 0.054 17);
+    --sidebar-accent-foreground:    oklch(0.970 0.006 50);
+    --sidebar-border:               oklch(0.242 0.050 17);
     --sidebar-ring:                 oklch(0.586 0.253 17.585);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   THEME: "Sage"
+   Primary:  oklch(0.546 0.122 149) — herb/sage green
+   Sidebar:  Deep forest green
+   ───────────────────────────────────────────────────────────────────────── */
+html[data-theme="sage"] {
+    --background:           oklch(0.990 0.004 149);
+    --foreground:           oklch(0.13  0.030 149);
+    --card:                 oklch(1.000 0.002 149);
+    --card-foreground:      oklch(0.13  0.030 149);
+    --popover:              oklch(1.000 0.002 149);
+    --popover-foreground:   oklch(0.13  0.030 149);
+
+    --primary:              oklch(0.546 0.122 149);
+    --primary-foreground:   oklch(0.98  0     0);
+
+    --secondary:            oklch(0.962 0.010 149);
+    --secondary-foreground: oklch(0.13  0.030 149);
+    --muted:                oklch(0.962 0.010 149);
+    --muted-foreground:     oklch(0.50  0.025 149);
+
+    --accent:               oklch(0.956 0.016 149);
+    --accent-foreground:    oklch(0.13  0.030 149);
+
+    --border:               oklch(0.914 0.013 149);
+    --input:                oklch(0.914 0.013 149);
+    --ring:                 oklch(0.546 0.122 149);
+
+    --sidebar:                      oklch(0.118 0.038 149);
+    --sidebar-foreground:           oklch(0.870 0.012 100);
+    --sidebar-primary:              oklch(0.546 0.122 149);
+    --sidebar-primary-foreground:   oklch(0.98  0     0);
+    --sidebar-accent:               oklch(0.198 0.048 149);
+    --sidebar-accent-foreground:    oklch(0.970 0.006 100);
+    --sidebar-border:               oklch(0.238 0.042 149);
+    --sidebar-ring:                 oklch(0.546 0.122 149);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   THEME: "Ocean"
+   Primary:  oklch(0.558 0.190 232) — azure / Mediterranean blue
+   Sidebar:  Deep navy
+   ───────────────────────────────────────────────────────────────────────── */
+html[data-theme="ocean"] {
+    --background:           oklch(0.990 0.003 232);
+    --foreground:           oklch(0.13  0.025 232);
+    --card:                 oklch(1.000 0.002 232);
+    --card-foreground:      oklch(0.13  0.025 232);
+    --popover:              oklch(1.000 0.002 232);
+    --popover-foreground:   oklch(0.13  0.025 232);
+
+    --primary:              oklch(0.558 0.190 232);
+    --primary-foreground:   oklch(0.98  0     0);
+
+    --secondary:            oklch(0.962 0.010 232);
+    --secondary-foreground: oklch(0.13  0.025 232);
+    --muted:                oklch(0.962 0.010 232);
+    --muted-foreground:     oklch(0.50  0.025 232);
+
+    --accent:               oklch(0.956 0.015 232);
+    --accent-foreground:    oklch(0.13  0.025 232);
+
+    --border:               oklch(0.912 0.013 232);
+    --input:                oklch(0.912 0.013 232);
+    --ring:                 oklch(0.558 0.190 232);
+
+    --sidebar:                      oklch(0.112 0.040 240);
+    --sidebar-foreground:           oklch(0.870 0.010 220);
+    --sidebar-primary:              oklch(0.558 0.190 232);
+    --sidebar-primary-foreground:   oklch(0.98  0     0);
+    --sidebar-accent:               oklch(0.192 0.050 240);
+    --sidebar-accent-foreground:    oklch(0.970 0.006 220);
+    --sidebar-border:               oklch(0.232 0.044 240);
+    --sidebar-ring:                 oklch(0.558 0.190 232);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   THEME: "Aubergine"
+   Primary:  oklch(0.562 0.200 298) — rich eggplant / aubergine purple
+   Sidebar:  Deep plum
+   ───────────────────────────────────────────────────────────────────────── */
+html[data-theme="aubergine"] {
+    --background:           oklch(0.990 0.004 298);
+    --foreground:           oklch(0.13  0.028 298);
+    --card:                 oklch(1.000 0.002 298);
+    --card-foreground:      oklch(0.13  0.028 298);
+    --popover:              oklch(1.000 0.002 298);
+    --popover-foreground:   oklch(0.13  0.028 298);
+
+    --primary:              oklch(0.562 0.200 298);
+    --primary-foreground:   oklch(0.98  0     0);
+
+    --secondary:            oklch(0.962 0.010 298);
+    --secondary-foreground: oklch(0.13  0.028 298);
+    --muted:                oklch(0.962 0.010 298);
+    --muted-foreground:     oklch(0.50  0.026 298);
+
+    --accent:               oklch(0.956 0.016 298);
+    --accent-foreground:    oklch(0.13  0.028 298);
+
+    --border:               oklch(0.912 0.014 298);
+    --input:                oklch(0.912 0.014 298);
+    --ring:                 oklch(0.562 0.200 298);
+
+    --sidebar:                      oklch(0.108 0.038 300);
+    --sidebar-foreground:           oklch(0.870 0.010 290);
+    --sidebar-primary:              oklch(0.562 0.200 298);
+    --sidebar-primary-foreground:   oklch(0.98  0     0);
+    --sidebar-accent:               oklch(0.188 0.048 300);
+    --sidebar-accent-foreground:    oklch(0.970 0.006 290);
+    --sidebar-border:               oklch(0.228 0.042 300);
+    --sidebar-ring:                 oklch(0.562 0.200 298);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────

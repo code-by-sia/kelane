@@ -2,22 +2,18 @@ import { useEffect } from "react";
 import useSettingsStore from "@/store/settings";
 
 /**
- * ThemeProvider — reads themeId from the settings store and syncs it to the
- * <html data-theme="..."> attribute so CSS variable overrides take effect.
+ * ThemeProvider — syncs themeId from the settings store to the
+ * <html data-theme="…"> attribute so CSS variable overrides take effect.
  *
- * The "warm-kitchen" theme is the :root default, so it removes the attribute
- * entirely; all other themes set it explicitly.
+ * Every theme has an explicit html[data-theme="X"] block in index.css.
+ * The :root block is the "Warm Kitchen" fallback (shown before JS hydrates).
  */
 export function ThemeProvider({ children }) {
   const themeId = useSettingsStore((s) => s.themeId);
 
   useEffect(() => {
-    const html = document.documentElement;
-    if (themeId && themeId !== "warm-kitchen") {
-      html.setAttribute("data-theme", themeId);
-    } else {
-      html.removeAttribute("data-theme");
-    }
+    const id = themeId || "tomato";
+    document.documentElement.setAttribute("data-theme", id);
   }, [themeId]);
 
   return <>{children}</>;
