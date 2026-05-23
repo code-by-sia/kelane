@@ -407,9 +407,10 @@ export default function FeedsPage() {
                 {viaCorsProxy && (
                   <Badge
                     variant="outline"
-                    className="text-xs text-amber-700 border-amber-300 shrink-0"
+                    className="text-xs text-amber-700 border-amber-300 shrink-0 gap-1"
                   >
-                    via CORS proxy
+                    <ShieldOffIcon size={10} />
+                    via {activePreset.label.replace(" (recommended)", "")}
                   </Badge>
                 )}
                 <Button
@@ -436,7 +437,7 @@ export default function FeedsPage() {
                   </div>
                 )}
 
-                {feedError && !loadingFeed && (
+                {feedError && !loadingFeed && !corsBlocked && (
                   <div className="flex flex-col items-center gap-3 py-16 text-center px-6">
                     <TriangleAlertIcon
                       size={32}
@@ -454,6 +455,96 @@ export default function FeedsPage() {
                     >
                       Try again
                     </Button>
+                  </div>
+                )}
+
+                {feedError && !loadingFeed && corsBlocked && (
+                  <div className="flex flex-col items-center gap-4 py-12 px-8 max-w-md mx-auto w-full">
+                    <ShieldOffIcon
+                      size={36}
+                      strokeWidth={0.8}
+                      className="text-amber-500 shrink-0"
+                    />
+                    <div className="text-center">
+                      <p className="font-medium text-sm">Blocked by CORS policy</p>
+                      <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                        The browser blocked this feed for security reasons. Use a CORS proxy to load it.
+                      </p>
+                    </div>
+
+                    {/* Proxy selector */}
+                    <div className="w-full flex flex-col gap-2">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Choose proxy
+                      </p>
+                      <div className="flex flex-col gap-1.5">
+                        {PROXY_PRESETS.map((preset) => (
+                          <label
+                            key={preset.id}
+                            className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                              proxyPresetId === preset.id
+                                ? "border-foreground/30 bg-accent"
+                                : "border-border hover:bg-accent/50"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="proxy-preset-feeds"
+                              value={preset.id}
+                              checked={proxyPresetId === preset.id}
+                              onChange={() => setProxyPreset(preset.id)}
+                              className="mt-0.5 accent-foreground"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium leading-tight">
+                                {preset.label}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-0.5 leading-tight">
+                                {preset.hint}
+                              </p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+
+                      {proxyPresetId === "custom" && (
+                        <Input
+                          placeholder="https://your-proxy.example.com/?url="
+                          value={customProxyPrefix}
+                          onChange={(e) => setCustomProxyPrefix(e.target.value)}
+                          className="h-8 text-xs mt-1"
+                          autoFocus
+                        />
+                      )}
+
+                      {proxyPresetId === "local" && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted text-xs text-muted-foreground font-mono">
+                          $ npm run proxy
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex gap-2 w-full">
+                      <Button
+                        size="sm"
+                        className="flex-1"
+                        onClick={retryWithProxy}
+                        disabled={
+                          proxyPresetId === "custom" && !customProxyPrefix.trim()
+                        }
+                      >
+                        <ShieldOffIcon size={13} />
+                        Retry via {activePreset.label.replace(" (recommended)", "")}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => loadFeed(selectedFeed)}
+                        title="Retry without proxy"
+                      >
+                        Direct
+                      </Button>
+                    </div>
                   </div>
                 )}
 
