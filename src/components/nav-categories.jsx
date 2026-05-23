@@ -31,7 +31,6 @@ import {
 import { useLocation } from "react-router";
 import {
   ArchiveIcon,
-  BookmarkXIcon,
   ChevronRight,
   Clock9Icon,
   CompassIcon,
@@ -98,14 +97,6 @@ export function NavCategories() {
             <a href="/favorites">
               <HeartIcon />
               <span>Favorites</span>
-            </a>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={pathname === `/uncategorized`}>
-            <a href="/uncategorized">
-              <BookmarkXIcon />
-              <span>Uncategorized</span>
             </a>
           </SidebarMenuButton>
         </SidebarMenuItem>

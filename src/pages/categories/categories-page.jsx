@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import SidebarPage from "../sidebar-page";
 import {
-  Columns3Icon,
-  FolderIcon,
+  BookmarkXIcon,
+  FolderOpenIcon,
   GalleryThumbnailsIcon,
   LayoutGridIcon,
   LayoutListIcon,
@@ -15,90 +15,197 @@ import useRecipeStore from "@/store/recipe";
 import { RecipeFormDialog } from "@/components/recipe-form";
 import { CategoryManagerDialog } from "@/components/category-manager";
 
-const GALLERY_COLORS = [
-  "bg-yellow-100 border-yellow-200",
-  "bg-blue-100 border-blue-200",
-  "bg-green-100 border-green-200",
-  "bg-purple-100 border-purple-200",
-  "bg-pink-100 border-pink-200",
-  "bg-orange-100 border-orange-200",
-];
+// ── Mosaic card (default grid view) ──────────────────────────────────────
+function CategoryMosaicCard({ name, count, images, isSpecial = false }) {
+  const href = isSpecial ? `/uncategorized` : `/categories/${name}`;
+  const imgs = images.slice(0, 4);
 
-export function CategoryFolder({ name, recipes = 0 }) {
   return (
     <a
-      href={`/categories/${name}`}
-      className="flex items-center gap-2 cursor-pointer min-w-1/5"
+      href={href}
+      className="group rounded-xl border overflow-hidden hover:shadow-md hover:border-primary/30 transition-all cursor-pointer"
     >
-      <FolderIcon
-        fill="var(--color-yellow-200)"
-        stroke="var(--color-yellow-600)"
-        size="64"
-        strokeWidth={0.4}
-      />
-      <div className="flex flex-col">
-        <span>{name}</span>
-        <small>{recipes || "No "} recipes</small>
+      {/* Image mosaic */}
+      <div className="h-28 bg-muted overflow-hidden">
+        {imgs.length === 0 ? (
+          <div className="w-full h-full flex items-center justify-center">
+            {isSpecial ? (
+              <BookmarkXIcon size={40} className="text-muted-foreground/25" />
+            ) : (
+              <FolderOpenIcon size={40} className="text-muted-foreground/25" />
+            )}
+          </div>
+        ) : imgs.length === 1 ? (
+          <img
+            src={imgs[0]}
+            alt=""
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="grid grid-cols-2 grid-rows-2 h-full gap-px bg-border">
+            {imgs.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt=""
+                className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300"
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Label */}
+      <div className="px-3 py-2.5 flex items-center gap-2">
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-sm truncate">{name}</p>
+          <p className="text-xs text-muted-foreground">
+            {count} recipe{count !== 1 ? "s" : ""}
+          </p>
+        </div>
+        {isSpecial && (
+          <BookmarkXIcon size={13} className="text-muted-foreground shrink-0" />
+        )}
       </div>
     </a>
   );
 }
 
-function CategoryListRow({ name, recipes = 0 }) {
+// ── List row ──────────────────────────────────────────────────────────────
+function CategoryListRow({ name, count, images, isSpecial = false }) {
+  const href = isSpecial ? `/uncategorized` : `/categories/${name}`;
+  const imgs = images.slice(0, 4);
+
   return (
     <a
-      href={`/categories/${name}`}
-      className="flex items-center gap-3 px-6 py-3 hover:bg-accent transition-colors border-b last:border-b-0"
+      href={href}
+      className="flex items-center gap-4 px-5 py-3 hover:bg-accent transition-colors border-b last:border-b-0"
     >
-      <FolderIcon
-        fill="var(--color-yellow-200)"
-        stroke="var(--color-yellow-600)"
-        size="20"
-        strokeWidth={0.6}
-      />
+      {/* Stacked avatars or icon */}
+      <div className="shrink-0 w-20 flex items-center">
+        {imgs.length === 0 ? (
+          isSpecial ? (
+            <BookmarkXIcon size={20} className="text-muted-foreground" />
+          ) : (
+            <FolderOpenIcon size={20} className="text-muted-foreground" />
+          )
+        ) : (
+          <div className="flex -space-x-2.5">
+            {imgs.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt=""
+                className="w-8 h-8 rounded-full object-cover border-2 border-background"
+                style={{ zIndex: imgs.length - i }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
       <span className="flex-1 text-sm font-medium">{name}</span>
-      <span className="text-xs text-muted-foreground">{recipes || 0} recipes</span>
+
+      <span className="text-xs text-muted-foreground tabular-nums shrink-0">
+        {count} recipe{count !== 1 ? "s" : ""}
+      </span>
     </a>
   );
 }
 
-function CategoryGalleryCard({ name, recipes = 0, colorClass }) {
+// ── Gallery card (large, image fills with overlay) ────────────────────────
+function CategoryGalleryCard({ name, count, images, isSpecial = false }) {
+  const href = isSpecial ? `/uncategorized` : `/categories/${name}`;
+  const imgs = images.slice(0, 4);
+
   return (
     <a
-      href={`/categories/${name}`}
-      className={`flex flex-col rounded-xl border overflow-hidden hover:shadow-md transition-shadow ${colorClass}`}
+      href={href}
+      className="group rounded-xl border overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all cursor-pointer"
     >
-      <div className="h-24 flex items-center justify-center">
-        <FolderIcon
-          fill="var(--color-yellow-200)"
-          stroke="var(--color-yellow-600)"
-          size="52"
-          strokeWidth={0.4}
-        />
-      </div>
-      <div className="bg-background px-4 py-3 border-t">
-        <p className="font-medium text-sm">{name}</p>
-        <p className="text-xs text-muted-foreground">{recipes || 0} recipes</p>
+      <div className="h-44 bg-muted overflow-hidden relative">
+        {imgs.length === 0 ? (
+          <div className="w-full h-full flex items-center justify-center">
+            {isSpecial ? (
+              <BookmarkXIcon size={56} className="text-muted-foreground/20" />
+            ) : (
+              <FolderOpenIcon size={56} className="text-muted-foreground/20" />
+            )}
+          </div>
+        ) : imgs.length === 1 ? (
+          <img
+            src={imgs[0]}
+            alt=""
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="grid grid-cols-2 grid-rows-2 h-full gap-px bg-border">
+            {imgs.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt=""
+                className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300"
+              />
+            ))}
+          </div>
+        )}
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+        {/* Name on image */}
+        <div className="absolute bottom-0 left-0 right-0 px-4 py-3 text-white">
+          <p className="font-semibold text-sm leading-tight drop-shadow">{name}</p>
+          <p className="text-xs text-white/70">
+            {count} recipe{count !== 1 ? "s" : ""}
+          </p>
+        </div>
       </div>
     </a>
   );
 }
 
+// ── Views ─────────────────────────────────────────────────────────────────
 const VIEWS = [
   { id: "grid", icon: LayoutGridIcon },
   { id: "list", icon: LayoutListIcon },
-  { id: "columns", icon: Columns3Icon },
   { id: "gallery", icon: GalleryThumbnailsIcon },
 ];
 
+// ── Page ──────────────────────────────────────────────────────────────────
 export default function CategoriesPage() {
-  const getCategoriesWithCounts = useRecipeStore(
-    (store) => store.getCategoriesWithCounts,
+  const categories = useRecipeStore((s) => s.categories);
+  const recipes = useRecipeStore((s) => s.recipes);
+  const getUncategorizedRecipes = useRecipeStore((s) => s.getUncategorizedRecipes);
+
+  const categoriesWithDetails = useMemo(
+    () =>
+      categories.map((name) => {
+        const catRecipes = recipes.filter((r) => r.categories.includes(name));
+        return {
+          name,
+          count: catRecipes.length,
+          images: catRecipes.map((r) => r.image).filter(Boolean).slice(0, 4),
+        };
+      }),
+    [categories, recipes],
   );
-  const categories = getCategoriesWithCounts();
+
+  const uncategorizedEntry = useMemo(() => {
+    const uncatRecipes = getUncategorizedRecipes();
+    return {
+      name: "Uncategorized",
+      count: uncatRecipes.length,
+      images: uncatRecipes.map((r) => r.image).filter(Boolean).slice(0, 4),
+      isSpecial: true,
+    };
+  }, [getUncategorizedRecipes]);
 
   const [view, setView] = useState(
-    () => localStorage.getItem("categories.view") || "grid",
+    () => {
+      const saved = localStorage.getItem("categories.view");
+      // "columns" was removed — fall back to grid
+      return saved && saved !== "columns" ? saved : "grid";
+    },
   );
   const [addOpen, setAddOpen] = useState(false);
   const [manageOpen, setManageOpen] = useState(false);
@@ -108,9 +215,11 @@ export default function CategoriesPage() {
     localStorage.setItem("categories.view", v);
   };
 
+  const allCategories = [...categoriesWithDetails, uncategorizedEntry];
+
   return (
     <SidebarPage
-      title="Recipes"
+      title="Categories"
       header={
         <div className="flex items-center gap-2">
           <Button size="sm" onClick={() => setAddOpen(true)}>
@@ -125,7 +234,11 @@ export default function CategoriesPage() {
                 key={id}
                 variant="outline"
                 size="sm"
-                className={`cursor-pointer ${view === id ? "bg-gray-600 text-white hover:bg-gray-700 hover:text-white" : ""}`}
+                className={`cursor-pointer ${
+                  view === id
+                    ? "bg-gray-600 text-white hover:bg-gray-700 hover:text-white"
+                    : ""
+                }`}
                 onClick={() => changeView(id)}
               >
                 <Icon />
@@ -137,39 +250,27 @@ export default function CategoriesPage() {
     >
       <RecipeFormDialog open={addOpen} onOpenChange={setAddOpen} />
       <CategoryManagerDialog open={manageOpen} onOpenChange={setManageOpen} />
+
       {view === "grid" && (
-        <div className="p-6 gap-6 flex flex-wrap">
-          {categories.map(({ name, recipes }) => (
-            <CategoryFolder key={name} name={name} recipes={recipes} />
+        <div className="p-6 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {allCategories.map((cat) => (
+            <CategoryMosaicCard key={cat.name} {...cat} />
           ))}
         </div>
       )}
 
       {view === "list" && (
         <div className="divide-y">
-          {categories.map(({ name, recipes }) => (
-            <CategoryListRow key={name} name={name} recipes={recipes} />
-          ))}
-        </div>
-      )}
-
-      {view === "columns" && (
-        <div className="p-6 grid grid-cols-3 gap-4">
-          {categories.map(({ name, recipes }) => (
-            <CategoryFolder key={name} name={name} recipes={recipes} />
+          {allCategories.map((cat) => (
+            <CategoryListRow key={cat.name} {...cat} />
           ))}
         </div>
       )}
 
       {view === "gallery" && (
-        <div className="p-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {categories.map(({ name, recipes }, i) => (
-            <CategoryGalleryCard
-              key={name}
-              name={name}
-              recipes={recipes}
-              colorClass={GALLERY_COLORS[i % GALLERY_COLORS.length]}
-            />
+        <div className="p-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {allCategories.map((cat) => (
+            <CategoryGalleryCard key={cat.name} {...cat} />
           ))}
         </div>
       )}

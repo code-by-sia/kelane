@@ -1,12 +1,15 @@
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
-import { RefrigeratorIcon, ShoppingCartIcon } from "lucide-react";
+import { differenceInDays, parseISO } from "date-fns";
+import { AlertTriangleIcon, RefrigeratorIcon, ShoppingCartIcon } from "lucide-react";
 import SidebarPage from "@/pages/sidebar-page";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import useSetupStore from "@/store/setup";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
+
+const EXPIRY_WARN_DAYS = 5;
 
 function isInStock(ingredient, fridgeItems) {
   return fridgeItems.some((item) =>
@@ -97,12 +100,40 @@ export default function ExplorePage() {
     if (!completed) navigate("/setup");
   }, [completed, navigate]);
 
-  const { canCook, almostReady, needShopping } = useMemo(() => {
+  const { canCook, almostReady, needShopping, preventExpiry, expiringNames } = useMemo(() => {
     const withPct = recipes.map((r) => ({ r, pct: coverage(r, fridgeItems) }));
+
+    // Items expiring within EXPIRY_WARN_DAYS (today or in the next N days)
+    const expiringItems = fridgeItems.filter((item) => {
+      if (!item.expiresAt) return false;
+      const days = differenceInDays(parseISO(item.expiresAt), new Date());
+      return days >= 0 && days <= EXPIRY_WARN_DAYS;
+    });
+
+    // Recipes that use the most expiring ingredients, sorted descending
+    const preventExpiry =
+      expiringItems.length > 0
+        ? recipes
+            .map((recipe) => {
+              const matchCount = expiringItems.filter((item) =>
+                (recipe.ingredients ?? []).some((ing) =>
+                  ing.toLowerCase().includes(item.name.toLowerCase()),
+                ),
+              ).length;
+              return { recipe, matchCount };
+            })
+            .filter(({ matchCount }) => matchCount > 0)
+            .sort((a, b) => b.matchCount - a.matchCount)
+            .slice(0, 9)
+            .map(({ recipe }) => recipe)
+        : [];
+
     return {
       canCook: withPct.filter(({ pct }) => pct === 1).map(({ r }) => r),
       almostReady: withPct.filter(({ pct }) => pct >= 0.6 && pct < 1).map(({ r }) => r),
       needShopping: withPct.filter(({ pct }) => pct < 0.6).map(({ r }) => r),
+      preventExpiry,
+      expiringNames: expiringItems.map((i) => i.name),
     };
   }, [recipes, fridgeItems]);
 
@@ -125,6 +156,35 @@ export default function ExplorePage() {
           </div>
         ) : (
           <>
+            {preventExpiry.length > 0 && (
+              <section className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <AlertTriangleIcon size={14} className="text-amber-500 shrink-0" />
+                  <h2 className="font-semibold text-sm uppercase tracking-wide text-amber-700">
+                    Use before they expire
+                  </h2>
+                  <Badge
+                    variant="outline"
+                    className="text-xs font-normal normal-case tracking-normal text-amber-700 border-amber-300"
+                  >
+                    {preventExpiry.length}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground -mt-1">
+                  These recipes use{" "}
+                  <span className="text-amber-700 font-medium">
+                    {expiringNames.slice(0, 3).join(", ")}
+                    {expiringNames.length > 3 ? ` +${expiringNames.length - 3} more` : ""}
+                  </span>{" "}
+                  — expiring within {EXPIRY_WARN_DAYS} days.
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                  {preventExpiry.map((r) => (
+                    <RecipeCard key={r.code} recipe={r} fridgeItems={fridgeItems} />
+                  ))}
+                </div>
+              </section>
+            )}
             <Section
               title="Can cook now"
               recipes={canCook}
