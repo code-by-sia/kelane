@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+header.site-header {
+    @apply flex h-(--header-height) shrink-0 items-center gap-2 border-b;
+    @apply transition-[width,height] ease-linear;
+    @apply group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height);
+    @apply rounded-t-xl;
+}

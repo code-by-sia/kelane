@@ -17,15 +17,10 @@ const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
   </svg>
 `;
 
-const maskableSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#f59e0b"/>
-  <rect x="136" y="320" width="240" height="44" rx="12" fill="white"/>
-  <rect x="136" y="350" width="240" height="14" rx="0" fill="rgba(0,0,0,0.06)"/>
-  <ellipse cx="256" cy="228" rx="110" ry="115" fill="white"/>
-  <circle cx="156" cy="250" r="62" fill="white"/>
-  <circle cx="356" cy="250" r="62" fill="white"/>
-  <circle cx="256" cy="148" r="72" fill="white"/>
-</svg>`;
+const maskableSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24" fill="none" stroke="#d93833" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chef-hat !size-6" aria-hidden="true">
+  <path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path>
+  <path d="M6 17h12"></path>
+  </svg>`;
 
 const sizes = [16, 32, 64, 180, 192, 512];
 
