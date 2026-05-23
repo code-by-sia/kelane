@@ -34,7 +34,7 @@ export function RecipeItem({
   return (
     <a
       href={`/categories/${id}/${code}`}
-      className="cursor-pointer flex p-2 gap-3 items-start max-w-sm hover:bg-neutral-200 active:bg-neutral-100 active:shadow-lg rounded-xl"
+      className="cursor-pointer flex p-2 gap-3 items-start w-full sm:max-w-sm hover:bg-neutral-200 active:bg-neutral-100 active:shadow-lg rounded-xl"
     >
       <img className="size-20 bg-contain rounded-lg object-cover" src={image} />
       <div className="flex flex-col">
@@ -89,13 +89,15 @@ export default function RecipiesPage() {
         </div>
       }
     >
-      <div className="flex items-start flex-1">
-        <div className="p-6 gap-6 flex flex-wrap">
+      <div className="flex items-start flex-1 min-h-0 overflow-hidden">
+        {/* Recipe list — hidden on mobile when a recipe is open */}
+        <div className={`p-4 sm:p-6 gap-4 sm:gap-6 flex flex-wrap overflow-y-auto h-full flex-1 ${recipeId ? "hidden sm:flex" : "flex"}`}>
           <Repeat value={recipes} view={RecipeItem} />
         </div>
 
+        {/* Recipe detail — full-width on mobile, half-width on desktop */}
         {recipeId && (
-          <div className="flex border h-full w-1/2">
+          <div className="flex flex-col border h-full w-full sm:w-1/2 overflow-y-auto">
             <RecipeViewer recipeId={recipeId} />
           </div>
         )}

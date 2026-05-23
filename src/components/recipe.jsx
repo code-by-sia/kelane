@@ -450,31 +450,33 @@ export function RecipeViewer({ recipeId }) {
       <h1 className="flex flex-col mb-2 mx-6 z-10 font-extralight -mt-4">
         <span className="text-3xl">{recipe?.name}</span>
       </h1>
-      <div className="flex gap-2 mx-3 divide-x text-gray-600 z-10">
-        <Button variant="ghost">
+      {/* Stats bar — scrollable on mobile */}
+      <div className="flex gap-1 mx-3 overflow-x-auto text-gray-600 z-10 scrollbar-none">
+        <Button variant="ghost" className="shrink-0">
           <FlameIcon size={16} />
           {recipe?.calories >= 1000
             ? Math.round(recipe.calories / 1000) + " kilo"
             : recipe?.calories || "N/A"}{" "}
-          calories
+          kcal
         </Button>
-        <Button variant="ghost">
+        <Button variant="ghost" className="shrink-0">
           {recipe.guests || 1} <Users2Icon size={16} />
         </Button>
-        <Button variant="ghost">
+        <Button variant="ghost" className="shrink-0">
           <ClockFadingIcon size={16} />
-          {recipe.preperationTime} minutes
+          {recipe.preperationTime} min
         </Button>
-        <Button variant="ghost">
+        <Button variant="ghost" className="shrink-0">
           <SaladIcon size={16} />
-          {recipe.ingredients?.length} ingredients
+          {recipe.ingredients?.length} ing
         </Button>
-        <Button variant="ghost">
+        <Button variant="ghost" className="shrink-0">
           <MicrowaveIcon size={16} />
           {recipe.tools?.length} tools
         </Button>
       </div>
-      <div className="flex gap-2 m-3 divide-x text-rose-950">
+      {/* Action buttons — wrap on small screens */}
+      <div className="flex flex-wrap gap-2 m-3 text-rose-950">
         <Button variant="outline" onClick={() => go(`/cook/${recipeId}`)}>
           <CookingPotIcon className="stroke-rose-600" size={18} />
           Cook

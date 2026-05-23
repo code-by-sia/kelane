@@ -81,14 +81,14 @@ export default function CookPage() {
           className="bg-cover w-full h-screen absolute top-0 left-0 -z-10"
         />
 
-        <div className="z-10 flex items-center flex-1 p-6 w-full">
-          <section className="z-10 m-6 border p-6 rounded-xl bg-neutral-50 shadow-xl">
-            <h1 className="inline-block text-3xl p-3 mb-2 font-extralight">
+        <div className="z-10 flex items-center flex-1 p-3 sm:p-6 w-full">
+          <section className="z-10 mx-2 sm:m-6 border p-4 sm:p-6 rounded-xl bg-neutral-50 shadow-xl w-full max-w-2xl">
+            <h1 className="inline-block text-2xl sm:text-3xl p-2 sm:p-3 mb-2 font-extralight">
               {recipe?.name}
             </h1>
             <br />
             {recipe?.summary && (
-              <p className="px-2 inline-block mb-6 max-w-1/2">{recipe?.summary}</p>
+              <p className="px-2 inline-block mb-4 sm:mb-6 max-w-prose">{recipe?.summary}</p>
             )}
             {steps && (
               <ol className="flex flex-col gap-2 my-2">

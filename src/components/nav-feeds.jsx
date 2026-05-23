@@ -206,12 +206,12 @@ export function NavFeeds() {
 
         {/* ── Other tool links ── */}
         <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={pathname === `/browser`}>
+          {/* <SidebarMenuButton asChild isActive={pathname === `/browser`}>
             <a href="/browser">
               <CompassIcon />
               <span>Browser</span>
             </a>
-          </SidebarMenuButton>
+          </SidebarMenuButton>*/}
         </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarMenuButton asChild isActive={pathname === `/calendar`}>
@@ -222,10 +222,7 @@ export function NavFeeds() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <SidebarMenuButton
-            asChild
-            isActive={pathname === `/groceries`}
-          >
+          <SidebarMenuButton asChild isActive={pathname === `/groceries`}>
             <a href="/groceries">
               <ShoppingBagIcon />
               <span>Groceries</span>

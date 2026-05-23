@@ -157,7 +157,7 @@ export default function ExplorePage() {
 
   return (
     <SidebarPage title="Explore">
-      <div className="p-6 flex flex-col gap-8 max-w-4xl">
+      <div className="p-4 sm:p-6 flex flex-col gap-8 max-w-4xl">
         {fridgeItems.length === 0 ? (
           <div className="flex flex-col items-center gap-4 py-16 text-center">
             <RefrigeratorIcon size={56} strokeWidth={0.6} className="text-muted-foreground" />

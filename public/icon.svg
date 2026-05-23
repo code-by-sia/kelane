@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#f59e0b"/>
+
+  <!-- Chef hat (simplified, centred) -->
+  <!-- Brim -->
+  <rect x="136" y="320" width="240" height="44" rx="12" fill="white"/>
+  <!-- Brim fold lines -->
+  <rect x="136" y="350" width="240" height="14" rx="0" fill="rgba(0,0,0,0.06)"/>
+  <!-- Main dome -->
+  <ellipse cx="256" cy="228" rx="110" ry="115" fill="white"/>
+  <!-- Left puff -->
+  <circle cx="156" cy="250" r="62" fill="white"/>
+  <!-- Right puff -->
+  <circle cx="356" cy="250" r="62" fill="white"/>
+  <!-- Top centre puff -->
+  <circle cx="256" cy="148" r="72" fill="white"/>
+</svg>
