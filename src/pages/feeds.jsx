@@ -8,6 +8,7 @@ import {
   PlusIcon,
   RefreshCwIcon,
   RssIcon,
+  ShieldOffIcon,
   TrashIcon,
   TriangleAlertIcon,
   UtensilsIcon,
@@ -20,10 +21,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import SidebarPage from "@/pages/sidebar-page";
 import { RecipeFormDialog } from "@/components/recipe-form";
 import useFeedsStore from "@/store/feeds";
+import useSettingsStore, {
+  PROXY_PRESETS,
+  getProxyPrefix,
+} from "@/store/settings";
 
 // ── RSS / Atom parser ──────────────────────────────────────────────────────
 function parseXML(xmlText) {
@@ -66,21 +72,19 @@ function parseXML(xmlText) {
   return { items, channelTitle };
 }
 
-async function fetchFeed(url) {
-  // Direct fetch first
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const text = await res.text();
-    return { ...parseXML(text), viaCorsProxy: false };
-  } catch {
-    // CORS fallback via corsproxy.io
-    const proxied = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-    const res = await fetch(proxied, { signal: AbortSignal.timeout(10000) });
-    if (!res.ok) throw new Error(`Proxy returned ${res.status}`);
-    const text = await res.text();
-    return { ...parseXML(text), viaCorsProxy: true };
-  }
+async function fetchDirect(url) {
+  const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const text = await res.text();
+  return { ...parseXML(text), viaCorsProxy: false };
+}
+
+async function fetchViaProxy(url, proxyPrefix) {
+  const proxied = `${proxyPrefix}${encodeURIComponent(url)}`;
+  const res = await fetch(proxied, { signal: AbortSignal.timeout(12000) });
+  if (!res.ok) throw new Error(`Proxy returned HTTP ${res.status}`);
+  const text = await res.text();
+  return { ...parseXML(text), viaCorsProxy: true };
 }
 
 // ── Feed item ──────────────────────────────────────────────────────────────
@@ -143,16 +147,22 @@ function AddFeedForm({ onAdd, onCancel }) {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const settingsState = useSettingsStore();
+  const proxyPrefix = getProxyPrefix(settingsState);
+
   const handleAdd = async () => {
     const trimmedUrl = url.trim();
     if (!trimmedUrl) return;
     setLoading(true);
     try {
-      const { channelTitle } = await fetchFeed(trimmedUrl);
-      onAdd({
-        url: trimmedUrl,
-        title: title.trim() || channelTitle || trimmedUrl,
-      });
+      // Try direct first, fall back to configured proxy for title auto-detection
+      let result;
+      try {
+        result = await fetchDirect(trimmedUrl);
+      } catch {
+        result = await fetchViaProxy(trimmedUrl, proxyPrefix);
+      }
+      onAdd({ url: trimmedUrl, title: title.trim() || result.channelTitle || trimmedUrl });
     } catch {
       toast.error("Could not reach that feed — check the URL and try again.");
     } finally {
@@ -274,15 +284,18 @@ export default function FeedsPage() {
 
   return (
     <SidebarPage title="Feeds">
-      <ResizablePanelGroup orientation="horizontal" className="flex-1 overflow-hidden">
+      <ResizablePanelGroup
+        orientation="horizontal"
+        className="flex-1 overflow-hidden"
+      >
         {/* ── Left: feed list ─────────────────────────────────────── */}
         <ResizablePanel
-          defaultSize={28}
-          minSize={20}
-          maxSize={50}
+          defaultSize={100}
+          minSize={100}
+          maxSize={250}
           className="flex flex-col"
         >
-          <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 border-b shrink-0  min-w-64">
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               My Feeds
             </span>
@@ -429,7 +442,9 @@ export default function FeedsPage() {
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center gap-3 text-muted-foreground">
               <RssIcon size={48} strokeWidth={0.5} />
-              <p className="text-sm">Select a feed or add one to get started.</p>
+              <p className="text-sm">
+                Select a feed or add one to get started.
+              </p>
               <Button
                 variant="outline"
                 size="sm"
