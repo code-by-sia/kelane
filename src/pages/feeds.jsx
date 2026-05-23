@@ -162,7 +162,10 @@ function AddFeedForm({ onAdd, onCancel }) {
       } catch {
         result = await fetchViaProxy(trimmedUrl, proxyPrefix);
       }
-      onAdd({ url: trimmedUrl, title: title.trim() || result.channelTitle || trimmedUrl });
+      onAdd({
+        url: trimmedUrl,
+        title: title.trim() || result.channelTitle || trimmedUrl,
+      });
     } catch {
       toast.error("Could not reach that feed — check the URL and try again.");
     } finally {
@@ -217,11 +220,22 @@ export default function FeedsPage() {
   const addFeed = useFeedsStore((s) => s.addFeed);
   const removeFeed = useFeedsStore((s) => s.removeFeed);
 
+  // Proxy settings — shared with the Browser page
+  const settingsState = useSettingsStore();
+  const proxyPresetId = useSettingsStore((s) => s.proxyPresetId);
+  const customProxyPrefix = useSettingsStore((s) => s.customProxyPrefix);
+  const setProxyPreset = useSettingsStore((s) => s.setProxyPreset);
+  const setCustomProxyPrefix = useSettingsStore((s) => s.setCustomProxyPrefix);
+  const proxyPrefix = getProxyPrefix(settingsState);
+  const activePreset =
+    PROXY_PRESETS.find((p) => p.id === proxyPresetId) ?? PROXY_PRESETS[0];
+
   const selectedFeed = feeds.find((f) => f.id === feedId) ?? null;
 
   const [items, setItems] = useState([]);
   const [loadingFeed, setLoadingFeed] = useState(false);
   const [feedError, setFeedError] = useState(null);
+  const [corsBlocked, setCorsBlocked] = useState(false);
   const [viaCorsProxy, setViaCorsProxy] = useState(false);
   const [addingFeed, setAddingFeed] = useState(false);
   const [importItem, setImportItem] = useState(null);
@@ -236,22 +250,43 @@ export default function FeedsPage() {
     };
   }, [importItem]);
 
+  // Try direct fetch only — on failure, surface a CORS prompt instead of silently proxying
   const loadFeed = useCallback(async (feed) => {
     if (!feed) return;
     setLoadingFeed(true);
     setFeedError(null);
+    setCorsBlocked(false);
     setItems([]);
     setViaCorsProxy(false);
     try {
-      const result = await fetchFeed(feed.url);
+      const result = await fetchDirect(feed.url);
       setItems(result.items);
-      setViaCorsProxy(result.viaCorsProxy);
     } catch (e) {
-      setFeedError(e?.message ?? "Failed to load feed.");
+      // Any fetch failure is surfaced as a potential CORS block
+      setCorsBlocked(true);
+      setFeedError(e?.message ?? "Network error");
     } finally {
       setLoadingFeed(false);
     }
   }, []);
+
+  // Retry using the proxy configured in settings (same as Browser page)
+  const retryWithProxy = useCallback(async () => {
+    if (!selectedFeed) return;
+    setLoadingFeed(true);
+    setFeedError(null);
+    setCorsBlocked(false);
+    setItems([]);
+    try {
+      const result = await fetchViaProxy(selectedFeed.url, proxyPrefix);
+      setItems(result.items);
+      setViaCorsProxy(true);
+    } catch (e) {
+      setFeedError(e?.message ?? "Proxy request failed");
+    } finally {
+      setLoadingFeed(false);
+    }
+  }, [selectedFeed, proxyPrefix]);
 
   // Auto-navigate to first feed when no feedId
   useEffect(() => {
@@ -290,9 +325,9 @@ export default function FeedsPage() {
       >
         {/* ── Left: feed list ─────────────────────────────────────── */}
         <ResizablePanel
-          defaultSize={100}
-          minSize={100}
-          maxSize={250}
+          defaultSize={128}
+          minSize={128}
+          maxSize={256}
           className="flex flex-col"
         >
           <div className="flex items-center justify-between px-4 py-3 border-b shrink-0  min-w-64">
