@@ -75,7 +75,7 @@ html[data-theme="warm-kitchen"] {
     --radius: 0.625rem;
 
     /* ── App chrome ── */
-    --background:        oklch(0.99  0.004 85);   /* warm off-white */
+    --background:        oklch(0.975 0.022 80);   /* warm amber tint */
     --foreground:        oklch(0.14  0.03  30);   /* warm near-black */
 
     /* ── Cards & popovers ── */
@@ -130,12 +130,12 @@ html[data-theme="warm-kitchen"] {
    Sidebar:  Deep burgundy
    ───────────────────────────────────────────────────────────────────────── */
 html[data-theme="tomato"] {
-    /* App chrome — very subtly rosy tint */
-    --background:           oklch(0.990 0.004 17);
+    /* App chrome — warm rosy tint */
+    --background:           oklch(0.974 0.022 17);
     --foreground:           oklch(0.13  0.030 17);
-    --card:                 oklch(1.000 0.002 17);
+    --card:                 oklch(0.990 0.010 17);
     --card-foreground:      oklch(0.13  0.030 17);
-    --popover:              oklch(1.000 0.002 17);
+    --popover:              oklch(0.990 0.010 17);
     --popover-foreground:   oklch(0.13  0.030 17);
 
     /* Primary — tomato red */
@@ -143,13 +143,13 @@ html[data-theme="tomato"] {
     --primary-foreground:   oklch(0.98  0     0);
 
     /* Secondary / muted */
-    --secondary:            oklch(0.962 0.010 17);
+    --secondary:            oklch(0.956 0.016 17);
     --secondary-foreground: oklch(0.13  0.030 17);
-    --muted:                oklch(0.962 0.010 17);
+    --muted:                oklch(0.956 0.016 17);
     --muted-foreground:     oklch(0.50  0.028 17);
 
     /* Accent — rosy hover */
-    --accent:               oklch(0.956 0.016 17);
+    --accent:               oklch(0.948 0.022 17);
     --accent-foreground:    oklch(0.13  0.030 17);
 
     /* Borders */
@@ -174,22 +174,22 @@ html[data-theme="tomato"] {
    Sidebar:  Deep forest green
    ───────────────────────────────────────────────────────────────────────── */
 html[data-theme="sage"] {
-    --background:           oklch(0.990 0.004 149);
+    --background:           oklch(0.974 0.018 149);
     --foreground:           oklch(0.13  0.030 149);
-    --card:                 oklch(1.000 0.002 149);
+    --card:                 oklch(0.990 0.008 149);
     --card-foreground:      oklch(0.13  0.030 149);
-    --popover:              oklch(1.000 0.002 149);
+    --popover:              oklch(0.990 0.008 149);
     --popover-foreground:   oklch(0.13  0.030 149);
 
     --primary:              oklch(0.546 0.122 149);
     --primary-foreground:   oklch(0.98  0     0);
 
-    --secondary:            oklch(0.962 0.010 149);
+    --secondary:            oklch(0.956 0.014 149);
     --secondary-foreground: oklch(0.13  0.030 149);
-    --muted:                oklch(0.962 0.010 149);
+    --muted:                oklch(0.956 0.014 149);
     --muted-foreground:     oklch(0.50  0.025 149);
 
-    --accent:               oklch(0.956 0.016 149);
+    --accent:               oklch(0.948 0.018 149);
     --accent-foreground:    oklch(0.13  0.030 149);
 
     --border:               oklch(0.914 0.013 149);
@@ -212,22 +212,22 @@ html[data-theme="sage"] {
    Sidebar:  Deep navy
    ───────────────────────────────────────────────────────────────────────── */
 html[data-theme="ocean"] {
-    --background:           oklch(0.990 0.003 232);
+    --background:           oklch(0.974 0.016 232);
     --foreground:           oklch(0.13  0.025 232);
-    --card:                 oklch(1.000 0.002 232);
+    --card:                 oklch(0.990 0.007 232);
     --card-foreground:      oklch(0.13  0.025 232);
-    --popover:              oklch(1.000 0.002 232);
+    --popover:              oklch(0.990 0.007 232);
     --popover-foreground:   oklch(0.13  0.025 232);
 
     --primary:              oklch(0.558 0.190 232);
     --primary-foreground:   oklch(0.98  0     0);
 
-    --secondary:            oklch(0.962 0.010 232);
+    --secondary:            oklch(0.956 0.012 232);
     --secondary-foreground: oklch(0.13  0.025 232);
-    --muted:                oklch(0.962 0.010 232);
+    --muted:                oklch(0.956 0.012 232);
     --muted-foreground:     oklch(0.50  0.025 232);
 
-    --accent:               oklch(0.956 0.015 232);
+    --accent:               oklch(0.948 0.016 232);
     --accent-foreground:    oklch(0.13  0.025 232);
 
     --border:               oklch(0.912 0.013 232);
@@ -250,22 +250,22 @@ html[data-theme="ocean"] {
    Sidebar:  Deep plum
    ───────────────────────────────────────────────────────────────────────── */
 html[data-theme="aubergine"] {
-    --background:           oklch(0.990 0.004 298);
+    --background:           oklch(0.974 0.018 298);
     --foreground:           oklch(0.13  0.028 298);
-    --card:                 oklch(1.000 0.002 298);
+    --card:                 oklch(0.990 0.008 298);
     --card-foreground:      oklch(0.13  0.028 298);
-    --popover:              oklch(1.000 0.002 298);
+    --popover:              oklch(0.990 0.008 298);
     --popover-foreground:   oklch(0.13  0.028 298);
 
     --primary:              oklch(0.562 0.200 298);
     --primary-foreground:   oklch(0.98  0     0);
 
-    --secondary:            oklch(0.962 0.010 298);
+    --secondary:            oklch(0.956 0.014 298);
     --secondary-foreground: oklch(0.13  0.028 298);
-    --muted:                oklch(0.962 0.010 298);
+    --muted:                oklch(0.956 0.014 298);
     --muted-foreground:     oklch(0.50  0.026 298);
 
-    --accent:               oklch(0.956 0.016 298);
+    --accent:               oklch(0.948 0.018 298);
     --accent-foreground:    oklch(0.13  0.028 298);
 
     --border:               oklch(0.912 0.014 298);
@@ -351,6 +351,27 @@ html[data-theme="aubergine"] {
     border-left: 2px solid var(--color-sidebar-primary);
     padding-left: calc(0.5rem - 2px);
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+/* Themed scrollbar — thumb uses --border so it shifts with the active theme */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 99px;
+}
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
+    opacity: 0.6;
 }
 
 /* Fridge expiry urgency badge pulse */

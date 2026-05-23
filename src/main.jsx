@@ -19,6 +19,7 @@ import BrowserPage from "./pages/browser";
 import FeedsPage from "./pages/feeds";
 import SetupPage from "./setup/index";
 import PreferencesPage from "./pages/preferences";
+import ProfilePage from "./pages/profile";
 
 import "./index.css";
 import CategoriesPage from "./pages/categories/categories-page";
@@ -48,6 +49,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/browser" element={<BrowserPage />} />
       <Route path="/groceries" element={<GrocoriesPage />} />
       <Route path="/preferences" element={<PreferencesPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   </ThemeProvider>,

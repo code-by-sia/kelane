@@ -25,14 +25,33 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import useSetupStore from "@/store/setup";
+import { cn } from "@/lib/utils";
 
-function initials(name) {
+function nameInitials(name) {
   if (!name) return "?";
   return name
     .split(" ")
     .map((w) => w[0]?.toUpperCase())
     .slice(0, 2)
     .join("");
+}
+
+/** Displays the user avatar — emoji if set, otherwise initials. */
+function UserAvatar({ name, avatarEmoji, className }) {
+  return (
+    <Avatar className={cn("rounded-lg shrink-0", className)}>
+      <AvatarFallback
+        className={cn(
+          "rounded-lg font-semibold",
+          avatarEmoji
+            ? "bg-primary/10 text-xl"           // emoji mode
+            : "bg-primary/15 text-primary text-xs", // initials mode
+        )}
+      >
+        {avatarEmoji || nameInitials(name)}
+      </AvatarFallback>
+    </Avatar>
+  );
 }
 
 export function NavUser() {
@@ -42,9 +61,10 @@ export function NavUser() {
   const preferences = useSetupStore((s) => s.preferences);
   const resetSetup = useSetupStore((s) => s.resetSetup);
 
-  const name = profile?.name || "Chef";
+  const name  = profile?.name  || "Chef";
   const email = profile?.email || "";
-  const tags = preferences?.dietaryTags ?? [];
+  const avatar = profile?.avatar || "";
+  const tags  = preferences?.dietaryTags ?? [];
 
   return (
     <SidebarMenu>
@@ -55,11 +75,7 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarFallback className="rounded-lg bg-amber-100 text-amber-700 text-xs font-semibold">
-                  {initials(name)}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar name={name} avatarEmoji={avatar} className="h-8 w-8" />
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{name}</span>
                 <span className="text-muted-foreground truncate text-xs">
@@ -69,25 +85,21 @@ export function NavUser() {
               <IconDotsVertical className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
           >
+            {/* Header */}
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarFallback className="rounded-lg bg-amber-100 text-amber-700 text-xs font-semibold">
-                    {initials(name)}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar name={name} avatarEmoji={avatar} className="h-8 w-8" />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{name}</span>
                   {email && (
-                    <span className="text-muted-foreground truncate text-xs">
-                      {email}
-                    </span>
+                    <span className="text-muted-foreground truncate text-xs">{email}</span>
                   )}
                   {tags.length > 0 && (
                     <span className="text-muted-foreground truncate text-xs">
@@ -97,9 +109,11 @@ export function NavUser() {
                 </div>
               </div>
             </DropdownMenuLabel>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => navigate("/setup")}>
+              <DropdownMenuItem onClick={() => navigate("/profile")}>
                 <IconUserCircle />
                 Edit profile
               </DropdownMenuItem>
@@ -108,7 +122,9 @@ export function NavUser() {
                 Preferences
               </DropdownMenuItem>
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem
               onClick={() => {
                 resetSetup();
