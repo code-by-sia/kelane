@@ -41,7 +41,7 @@ export default function Preferences({ onNext }) {
             key={id}
             className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${
               dietaryTags.includes(id)
-                ? "border-rose-400 bg-rose-50"
+                ? "border-primary/50 bg-primary/8"
                 : "border-border bg-white hover:bg-neutral-50"
             }`}
           >

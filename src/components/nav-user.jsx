@@ -103,7 +103,7 @@ export function NavUser() {
                 <IconUserCircle />
                 Edit profile
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/preferences")}>
                 <UtensilsIcon size={16} />
                 Preferences
               </DropdownMenuItem>

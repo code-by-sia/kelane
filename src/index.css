@@ -125,6 +125,28 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
+   THEME: "Tomato"
+   Primary:  oklch(0.586 0.253 17.585) — bold crimson/tomato red
+   Sidebar:  Deep burgundy
+   ───────────────────────────────────────────────────────────────────────── */
+html[data-theme="tomato"] {
+    /* Primary — tomato red */
+    --primary:              oklch(0.586 0.253 17.585);
+    --primary-foreground:   oklch(0.98  0     0);
+    --ring:                 oklch(0.586 0.253 17.585);
+
+    /* Sidebar — deep burgundy rail */
+    --sidebar:                      oklch(0.125 0.042 17);
+    --sidebar-foreground:           oklch(0.870 0.015 75);
+    --sidebar-primary:              oklch(0.586 0.253 17.585);
+    --sidebar-primary-foreground:   oklch(0.98  0     0);
+    --sidebar-accent:               oklch(0.205 0.052 17);
+    --sidebar-accent-foreground:    oklch(0.970 0.008 85);
+    --sidebar-border:               oklch(0.245 0.048 17);
+    --sidebar-ring:                 oklch(0.586 0.253 17.585);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
    DARK MODE
    ───────────────────────────────────────────────────────────────────────── */
 .dark {

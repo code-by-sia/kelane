@@ -36,8 +36,12 @@ const useSettingsStore = create(
       // When proxyPresetId === "custom", this is the full prefix to prepend
       customProxyPrefix: "",
 
+      // "warm-kitchen" | "tomato"
+      themeId: "warm-kitchen",
+
       setProxyPreset: (id) => set({ proxyPresetId: id }),
       setCustomProxyPrefix: (prefix) => set({ customProxyPrefix: prefix }),
+      setTheme: (id) => set({ themeId: id }),
     }),
     { name: "kelane-settings" },
   ),

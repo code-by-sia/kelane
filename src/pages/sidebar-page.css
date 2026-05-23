@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Sidebar icons use amber instead of rose */
+/* Sidebar icons track the active theme's sidebar primary colour */
 .side-bar .lucide {
-    @apply stroke-amber-400;
+    stroke: var(--color-sidebar-primary);
 }

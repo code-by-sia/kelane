@@ -18,6 +18,7 @@ import {
   GlobeIcon,
   TagIcon,
   HistoryIcon,
+  SettingsIcon,
 } from "lucide-react";
 import { RecipeScanner } from "@/components/recipe-scanner";
 import {
@@ -39,6 +40,7 @@ const MORE_ITEMS = [
   { label: "Feeds", icon: RssIcon, href: "/feeds" },
   // { label: "Browser",    icon: GlobeIcon,    href: "/browser" },
   { label: "History", icon: HistoryIcon, href: "/history" },
+  { label: "Preferences", icon: SettingsIcon, href: "/preferences" },
 ];
 
 function NavItem({ href, icon: Icon, label, active, onClick }) {

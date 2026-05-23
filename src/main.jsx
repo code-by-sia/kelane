@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import { Toaster } from "sonner";
 
 import { BrowserRouter, Route, Routes } from "react-router";
+import { ThemeProvider } from "./components/theme-provider";
 import HomePage from "./pages/welcome";
 
 import CalendarPage from "./pages/calendar";
@@ -17,15 +18,17 @@ import HistoryPage from "./pages/history";
 import BrowserPage from "./pages/browser";
 import FeedsPage from "./pages/feeds";
 import SetupPage from "./setup/index";
+import PreferencesPage from "./pages/preferences";
 
 import "./index.css";
 import CategoriesPage from "./pages/categories/categories-page";
 import RecipiesPage from "./pages/categories/recipies-page";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <Toaster richColors position="top-right" />
-    <Routes>
+  <ThemeProvider>
+    <BrowserRouter>
+      <Toaster richColors position="top-right" />
+      <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/setup" element={<SetupPage />} />
       <Route path="/cook/:recipeId" element={<CookPage />} />
@@ -44,6 +47,8 @@ createRoot(document.getElementById("root")).render(
       <Route path="/feeds/:feedId" element={<FeedsPage />} />
       <Route path="/browser" element={<BrowserPage />} />
       <Route path="/groceries" element={<GrocoriesPage />} />
-    </Routes>
-  </BrowserRouter>,
+      <Route path="/preferences" element={<PreferencesPage />} />
+      </Routes>
+    </BrowserRouter>
+  </ThemeProvider>,
 );
