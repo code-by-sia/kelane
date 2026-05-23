@@ -274,7 +274,7 @@ export default function FeedsPage() {
 
   return (
     <SidebarPage title="Feeds">
-      <ResizablePanelGroup orientation="horizontal" style={{ height: "100svh" }}>
+      <ResizablePanelGroup orientation="horizontal" className="flex-1 overflow-hidden">
         {/* ── Left: feed list ─────────────────────────────────────── */}
         <ResizablePanel
           defaultSize={28}
