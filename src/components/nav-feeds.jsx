@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuAction,
@@ -28,7 +27,6 @@ import {
   BookMarkedIcon,
   CalendarDaysIcon,
   ChevronRight,
-  CompassIcon,
   PlusIcon,
   RssIcon,
   ShoppingBagIcon,
@@ -99,8 +97,9 @@ function AddFeedInline({ onDone }) {
 }
 
 export function NavFeeds() {
-  const { isMobile } = useSidebar();
+  const { isMobile, state } = useSidebar();
   const { pathname } = useLocation();
+  const isCollapsed = state === "collapsed";
 
   const feeds = useFeedsStore((s) => s.feeds);
   const removeFeed = useFeedsStore((s) => s.removeFeed);
@@ -116,11 +115,25 @@ export function NavFeeds() {
   }, []);
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Feeds &amp; Tools</SidebarGroupLabel>
+    <SidebarGroup>
+      <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">Feeds &amp; Tools</SidebarGroupLabel>
 
       <SidebarMenu>
-        {/* ── RSS Feeds collapsible ── */}
+        {/* ── RSS Feeds collapsible (expanded) / direct link (icon mode) ── */}
+        {isCollapsed ? (
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              tooltip="Feeds"
+              isActive={pathname.startsWith("/feeds")}
+            >
+              <a href="/feeds">
+                <RssIcon />
+                <span>Feeds</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ) : (
         <Collapsible
           asChild
           open={feedsOpen}
@@ -203,18 +216,15 @@ export function NavFeeds() {
             </CollapsibleContent>
           </SidebarMenuItem>
         </Collapsible>
+        )}
 
         {/* ── Other tool links ── */}
         <SidebarMenuItem>
-          {/* <SidebarMenuButton asChild isActive={pathname === `/browser`}>
-            <a href="/browser">
-              <CompassIcon />
-              <span>Browser</span>
-            </a>
-          </SidebarMenuButton>*/}
-        </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={pathname === `/calendar`}>
+          <SidebarMenuButton
+            asChild
+            tooltip="Calendar"
+            isActive={pathname === `/calendar`}
+          >
             <a href="/calendar">
               <CalendarDaysIcon />
               <span>Calendar</span>
@@ -222,7 +232,11 @@ export function NavFeeds() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild isActive={pathname === `/groceries`}>
+          <SidebarMenuButton
+            asChild
+            tooltip="Groceries"
+            isActive={pathname === `/groceries`}
+          >
             <a href="/groceries">
               <ShoppingBagIcon />
               <span>Groceries</span>
