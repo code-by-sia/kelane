@@ -277,9 +277,9 @@ export default function FeedsPage() {
       <ResizablePanelGroup orientation="horizontal" style={{ height: "100svh" }}>
         {/* ── Left: feed list ─────────────────────────────────────── */}
         <ResizablePanel
-          defaultSize={22}
-          minSize={16}
-          maxSize={34}
+          defaultSize={28}
+          minSize={20}
+          maxSize={50}
           className="flex flex-col"
         >
           <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
@@ -347,7 +347,7 @@ export default function FeedsPage() {
         <ResizableHandle withHandle />
 
         {/* ── Right: feed items ────────────────────────────────────── */}
-        <ResizablePanel defaultSize={78} minSize={50} className="flex flex-col">
+        <ResizablePanel defaultSize={72} minSize={40} className="flex flex-col">
           {selectedFeed ? (
             <>
               {/* Feed header */}
