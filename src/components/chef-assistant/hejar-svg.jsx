@@ -217,28 +217,27 @@ function Body() {
       <circle cx="64" cy="96" r="2.6" fill="#2A1C10" stroke={OL} strokeWidth="0.8" />
       <circle cx="76" cy="96" r="2.6" fill="#2A1C10" stroke={OL} strokeWidth="0.8" />
 
-      {/* ── Black sash — the dominant feature ── */}
-      {/* Sash shape covers most of the body */}
+      {/* ── Black sash — a defined belt band, not full torso ── */}
       <path
-        d="M 16 112 C 12 122 14 142 18 154 L 122 154 C 126 142 128 122 124 112 C 106 106 88 102 70 102 C 52 102 34 106 16 112 Z"
+        d="M 17 121 C 44 116 96 116 123 121 C 127 129 127 141 123 147 C 96 151 44 151 17 147 C 13 141 13 129 17 121 Z"
         fill="url(#hj-sash)" stroke={OL} strokeWidth={OW}
       />
 
-      {/* Sash wrap lines — horizontal curved bands */}
-      <path d="M 18 120 C 44 115 96 115 122 120" stroke="#30303A" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d="M 17 129 C 44 124 96 124 123 129" stroke="#28282E" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d="M 17 138 C 44 133 96 133 123 138" stroke="#30303A" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d="M 17 147 C 44 142 96 142 123 147" stroke="#28282E" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      {/* Sash wrap lines */}
+      <path d="M 19 126 C 44 122 96 122 121 126" stroke="#30303A" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      <path d="M 18 132 C 44 128 96 128 122 132" stroke="#28282E" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      <path d="M 18 138 C 44 134 96 134 122 138" stroke="#30303A" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      <path d="M 18 144 C 44 140 96 140 122 144" stroke="#28282E" strokeWidth="2"   fill="none" strokeLinecap="round" />
 
       {/* Sash top highlight strip */}
       <path
-        d="M 16 112 C 44 107 96 107 124 112 C 96 116 44 116 16 112 Z"
+        d="M 17 121 C 44 116 96 116 123 121 C 96 125 44 125 17 121 Z"
         fill="#3C3C48" opacity="0.65"
       />
 
-      {/* Sash bottom / trouser transition */}
+      {/* Sash bottom edge */}
       <path
-        d="M 18 154 C 44 150 96 150 122 154"
+        d="M 17 147 C 44 143 96 143 123 147"
         stroke="#0E0E14" strokeWidth="1.4" fill="none"
       />
     </g>
@@ -411,25 +410,25 @@ function Head({ pose }) {
 function Turban() {
   return (
     <g>
-      {/* Main dome body */}
+      {/* Main dome body — smaller, sits like a cap rather than dominating */}
       <path
-        d="M 14 56 C 10 38 14 16 26 8 Q 44 2 70 2 Q 96 2 114 8 C 126 16 130 38 126 56 Q 100 64 70 64 Q 40 64 14 56 Z"
+        d="M 24 56 C 20 44 22 30 34 22 Q 50 16 70 16 Q 90 16 106 22 C 118 30 120 44 116 56 Q 96 62 70 62 Q 44 62 24 56 Z"
         fill="url(#hj-turban)" stroke={OL} strokeWidth={OW}
       />
 
       {/* Wrap texture lines — 5 horizontal arcs suggesting coiled cloth */}
-      <path d="M 16 50 C 42 44 98 44 124 50" stroke="#2E2E3A" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <path d="M 15 42 C 42 36 98 36 125 42" stroke="#2A2A36" strokeWidth="2"   fill="none" strokeLinecap="round" />
-      <path d="M 16 34 C 42 28 98 28 124 34" stroke="#2E2E3A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-      <path d="M 20 26 C 44 20 96 20 120 26" stroke="#2A2A36" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-      <path d="M 26 18 C 46 13 94 13 114 18" stroke="#282830" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+      <path d="M 26 50 C 46 46 94 46 114 50" stroke="#2E2E3A" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      <path d="M 25 44 C 46 40 94 40 115 44" stroke="#2A2A36" strokeWidth="2"   fill="none" strokeLinecap="round" />
+      <path d="M 26 38 C 46 34 94 34 114 38" stroke="#2E2E3A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      <path d="M 30 32 C 48 28 92 28 110 32" stroke="#2A2A36" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+      <path d="M 36 26 C 50 22 90 22 104 26" stroke="#282830" strokeWidth="1.4" fill="none" strokeLinecap="round" />
 
       {/* Top highlight — subtle sheen */}
-      <ellipse cx="60" cy="18" rx="22" ry="9" fill="white" opacity="0.05" />
+      <ellipse cx="64" cy="26" rx="18" ry="7" fill="white" opacity="0.05" />
 
       {/* Bottom edge shadow where turban meets face */}
       <path
-        d="M 14 56 C 40 64 100 64 126 56"
+        d="M 24 56 C 46 62 94 62 116 56"
         stroke="#0A0A10" strokeWidth="1.6" fill="none"
       />
     </g>
