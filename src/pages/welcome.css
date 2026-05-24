@@ -40,3 +40,10 @@
 .home-expiry-heading {
     @apply font-semibold text-sm uppercase tracking-wide text-amber-700;
 }
+
+/* ── Suggestion explanation chip ── */
+.suggest-chip {
+    @apply inline-flex self-start items-center px-2 py-0.5 rounded-full
+           text-[10px] font-medium bg-primary/10 text-primary border border-primary/20
+           leading-none;
+}
