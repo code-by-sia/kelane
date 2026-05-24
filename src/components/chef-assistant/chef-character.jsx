@@ -1,14 +1,16 @@
 import { HEjarSVG } from "./hejar-svg";
 
-export function ChefCharacter({ mood = "idle", onClick, isOpen, hasMessages }) {
+export function ChefCharacter({ mood = "idle", onClick, isOpen, hasMessages, dragHandlers = {}, isDragging = false }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      {...dragHandlers}
       className={`chef-btn${isOpen ? " chef-btn--open" : ""}`}
       data-mood={mood}
       title={isOpen ? "Close Hejar" : "Chat with Hejar"}
       aria-label={isOpen ? "Close assistant" : "Chat with Hejar, your culinary assistant"}
+      style={{ cursor: isDragging ? "grabbing" : "grab" }}
     >
       <div className="chef-character">
         <HEjarSVG pose={moodToPose(mood)} />

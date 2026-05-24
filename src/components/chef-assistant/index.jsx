@@ -5,9 +5,14 @@ import { useLocation, useNavigate } from "react-router";
 import useRecipeStore from "@/store/recipe";
 import useSetupStore from "@/store/setup";
 import { useChefLLM } from "./use-chef-llm";
+import { useDraggable } from "./use-draggable";
 import { ChefCharacter } from "./chef-character";
 import { ChatPanel } from "./chat-panel";
 import "./chef-assistant.css";
+
+const PANEL_H  = 442; // chat panel height (430) + gap (12)
+const PANEL_W  = 320; // chat panel width
+const CHAR_W   = 110; // character button width
 
 // ── Available app routes Hejar can navigate to ────────────────────────────────
 const NAV_ROUTES = {
@@ -89,6 +94,13 @@ export function ChefAssistant() {
   const { messages, streaming, send, status, progress, clear, pendingActions, clearActions } =
     useChefLLM();
 
+  const { pos, isDragging, dragHandlers } = useDraggable();
+
+  // Determine whether the panel opens above or below the character, and
+  // whether it extends left or right, based on current screen position.
+  const panelDir  = pos.y < PANEL_H                                    ? "below" : "above";
+  const panelSide = pos.x + CHAR_W / 2 < (window.innerWidth ?? 800) / 2 ? "right" : "left";
+
   const systemPrompt = useMemo(
     () => buildSystemPrompt(recipes, userName),
     [recipes, userName],
@@ -162,7 +174,12 @@ export function ChefAssistant() {
   if (!isExplore) return null;
 
   return (
-    <div className="chef-assistant">
+    <div
+      className="chef-assistant"
+      data-dir={panelDir}
+      data-side={panelSide}
+      style={{ top: pos.y, left: pos.x }}
+    >
       {isOpen && (
         <ChatPanel
           messages={messages}
@@ -179,6 +196,8 @@ export function ChefAssistant() {
         onClick={() => setIsOpen((o) => !o)}
         isOpen={isOpen}
         hasMessages={messages.length > 0}
+        dragHandlers={dragHandlers}
+        isDragging={isDragging}
       />
     </div>
   );

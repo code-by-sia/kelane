@@ -1,14 +1,16 @@
-import { BrainCircuitIcon, CheckIcon, DatabaseIcon, GlobeIcon, PaletteIcon, SaladIcon, ZapIcon } from "lucide-react";
+import { BrainCircuitIcon, BotIcon, CheckIcon, DatabaseIcon, FlameIcon, GlobeIcon, PaletteIcon, RotateCcwIcon, SaladIcon, ZapIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SidebarPage from "@/pages/sidebar-page";
 import { ThemePicker } from "@/components/theme-picker";
 import useSetupStore from "@/store/setup";
 import useSettingsStore, { PROXY_PRESETS } from "@/store/settings";
 import { LLM_MODELS } from "@/data/llm-models";
+import { clearChefPos } from "@/components/chef-assistant/use-draggable";
 import "./preferences.css";
 import { DataTab } from "./data-tab";
 
@@ -25,12 +27,20 @@ const DIETARY_OPTIONS = [
 
 const SPEED_LABELS = { fast: "Fast", medium: "Medium", slow: "Slower" };
 
+const CHEF_STYLES = [
+  { label: "Precise",  value: 0.4,  icon: CheckIcon,  hint: "Focused answers" },
+  { label: "Balanced", value: 0.72, icon: ZapIcon,     hint: "Default" },
+  { label: "Creative", value: 1.1,  icon: FlameIcon,   hint: "More inventive" },
+];
+
 export default function PreferencesPage() {
   const dietaryTags = useSetupStore((s) => s.preferences.dietaryTags);
   const setDietaryTags = useSetupStore((s) => s.setDietaryTags);
-  const modelId = useSettingsStore((s) => s.modelId);
-  const setModel = useSettingsStore((s) => s.setModel);
-  const proxyPresetId = useSettingsStore((s) => s.proxyPresetId);
+  const modelId          = useSettingsStore((s) => s.modelId);
+  const setModel         = useSettingsStore((s) => s.setModel);
+  const chefTemperature  = useSettingsStore((s) => s.chefTemperature) ?? 0.72;
+  const setChefTemperature = useSettingsStore((s) => s.setChefTemperature);
+  const proxyPresetId    = useSettingsStore((s) => s.proxyPresetId);
   const customProxyPrefix = useSettingsStore((s) => s.customProxyPrefix);
   const setProxyPreset = useSettingsStore((s) => s.setProxyPreset);
   const setCustomProxyPrefix = useSettingsStore((s) => s.setCustomProxyPrefix);
@@ -54,7 +64,7 @@ export default function PreferencesPage() {
             </TabsTrigger>
             <TabsTrigger value="ai">
               <BrainCircuitIcon size={13} />
-              AI Model
+              AI
             </TabsTrigger>
             <TabsTrigger value="dietary">
               <SaladIcon size={13} />
@@ -79,11 +89,16 @@ export default function PreferencesPage() {
 
         <TabsContent value="ai" className="prefs-tab-content">
           <div className="prefs-tab-inner--gap">
-            <p className="text-sm text-muted-foreground">
-              Used by the recipe scanner to extract recipes from text. Models run
-              entirely on your device — nothing is sent to the cloud. The first
-              use downloads and caches the model locally.
-            </p>
+
+            {/* ── On-device model ── */}
+            <div>
+              <p className="text-sm font-medium mb-0.5">On-device model</p>
+              <p className="text-sm text-muted-foreground">
+                Used by the recipe scanner and Hejar assistant. Runs entirely on
+                your device — nothing is sent to the cloud. The first use
+                downloads and caches the model locally.
+              </p>
+            </div>
             <div className="flex flex-col gap-2">
               {LLM_MODELS.map((model) => {
                 const active = modelId === model.id;
@@ -118,6 +133,56 @@ export default function PreferencesPage() {
                 );
               })}
             </div>
+
+            <hr className="border-border" />
+
+            {/* ── Hejar assistant ── */}
+            <div className="flex items-center gap-2">
+              <BotIcon size={15} className="text-muted-foreground shrink-0" />
+              <p className="text-sm font-medium">Hejar assistant</p>
+            </div>
+
+            {/* Response style (temperature) */}
+            <div className="flex flex-col gap-2">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Response style</p>
+              <div className="flex gap-2">
+                {CHEF_STYLES.map(({ label, value, icon: Icon, hint }) => {
+                  const active = chefTemperature === value;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setChefTemperature(value)}
+                      className={`prefs-style-card ${active ? "prefs-style-card--active" : "prefs-style-card--idle"}`}
+                    >
+                      <Icon size={16} className={active ? "text-primary" : "text-muted-foreground"} />
+                      <span className="text-sm font-medium">{label}</span>
+                      <span className="text-[11px] text-muted-foreground">{hint}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Reset position */}
+            <div className="flex flex-col gap-1.5">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Character position</p>
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                  onClick={() => { clearChefPos(); window.location.reload(); }}
+                >
+                  <RotateCcwIcon size={13} />
+                  Reset to default corner
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  Drag Hejar anywhere on the Explore page.
+                </p>
+              </div>
+            </div>
+
           </div>
         </TabsContent>
 

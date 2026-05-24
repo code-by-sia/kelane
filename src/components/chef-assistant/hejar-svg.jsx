@@ -410,25 +410,24 @@ function Head({ pose }) {
 function Turban() {
   return (
     <g>
-      {/* Main dome body — smaller, sits like a cap rather than dominating */}
+      {/* Main dome body — compact cap, modest height */}
       <path
-        d="M 24 56 C 20 44 22 30 34 22 Q 50 16 70 16 Q 90 16 106 22 C 118 30 120 44 116 56 Q 96 62 70 62 Q 44 62 24 56 Z"
+        d="M 36 56 C 32 48 34 40 44 34 Q 55 28 70 28 Q 85 28 96 34 C 106 40 108 48 104 56 Q 91 61 70 61 Q 49 61 36 56 Z"
         fill="url(#hj-turban)" stroke={OL} strokeWidth={OW}
       />
 
-      {/* Wrap texture lines — 5 horizontal arcs suggesting coiled cloth */}
-      <path d="M 26 50 C 46 46 94 46 114 50" stroke="#2E2E3A" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <path d="M 25 44 C 46 40 94 40 115 44" stroke="#2A2A36" strokeWidth="2"   fill="none" strokeLinecap="round" />
-      <path d="M 26 38 C 46 34 94 34 114 38" stroke="#2E2E3A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-      <path d="M 30 32 C 48 28 92 28 110 32" stroke="#2A2A36" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-      <path d="M 36 26 C 50 22 90 22 104 26" stroke="#282830" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+      {/* Wrap texture lines — 4 arcs compressed into the smaller dome */}
+      <path d="M 38 50 C 54 46 86 46 102 50" stroke="#2E2E3A" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      <path d="M 37 44 C 54 40 86 40 103 44" stroke="#2A2A36" strokeWidth="2"   fill="none" strokeLinecap="round" />
+      <path d="M 38 39 C 54 35 86 35 102 39" stroke="#2E2E3A" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+      <path d="M 42 33 C 56 29 84 29 98 33"  stroke="#282830" strokeWidth="1.5" fill="none" strokeLinecap="round" />
 
-      {/* Top highlight — subtle sheen */}
-      <ellipse cx="64" cy="26" rx="18" ry="7" fill="white" opacity="0.05" />
+      {/* Top highlight */}
+      <ellipse cx="66" cy="35" rx="14" ry="5" fill="white" opacity="0.05" />
 
       {/* Bottom edge shadow where turban meets face */}
       <path
-        d="M 24 56 C 46 62 94 62 116 56"
+        d="M 36 56 C 54 61 86 61 104 56"
         stroke="#0A0A10" strokeWidth="1.6" fill="none"
       />
     </g>

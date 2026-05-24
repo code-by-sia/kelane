@@ -40,13 +40,17 @@ const useSettingsStore = create(
       // "tomato" | "warm-kitchen" | "sage" | "ocean" | "aubergine"
       themeId: "tomato",
 
-      // LLM model used by the recipe scanner (on-device WebLLM)
+      // LLM model used by the recipe scanner and Hejar assistant (on-device WebLLM)
       modelId: DEFAULT_MODEL_ID,
+
+      // Hejar assistant settings
+      chefTemperature: 0.72,   // 0.4 = precise · 0.72 = balanced · 1.1 = creative
 
       setProxyPreset: (id) => set({ proxyPresetId: id }),
       setCustomProxyPrefix: (prefix) => set({ customProxyPrefix: prefix }),
       setTheme: (id) => set({ themeId: id }),
       setModel: (id) => set({ modelId: id }),
+      setChefTemperature: (t) => set({ chefTemperature: t }),
     }),
     { name: "kelane-settings" },
   ),

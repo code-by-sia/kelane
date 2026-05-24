@@ -83,7 +83,8 @@ function parseActions(text) {
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
 export function useChefLLM() {
-  const modelId = useSettingsStore((s) => s.modelId) || DEFAULT_MODEL_ID;
+  const modelId     = useSettingsStore((s) => s.modelId)          || DEFAULT_MODEL_ID;
+  const temperature = useSettingsStore((s) => s.chefTemperature)  ?? 0.72;
 
   const [status, setStatus] = useState(() =>
     typeof navigator !== "undefined" && !navigator.gpu ? "unsupported" : "idle",
@@ -120,7 +121,7 @@ export function useChefLLM() {
             { role: "system", content: systemPrompt },
             ...historyRef.current,
           ],
-          temperature: 0.72,
+          temperature,
           max_tokens: 512,
         });
 

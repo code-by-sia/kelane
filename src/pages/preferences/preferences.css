@@ -95,6 +95,20 @@
     @apply flex flex-col gap-1.5;
 }
 
+/* ── Hejar response-style cards ── */
+.prefs-style-card {
+    @apply flex flex-col items-center gap-1 p-3 rounded-xl border
+           cursor-pointer transition-colors flex-1 text-center;
+}
+
+.prefs-style-card--active {
+    @apply border-primary/50 bg-primary/8;
+}
+
+.prefs-style-card--idle {
+    @apply border-border bg-card hover:bg-accent;
+}
+
 /* ── Dietary grid ── */
 .prefs-dietary-grid {
     @apply grid grid-cols-2 gap-3;
