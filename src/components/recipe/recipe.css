@@ -1,0 +1,49 @@
+@reference "../../index.css";
+
+/* ── Hero no-image placeholder ── */
+.recipe-no-image {
+    @apply w-full h-40 bg-gradient-to-br from-primary/8 to-primary/15
+           flex items-center justify-center;
+}
+
+/* ── Stats grid ── */
+.recipe-stats {
+    @apply grid grid-cols-4 divide-x border-y mx-5 my-3 rounded-lg overflow-hidden;
+}
+
+.recipe-stat {
+    @apply flex flex-col items-center py-2.5 px-1 bg-muted/30;
+}
+
+/* ── Diet selector buttons ── */
+.diet-btn {
+    @apply flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs
+           font-medium border transition-colors cursor-pointer;
+}
+
+.diet-btn--active {
+    @apply bg-foreground text-background border-foreground;
+}
+
+.diet-btn--idle {
+    @apply border-border hover:bg-accent;
+}
+
+/* ── Substitution item ── */
+.diet-sub-item {
+    @apply flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors;
+}
+
+.diet-sub-item--active {
+    @apply bg-accent/30;
+}
+
+.diet-sub-item--dismissed {
+    @apply opacity-50 bg-muted/30;
+}
+
+/* ── Scale counter button ── */
+.scale-counter-btn {
+    @apply w-8 h-8 rounded-md border flex items-center justify-center
+           text-lg hover:bg-accent cursor-pointer;
+}

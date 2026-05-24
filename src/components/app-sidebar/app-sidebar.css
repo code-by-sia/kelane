@@ -1,0 +1,29 @@
+@reference "../../index.css";
+
+/* ────────────────────────────────────────────────────────────
+   Sidebar logo / workspace mark
+   ──────────────────────────────────────────────────────────── */
+.sidebar-logo {
+    @apply flex items-center gap-2.5 overflow-hidden;
+}
+
+.sidebar-logo__icon {
+    @apply size-6 shrink-0;
+}
+
+.sidebar-logo__text {
+    @apply group-data-[collapsible=icon]:hidden flex flex-col leading-none;
+}
+
+.sidebar-logo__title {
+    @apply text-sm font-bold tracking-tight;
+}
+
+.sidebar-logo__subtitle {
+    @apply text-sidebar-foreground/40 text-[10px] font-normal;
+}
+
+/* Search wrapper — hidden in icon-rail mode */
+.sidebar-search {
+    @apply px-0 pt-1 group-data-[collapsible=icon]:hidden;
+}

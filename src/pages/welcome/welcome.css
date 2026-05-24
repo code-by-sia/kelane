@@ -1,0 +1,49 @@
+@reference "../../index.css";
+
+/* ── Recipe card ── */
+.home-recipe-card {
+    @apply relative rounded-xl overflow-hidden cursor-pointer shadow-sm
+           hover:shadow-lg transition-all duration-200 hover:scale-[1.02];
+}
+
+.home-recipe-card__placeholder {
+    @apply aspect-[4/3] w-full bg-gradient-to-br from-primary/8 to-primary/15
+           flex items-center justify-center;
+}
+
+.home-recipe-card__overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent;
+}
+
+.home-recipe-card__overlay--light {
+    @apply absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent;
+}
+
+.home-recipe-card__body {
+    @apply absolute bottom-0 left-0 right-0 p-3 text-white;
+}
+
+.home-recipe-card__progress-track {
+    @apply flex-1 h-1 bg-white/30 rounded-full overflow-hidden;
+}
+
+/* ── Section ── */
+.home-section {
+    @apply flex flex-col gap-3;
+}
+
+.home-section__heading {
+    @apply font-semibold text-sm uppercase tracking-wide text-muted-foreground;
+}
+
+/* ── Expiry warning ── */
+.home-expiry-heading {
+    @apply font-semibold text-sm uppercase tracking-wide text-amber-700;
+}
+
+/* ── Suggestion explanation chip ── */
+.suggest-chip {
+    @apply inline-flex self-start items-center px-2 py-0.5 rounded-full
+           text-[10px] font-medium bg-primary/10 text-primary border border-primary/20
+           leading-none;
+}

@@ -1,0 +1,23 @@
+@reference "../../index.css";
+
+/* ────────────────────────────────────────────────────────────
+   Add-feed inline form
+   ──────────────────────────────────────────────────────────── */
+.feeds-add-form {
+    @apply px-2 pb-2 flex flex-col gap-1.5;
+}
+
+.feeds-add-form__actions {
+    @apply flex gap-1;
+}
+
+/* Collapsible chevron animation */
+.feeds-chevron {
+    @apply ml-auto transition-transform duration-200
+           group-data-[state=open]/collapsible:rotate-90;
+}
+
+/* Empty-state hint inside feeds sub-menu */
+.feeds-empty-hint {
+    @apply text-sidebar-foreground/40 text-xs italic;
+}
