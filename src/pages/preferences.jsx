@@ -1,14 +1,21 @@
-import { BrainCircuitIcon, CheckIcon, GlobeIcon, PaletteIcon, SaladIcon, ZapIcon } from "lucide-react";
+import { useRef, useState } from "react";
+import { BrainCircuitIcon, CheckIcon, DatabaseIcon, DownloadIcon, GlobeIcon, PaletteIcon, SaladIcon, UploadIcon, ZapIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SidebarPage from "@/pages/sidebar-page";
 import { ThemePicker } from "@/components/theme-picker";
 import useSetupStore from "@/store/setup";
 import useSettingsStore, { PROXY_PRESETS } from "@/store/settings";
+import useRecipeStore from "@/store/recipe";
+import useHistoryStore from "@/store/history";
+import useCalendarStore from "@/store/calendar";
+import useGroceriesStore from "@/store/groceries";
 import { LLM_MODELS } from "@/data/llm-models";
+import { toast } from "sonner";
 import "./preferences.css";
 
 const DIETARY_OPTIONS = [
@@ -24,6 +31,187 @@ const DIETARY_OPTIONS = [
 
 const SPEED_LABELS = { fast: "Fast", medium: "Medium", slow: "Slower" };
 
+const BACKUP_VERSION = 1;
+
+// ── Data tab ──────────────────────────────────────────────────────────────────
+function DataTab() {
+  const recipes    = useRecipeStore((s) => s.recipes);
+  const categories = useRecipeStore((s) => s.categories);
+  const mergeRecipes   = useRecipeStore((s) => s.mergeRecipes);
+  const replaceRecipes = useRecipeStore((s) => s.replaceRecipes);
+
+  const historyEntries = useHistoryStore((s) => s.entries);
+  const calendarMeals  = useCalendarStore((s) => s.meals);
+  const fridgeItems    = useGroceriesStore((s) => s.fridgeItems);
+  const toBuyItems     = useGroceriesStore((s) => s.toBuyItems);
+
+  const fileRef = useRef(null);
+  const [preview, setPreview]   = useState(null); // parsed backup waiting for mode choice
+  const [importing, setImporting] = useState(false);
+
+  // ── Export ──────────────────────────────────────────────────────────────────
+  const handleExport = () => {
+    const date = new Date().toISOString().slice(0, 10);
+    const backup = {
+      version: BACKUP_VERSION,
+      exportedAt: new Date().toISOString(),
+      recipes,
+      categories,
+      history: historyEntries,
+      calendar: calendarMeals,
+      groceries: { fridgeItems, toBuyItems },
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = `kelane-backup-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Backup downloaded");
+  };
+
+  // ── Import — file picked ────────────────────────────────────────────────────
+  const handleFilePicked = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        // Validate minimal structure
+        if (!Array.isArray(data.recipes)) {
+          toast.error("Invalid backup: missing recipes array");
+          return;
+        }
+        setPreview(data);
+      } catch {
+        toast.error("Could not parse file — make sure it is a valid Kelane backup JSON");
+      }
+    };
+    reader.readAsText(file);
+    // reset so the same file can be re-picked
+    e.target.value = "";
+  };
+
+  // ── Import — confirm ────────────────────────────────────────────────────────
+  const handleImport = (mode) => {
+    if (!preview) return;
+    setImporting(true);
+    try {
+      if (mode === "replace") {
+        replaceRecipes(preview.recipes, preview.categories ?? []);
+      } else {
+        mergeRecipes(preview.recipes);
+        // Merge categories too (add missing ones)
+        if (Array.isArray(preview.categories)) {
+          const addCat = useRecipeStore.getState().addCategory;
+          preview.categories.forEach((c) => addCat(c));
+        }
+      }
+      const n = preview.recipes.length;
+      toast.success(`${mode === "replace" ? "Replaced" : "Merged"} ${n} recipe${n !== 1 ? "s" : ""}`);
+      setPreview(null);
+    } catch {
+      toast.error("Import failed — please try again");
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  return (
+    <div className="prefs-tab-inner--gap">
+      {/* Export */}
+      <section className="prefs-data-section">
+        <div>
+          <p className="text-sm font-medium">Export backup</p>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Downloads your entire library — recipes, categories, cooking history,
+            calendar meals, and grocery lists — as a single JSON file.
+          </p>
+        </div>
+        <div className="prefs-data-stat-row">
+          <span className="prefs-data-stat"><strong>{recipes.length}</strong> recipes</span>
+          <span className="prefs-data-stat"><strong>{categories.length}</strong> categories</span>
+          <span className="prefs-data-stat"><strong>{historyEntries.length}</strong> history entries</span>
+        </div>
+        <Button variant="outline" onClick={handleExport}>
+          <DownloadIcon size={15} />
+          Export all
+        </Button>
+      </section>
+
+      <div className="prefs-data-divider" />
+
+      {/* Import */}
+      <section className="prefs-data-section">
+        <div>
+          <p className="text-sm font-medium">Import backup</p>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Restore from a previously exported Kelane backup file.
+            Choose <strong>Merge</strong> to keep existing data and add new
+            recipes, or <strong>Replace</strong> to wipe and restore everything.
+          </p>
+        </div>
+
+        {!preview ? (
+          <>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".json,application/json"
+              className="hidden"
+              onChange={handleFilePicked}
+            />
+            <Button variant="outline" onClick={() => fileRef.current?.click()}>
+              <UploadIcon size={15} />
+              Choose backup file…
+            </Button>
+          </>
+        ) : (
+          <div className="prefs-import-preview">
+            <div className="prefs-import-preview__counts">
+              <p className="text-sm font-medium">Ready to import</p>
+              <div className="prefs-data-stat-row">
+                <span className="prefs-data-stat"><strong>{preview.recipes.length}</strong> recipes</span>
+                <span className="prefs-data-stat"><strong>{(preview.categories ?? []).length}</strong> categories</span>
+                {preview.history && (
+                  <span className="prefs-data-stat"><strong>{preview.history.length}</strong> history entries</span>
+                )}
+              </div>
+              {preview.exportedAt && (
+                <p className="text-xs text-muted-foreground">
+                  Exported {new Date(preview.exportedAt).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant="outline"
+                onClick={() => handleImport("merge")}
+                disabled={importing}
+              >
+                Merge
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => handleImport("replace")}
+                disabled={importing}
+              >
+                Replace all
+              </Button>
+              <Button variant="ghost" onClick={() => setPreview(null)} disabled={importing}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────────
 export default function PreferencesPage() {
   const dietaryTags = useSetupStore((s) => s.preferences.dietaryTags);
   const setDietaryTags = useSetupStore((s) => s.setDietaryTags);
@@ -62,6 +250,10 @@ export default function PreferencesPage() {
           <TabsTrigger value="network" className="prefs-tab-trigger">
             <GlobeIcon size={13} />
             Network
+          </TabsTrigger>
+          <TabsTrigger value="data" className="prefs-tab-trigger">
+            <DatabaseIcon size={13} />
+            Data
           </TabsTrigger>
         </TabsList>
 
@@ -206,6 +398,11 @@ export default function PreferencesPage() {
               </div>
             )}
           </div>
+        </TabsContent>
+
+        {/* ── Data ── */}
+        <TabsContent value="data" className="prefs-tab-content">
+          <DataTab />
         </TabsContent>
 
       </Tabs>

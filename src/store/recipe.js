@@ -42,6 +42,18 @@ const useRecipeStore = create(
           ),
         })),
 
+      /** Merge new recipes in (skip duplicates by code). */
+      mergeRecipes: (incoming) =>
+        set((state) => {
+          const existing = new Set(state.recipes.map((r) => String(r.code)));
+          const toAdd = incoming.filter((r) => !existing.has(String(r.code)));
+          return { recipes: [...state.recipes, ...toAdd] };
+        }),
+
+      /** Replace the entire library. */
+      replaceRecipes: (recipes, categories) =>
+        set({ recipes, categories }),
+
       addCategory: (category) => {
         const { categories } = get();
         if (!categories.includes(category)) {
