@@ -50,15 +50,17 @@ async function getEngine(modelId, onProgress) {
   return _enginePromise;
 }
 
-// ── Action tag parser ──────────────────────────────────────────────────────────
-const ACTION_RE = /\[(?:NAV|LIKE|FLAG):[^\]]*\]?/g;
+// ── Tag parsers ────────────────────────────────────────────────────────────────
+// CHOICE tags are kept in the stored message (parsed by the UI for buttons).
+// NAV / LIKE / FLAG tags are stripped and executed as side-effects.
+// All tags are stripped from the live streaming display.
 
 function stripStreamingTags(text) {
-  // Remove complete tags; also remove an incomplete tag at the very end of the
-  // buffer (e.g. "[NAV:/groc" still being streamed in).
+  // Remove complete tags; also strip an incomplete tag at the end of the buffer
+  // (e.g. "[CHOICE: Tell me" still streaming in).
   return text
-    .replace(/\[(NAV|LIKE|FLAG):[^\]]+\]/g, "")
-    .replace(/\[(NAV|LIKE|FLAG):[^\]]*$/, "")
+    .replace(/\[(NAV|LIKE|FLAG|CHOICE):[^\]]+\]/g, "")
+    .replace(/\[(NAV|LIKE|FLAG|CHOICE):[^\]]*$/, "")
     .trim();
 }
 

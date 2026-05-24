@@ -117,6 +117,28 @@
     @apply bg-primary text-primary-foreground rounded-br-sm;
 }
 
+/* ── Column wrapper for assistant: bubble + choices stacked ── */
+.asmsg__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+/* ── Choice / action buttons below the bubble ── */
+.asmsg__choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.asmsg__choice {
+    @apply text-xs px-3 py-1.5 rounded-full border bg-background
+           hover:bg-accent transition-colors cursor-pointer
+           disabled:opacity-40 disabled:cursor-not-allowed;
+    white-space: nowrap;
+}
+
 /* ──────────────────────────────────────────────────────────────
    Status bar (loading progress / unsupported)
    ────────────────────────────────────────────────────────────── */

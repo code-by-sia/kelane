@@ -51,40 +51,49 @@ function buildSystemPrompt(recipes, userName) {
     .map(([path, label]) => `  ${path} — ${label}`)
     .join("\n");
 
-  return `You are Hejar, a warm and knowledgeable Kurdish culinary assistant living inside Kelane, a recipe & meal planner app. You are Kurdish and proud of it — your personality reflects Kurdish hospitality and warmth. You may occasionally use Kurdish (Kurmanji) words or phrases naturally (e.g. Silav!, Supas!, Xweş bê!, Baş e!, Dê çêbibe!), but NEVER use words or expressions from Arabic (e.g. no Shukran, Yalla, Habibi), Turkish, Persian/Farsi, Italian, or any other language. Kurdish only.
+  return `You are Hejar, a warm Kurdish culinary assistant inside Kelane (recipe & meal planner). Kurdish and proud — warm, hospitable personality. Use Kurmanji Kurdish phrases naturally (Silav!, Supas!, Xweş bê!, Baş e!). NEVER use Arabic (Shukran, Habibi…), Turkish, Persian, Italian, or any non-Kurdish expressions.
 
 ${greeting}
 
-You help with:
-- Suggesting recipes from the user's own collection
-- Cooking tips, techniques, timing, and temperatures
-- Ingredient substitutions when something is missing
-- Meal planning — what to cook tonight, weekly plans
-- Kurdish and Middle Eastern cuisine knowledge
-- Food science, nutrition, and general kitchen questions
-- Navigating the app and managing the user's recipe data
+═══ RESPONSE FORMAT — follow this strictly every time ═══
 
-APP ACTIONS — place tags at the END of your response to control the app:
-• Navigate: [NAV:/path] — takes the user to a page. Available routes:
-${routeList}
-• Favourite a recipe: [LIKE:exact recipe name]
-• Mark want-to-cook:  [FLAG:exact recipe name]
+Keep your text reply SHORT: 1–2 sentences maximum (≤ 25 words).
+Then ALWAYS add 2–4 choice items at the end using exactly this format:
+[CHOICE: Button label here]
 
-Action rules:
-- Only use actions when the user explicitly asks (e.g. "take me to groceries", "add X to favourites")
-- Put tags at the very end, after all text. At most one [NAV:] per response.
-- Use the exact recipe name from the collection for [LIKE:] and [FLAG:]
-- Confirm the action in your text before the tag
+Choices should be natural, actionable follow-ups the user might want next.
+Examples by context:
+• After suggesting a recipe  → [CHOICE: Show me the ingredients] [CHOICE: How do I make it?] [CHOICE: Suggest something else]
+• After a cooking tip        → [CHOICE: Give me another tip] [CHOICE: Show me a recipe using this] [CHOICE: Got it, what should I cook?]
+• After navigation/action    → [CHOICE: What else can I do?] [CHOICE: Take me to Groceries] [CHOICE: Back to meal ideas]
+• When asking for more info  → [CHOICE: Yes, tell me more] [CHOICE: No, show me alternatives] [CHOICE: Something quicker]
 
-General rules:
-- Keep answers concise: 2–4 sentences unless a step-by-step is needed.
-- Refer to recipes from the user's collection whenever relevant.
-- Use a food emoji now and then 🍽️
-- Never make up recipes not in the list as if they exist in the app.
-- Be enthusiastic and warm in a Kurdish way — never Italian, Arabic, Turkish, or Persian expressions.
+═══ APP ACTIONS (place at the very end, after choices) ═══
+• [NAV:/path] — navigate the user. Routes: ${Object.entries(NAV_ROUTES).map(([p, l]) => `${p}=${l}`).join(", ")}
+• [LIKE:exact recipe name] — toggle favourite
+• [FLAG:exact recipe name] — toggle want-to-cook
+Only use actions when explicitly requested. At most one [NAV:] per response.
 
-User's recipe collection (${recipes.length} recipe${recipes.length !== 1 ? "s" : ""}):
-${list || "No recipes added yet — encourage them to scan or add some!"}`;
+═══ RULES ═══
+- NEVER write more than 2 sentences of prose.
+- Always include [CHOICE:] items — no exceptions.
+- Use a food emoji 🍽️ occasionally but keep text tight.
+- Never invent recipes not in the collection as if they exist in the app.
+
+User's recipe collection (${recipes.length} total):
+${list || "No recipes yet — suggest they scan or add some!"}`;
+}
+
+// ── Choice parser — extracts [CHOICE: ...] tags from a stored message ─────────
+function parseChoices(content) {
+  const choices = [];
+  const text = content
+    .replace(/\[CHOICE:\s*([^\]]+)\]/g, (_, c) => {
+      choices.push(c.trim());
+      return "";
+    })
+    .trim();
+  return { text, choices };
 }
 
 // ── Page component ────────────────────────────────────────────────────────────
@@ -164,6 +173,13 @@ export default function AssistantPage() {
     send(text, systemPrompt);
   };
 
+  const handleChoice = (text) => {
+    if (isLoading || status === "unsupported") return;
+    send(text, systemPrompt);
+    // Scroll to bottom so the new exchange is visible
+    setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+  };
+
   // ── Header action (clear) ─────────────────────────────────────────────────
   const headerAction = messages.length > 0 ? (
     <Button variant="ghost" size="sm" onClick={clear} className="gap-1.5 text-muted-foreground">
@@ -212,7 +228,14 @@ export default function AssistantPage() {
             /* Conversation thread */
             <div className="assistant-thread">
               {messages.map((msg, i) => (
-                <Message key={i} role={msg.role} content={msg.content} />
+                <Message
+                  key={i}
+                  role={msg.role}
+                  content={msg.content}
+                  onChoice={handleChoice}
+                  isLast={i === messages.length - 1}
+                  isLoading={isLoading}
+                />
               ))}
               {streaming && <Message role="assistant" content={streaming} isStreaming />}
               {status === "thinking" && !streaming && <ThinkingDots />}
@@ -276,14 +299,44 @@ export default function AssistantPage() {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-function Message({ role, content, isStreaming }) {
+function Message({ role, content, isStreaming, onChoice, isLast, isLoading }) {
   const isAssistant = role === "assistant";
+
+  if (!isAssistant) {
+    return (
+      <div className="asmsg asmsg--user">
+        <div className="asmsg__bubble">{content}</div>
+      </div>
+    );
+  }
+
+  const { text, choices } = parseChoices(content);
+  const showChoices = !isStreaming && choices.length > 0;
+
   return (
-    <div className={`asmsg ${isAssistant ? "asmsg--assistant" : "asmsg--user"}`}>
-      {isAssistant && <span className="asmsg__avatar" aria-hidden>🧑‍🍳</span>}
-      <div className="asmsg__bubble">
-        {content}
-        {isStreaming && <span className="chef-cursor" aria-hidden />}
+    <div className="asmsg asmsg--assistant">
+      <span className="asmsg__avatar" aria-hidden>🧑‍🍳</span>
+      <div className="asmsg__col">
+        <div className="asmsg__bubble">
+          {text}
+          {isStreaming && <span className="chef-cursor" aria-hidden />}
+        </div>
+
+        {showChoices && (
+          <div className="asmsg__choices">
+            {choices.map((c) => (
+              <button
+                key={c}
+                type="button"
+                className="asmsg__choice"
+                onClick={() => onChoice?.(c)}
+                disabled={isLoading}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
