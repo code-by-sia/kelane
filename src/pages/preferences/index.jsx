@@ -46,28 +46,30 @@ export default function PreferencesPage() {
     <SidebarPage title="Preferences">
       <Tabs defaultValue="appearance" className="flex flex-col flex-1 min-h-0">
 
-        <TabsList className="prefs-tab-list">
-          <TabsTrigger value="appearance" className="prefs-tab-trigger">
-            <PaletteIcon size={13} />
-            Appearance
-          </TabsTrigger>
-          <TabsTrigger value="ai" className="prefs-tab-trigger">
-            <BrainCircuitIcon size={13} />
-            AI Model
-          </TabsTrigger>
-          <TabsTrigger value="dietary" className="prefs-tab-trigger">
-            <SaladIcon size={13} />
-            Dietary
-          </TabsTrigger>
-          <TabsTrigger value="network" className="prefs-tab-trigger">
-            <GlobeIcon size={13} />
-            Network
-          </TabsTrigger>
-          <TabsTrigger value="data" className="prefs-tab-trigger">
-            <DatabaseIcon size={13} />
-            Data
-          </TabsTrigger>
-        </TabsList>
+        <div className="px-4 lg:px-6 py-3 shrink-0">
+          <TabsList>
+            <TabsTrigger value="appearance">
+              <PaletteIcon size={13} />
+              Appearance
+            </TabsTrigger>
+            <TabsTrigger value="ai">
+              <BrainCircuitIcon size={13} />
+              AI Model
+            </TabsTrigger>
+            <TabsTrigger value="dietary">
+              <SaladIcon size={13} />
+              Dietary
+            </TabsTrigger>
+            <TabsTrigger value="network">
+              <GlobeIcon size={13} />
+              Network
+            </TabsTrigger>
+            <TabsTrigger value="data">
+              <DatabaseIcon size={13} />
+              Data
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="appearance" className="prefs-tab-content">
           <div className="prefs-tab-inner">

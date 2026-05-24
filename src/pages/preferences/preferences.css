@@ -1,35 +1,5 @@
 @reference "../../index.css";
 
-/* ────────────────────────────────────────────────────────────
-   Preferences — tab bar (underline indicator style)
-   ──────────────────────────────────────────────────────────── */
-.prefs-tab-list {
-    @apply w-full justify-start rounded-none border-b bg-background
-           px-4 lg:px-6 h-11 gap-0 shrink-0;
-}
-
-.prefs-tab-trigger {
-    @apply relative rounded-none px-4 h-full gap-1.5
-           text-muted-foreground font-medium text-sm
-           bg-transparent shadow-none
-           hover:text-foreground transition-colors
-           data-[state=active]:text-foreground
-           data-[state=active]:bg-transparent
-           data-[state=active]:shadow-none;
-    overflow: visible;
-}
-
-.prefs-tab-trigger[data-state="active"]::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--primary);
-    border-radius: 2px 2px 0 0;
-}
-
 /* ── Tab content panels ── */
 .prefs-tab-content {
     @apply flex-1 overflow-y-auto mt-0;

@@ -25,7 +25,7 @@ export default function RecipiesPage() {
   const listInner = (
     <>
       {viewMode === "grid" ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 p-4 sm:p-6">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-3 p-4 sm:p-6">
           {recipes.map((r) => <RecipeCard key={r.code} {...r} />)}
         </div>
       ) : (
