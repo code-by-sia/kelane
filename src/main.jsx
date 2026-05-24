@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { ThemeProvider } from "./components/theme-provider";
 import { Loading } from "./components/loading";
+import { ChefAssistant } from "./components/chef-assistant";
 import "./index.css";
 
 // ── Page chunks — each lazy import becomes its own JS chunk ──────────────────
@@ -32,6 +33,7 @@ createRoot(document.getElementById("root")).render(
   <ThemeProvider>
     <BrowserRouter>
       <Toaster richColors position="top-right" />
+      <ChefAssistant />
       <Suspense fallback={<Loading isLoading loadingText="Loading…" />}>
         <Routes>
           <Route path="/"                           element={<HomePage />} />
