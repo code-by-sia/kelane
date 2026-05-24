@@ -4,7 +4,6 @@ import { Toaster } from "sonner";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { ThemeProvider } from "./components/theme-provider";
 import { Loading } from "./components/loading";
-import { ChefAssistant } from "./components/chef-assistant";
 import "./index.css";
 
 // ── Page chunks — each lazy import becomes its own JS chunk ──────────────────
@@ -25,6 +24,7 @@ const GrocoriesPage       = lazy(() => import("./pages/grocories/grocories-page"
 const HistoryPage         = lazy(() => import("./pages/history"));
 const FeedsPage           = lazy(() => import("./pages/feeds"));
 const BrowserPage         = lazy(() => import("./pages/browser"));
+const AssistantPage       = lazy(() => import("./pages/assistant"));
 const PreferencesPage     = lazy(() => import("./pages/preferences"));
 const ProfilePage         = lazy(() => import("./pages/profile"));
 
@@ -33,7 +33,6 @@ createRoot(document.getElementById("root")).render(
   <ThemeProvider>
     <BrowserRouter>
       <Toaster richColors position="top-right" />
-      <ChefAssistant />
       <Suspense fallback={<Loading isLoading loadingText="Loading…" />}>
         <Routes>
           <Route path="/"                           element={<HomePage />} />
@@ -55,6 +54,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/feeds"                      element={<FeedsPage />} />
           <Route path="/feeds/:feedId"              element={<FeedsPage />} />
           <Route path="/browser"                    element={<BrowserPage />} />
+          <Route path="/assistant"                   element={<AssistantPage />} />
           <Route path="/preferences"                element={<PreferencesPage />} />
           <Route path="/profile"                    element={<ProfilePage />} />
         </Routes>

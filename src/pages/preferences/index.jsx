@@ -1,4 +1,4 @@
-import { BrainCircuitIcon, BotIcon, CheckIcon, DatabaseIcon, FlameIcon, GlobeIcon, PaletteIcon, RotateCcwIcon, SaladIcon, ZapIcon } from "lucide-react";
+import { BrainCircuitIcon, BotIcon, CheckIcon, DatabaseIcon, FlameIcon, GlobeIcon, PaletteIcon, SaladIcon, ZapIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +10,6 @@ import { ThemePicker } from "@/components/theme-picker";
 import useSetupStore from "@/store/setup";
 import useSettingsStore, { PROXY_PRESETS } from "@/store/settings";
 import { LLM_MODELS } from "@/data/llm-models";
-import { clearChefPos } from "@/components/chef-assistant/use-draggable";
 import "./preferences.css";
 import { DataTab } from "./data-tab";
 
@@ -164,24 +163,6 @@ export default function PreferencesPage() {
               </div>
             </div>
 
-            {/* Reset position */}
-            <div className="flex flex-col gap-1.5">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Character position</p>
-              <div className="flex items-center gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1.5"
-                  onClick={() => { clearChefPos(); window.location.reload(); }}
-                >
-                  <RotateCcwIcon size={13} />
-                  Reset to default corner
-                </Button>
-                <p className="text-xs text-muted-foreground">
-                  Drag Hejar anywhere on the Explore page.
-                </p>
-              </div>
-            </div>
 
           </div>
         </TabsContent>

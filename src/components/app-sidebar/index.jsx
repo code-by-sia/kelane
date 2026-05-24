@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { NavAssistant } from "@/components/nav-assistant";
 import { NavCategories } from "@/components/nav-categories";
 import { NavFeeds } from "@/components/nav-feeds";
 import { NavUser } from "@/components/nav-user";
@@ -41,6 +42,7 @@ export function AppSidebar({ ...props }) {
       </SidebarHeader>
 
       <SidebarContent>
+        <NavAssistant />
         <NavCategories />
         <NavFeeds />
       </SidebarContent>

@@ -1,0 +1,143 @@
+@reference "../../index.css";
+
+/* ──────────────────────────────────────────────────────────────
+   Full-page layout — flex column filling the sidebar inset
+   ────────────────────────────────────────────────────────────── */
+.assistant-layout {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;    /* critical: lets the flex child shrink below content size */
+    overflow: hidden;
+}
+
+/* ── Scrollable message area ── */
+.assistant-messages {
+    flex: 1;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Welcome / empty state
+   ────────────────────────────────────────────────────────────── */
+.assistant-welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.75rem;
+    min-height: 100%;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+}
+
+.assistant-welcome__avatar {
+    /* Natural SVG size; the sticker filter adds its own halo */
+    line-height: 0;
+}
+
+.assistant-welcome__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+/* ── Suggestion chips grid ── */
+.assistant-suggestions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 680px;
+}
+
+.assistant-chip {
+    @apply flex items-center gap-2.5 px-4 py-3 rounded-xl border
+           bg-card text-sm text-left cursor-pointer transition-colors
+           hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.assistant-chip__emoji {
+    font-size: 1.125rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Conversation thread
+   ────────────────────────────────────────────────────────────── */
+.assistant-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1rem 1rem;
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+@media (min-width: 640px) {
+    .assistant-thread {
+        padding: 1.75rem 1.5rem 1.5rem;
+    }
+}
+
+/* ── Message rows ── */
+.asmsg {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.asmsg--user {
+    flex-direction: row-reverse;
+}
+
+.asmsg__avatar {
+    @apply text-xl leading-none shrink-0 mb-0.5;
+}
+
+.asmsg__bubble {
+    @apply text-sm px-4 py-2.5 rounded-2xl leading-relaxed;
+    max-width: min(84%, 560px);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.asmsg--assistant .asmsg__bubble {
+    @apply bg-muted text-foreground rounded-bl-sm;
+}
+
+.asmsg--user .asmsg__bubble {
+    @apply bg-primary text-primary-foreground rounded-br-sm;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Status bar (loading progress / unsupported)
+   ────────────────────────────────────────────────────────────── */
+.assistant-status-bar {
+    @apply px-4 py-2 border-t bg-muted/20 shrink-0;
+}
+
+.assistant-progress {
+    @apply h-1 rounded-full bg-muted overflow-hidden;
+}
+
+.assistant-progress__fill {
+    @apply h-full bg-primary rounded-full transition-[width] duration-300;
+}
+
+.assistant-status-label {
+    @apply text-[11px] text-muted-foreground mt-1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Input row — pinned to the bottom
+   ────────────────────────────────────────────────────────────── */
+.assistant-input-row {
+    @apply flex items-center gap-2 px-3 sm:px-4 py-3 border-t shrink-0 bg-background;
+}
