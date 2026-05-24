@@ -1,4 +1,5 @@
 @reference "../../index.css";
+@reference "../../components/chef-assistant/chef-assistant.css";
 
 /* ──────────────────────────────────────────────────────────────
    Full-page layout — flex column filling the sidebar inset
@@ -140,4 +141,30 @@
    ────────────────────────────────────────────────────────────── */
 .assistant-input-row {
     @apply flex items-center gap-2 px-3 sm:px-4 py-3 border-t shrink-0 bg-background;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Corner character — fixed to bottom-right of the page.
+   Clicks focus the chat input. Mood animations come from
+   chef-assistant.css (chef-btn[data-mood=...] keyframes).
+   ────────────────────────────────────────────────────────────── */
+.assistant-actor {
+    position: fixed;
+    /* On mobile: clear the bottom nav (5.5rem) + input row (~3rem) */
+    bottom: 9rem;
+    right: 1rem;
+    z-index: 40;
+    pointer-events: none;
+}
+
+.assistant-actor > * {
+    pointer-events: auto;
+}
+
+@media (min-width: 768px) {
+    .assistant-actor {
+        /* On desktop: clear the input row (~3rem) + comfortable gap */
+        bottom: 4.5rem;
+        right: 1.5rem;
+    }
 }

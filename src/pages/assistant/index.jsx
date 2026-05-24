@@ -10,6 +10,7 @@ import useRecipeStore from "@/store/recipe";
 import useSetupStore from "@/store/setup";
 import { useChefLLM } from "@/components/chef-assistant/use-chef-llm";
 import { HEjarSVG } from "@/components/chef-assistant/hejar-svg";
+import { ChefCharacter } from "@/components/chef-assistant/chef-character";
 import "./assistant.css";
 
 // ── App routes Hejar can navigate to ─────────────────────────────────────────
@@ -93,7 +94,8 @@ export default function AssistantPage() {
   const updateRecipe = useRecipeStore((s) => s.updateRecipe);
   const userName     = useSetupStore((s) => s.profile?.name);
 
-  const [input, setInput] = useState("");
+  const [input, setInput]         = useState("");
+  const [greetOverride, setGreet] = useState(false);
   const bottomRef = useRef(null);
   const inputRef  = useRef(null);
 
@@ -105,13 +107,25 @@ export default function AssistantPage() {
   const isLoading = status === "loading" || status === "thinking";
   const isEmpty   = messages.length === 0 && !streaming;
 
+  // ── Character mood ───────────────────────────────────────────────────────
+  const llmMood =
+    status === "loading" || status === "thinking" ? "thinking"
+    : streaming                                   ? "talking"
+    : "idle";
+  const mood = greetOverride ? "greeting" : llmMood;
+
   // ── Auto-scroll ──────────────────────────────────────────────────────────
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streaming]);
 
-  // ── Focus input ──────────────────────────────────────────────────────────
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  // ── Focus input & greeting pose on mount ─────────────────────────────────
+  useEffect(() => {
+    inputRef.current?.focus();
+    setGreet(true);
+    const t = setTimeout(() => setGreet(false), 1400);
+    return () => clearTimeout(t);
+  }, []);
 
   // ── Execute LLM actions ──────────────────────────────────────────────────
   useEffect(() => {
@@ -247,6 +261,16 @@ export default function AssistantPage() {
         </form>
 
       </div>
+      {/* ── Corner character ─────────────────────────────────────────── */}
+      <div className="assistant-actor">
+        <ChefCharacter
+          mood={mood}
+          onClick={() => inputRef.current?.focus()}
+          isOpen={false}
+          hasMessages={false}
+        />
+      </div>
+
     </SidebarPage>
   );
 }
