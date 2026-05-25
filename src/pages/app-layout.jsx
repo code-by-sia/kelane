@@ -44,7 +44,7 @@ export default function AppLayout() {
       }}
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className={noScroll ? "!h-svh !overflow-hidden" : ""}>
+      <SidebarInset className="overflow-hidden">
         <Suspense fallback={<ContentSkeleton />}>
           <Outlet />
         </Suspense>
