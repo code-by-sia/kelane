@@ -2,14 +2,24 @@
 @reference "../../components/chef-assistant/chef-assistant.css";
 
 /* ──────────────────────────────────────────────────────────────
-   Full-page layout — flex column filling the sidebar inset
+   Full-page layout — explicit height so only messages scroll.
+   We use viewport units minus the header rather than relying on
+   flex alone; SidebarInset's flex context can't bound height
+   reliably on all browsers.
    ────────────────────────────────────────────────────────────── */
 .assistant-layout {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    min-height: 0;    /* critical: lets the flex child shrink below content size */
+    /* Desktop: full viewport below the site header */
+    height: calc(100svh - var(--header-height, 3rem));
     overflow: hidden;
+}
+
+@media (max-width: 767px) {
+    .assistant-layout {
+        /* Mobile: also subtract the fixed bottom nav (h-16 = 4rem) */
+        height: calc(100svh - var(--header-height, 3rem) - 4rem);
+    }
 }
 
 /* ── Scrollable message area ── */

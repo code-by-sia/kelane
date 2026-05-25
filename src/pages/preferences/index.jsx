@@ -93,7 +93,7 @@ export default function PreferencesPage() {
             <div>
               <p className="text-sm font-medium mb-0.5">On-device model</p>
               <p className="text-sm text-muted-foreground">
-                Used by the recipe scanner and Hejar assistant. Runs entirely on
+                Used by the recipe scanner and Kejal assistant. Runs entirely on
                 your device — nothing is sent to the cloud. The first use
                 downloads and caches the model locally.
               </p>
@@ -138,7 +138,7 @@ export default function PreferencesPage() {
             {/* ── Hejar assistant ── */}
             <div className="flex items-center gap-2">
               <BotIcon size={15} className="text-muted-foreground shrink-0" />
-              <p className="text-sm font-medium">Hejar assistant</p>
+              <p className="text-sm font-medium">Kejal assistant</p>
             </div>
 
             {/* Response style (temperature) */}

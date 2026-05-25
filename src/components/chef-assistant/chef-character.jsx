@@ -1,4 +1,4 @@
-import { HEjarSVG } from "./hejar-svg";
+import { KejalSVG } from "./kejal-svg";
 
 export function ChefCharacter({ mood = "idle", onClick, isOpen, hasMessages, dragHandlers = {}, isDragging = false }) {
   return (
@@ -8,12 +8,12 @@ export function ChefCharacter({ mood = "idle", onClick, isOpen, hasMessages, dra
       {...dragHandlers}
       className={`chef-btn${isOpen ? " chef-btn--open" : ""}`}
       data-mood={mood}
-      title={isOpen ? "Close Hejar" : "Chat with Hejar"}
-      aria-label={isOpen ? "Close assistant" : "Chat with Hejar, your culinary assistant"}
-      style={{ cursor: isDragging ? "grabbing" : "grab" }}
+      title="Chat with Kejal"
+      aria-label="Chat with Kejal, your culinary assistant"
+      style={{ cursor: isDragging ? "grabbing" : "pointer" }}
     >
       <div className="chef-character">
-        <HEjarSVG pose={moodToPose(mood)} />
+        <KejalSVG pose={moodToPose(mood)} />
       </div>
       {!isOpen && hasMessages && <span className="chef-notif-dot" aria-hidden />}
     </button>

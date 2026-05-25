@@ -9,11 +9,11 @@ import SidebarPage from "@/pages/sidebar-page";
 import useRecipeStore from "@/store/recipe";
 import useSetupStore from "@/store/setup";
 import { useChefLLM } from "@/components/chef-assistant/use-chef-llm";
-import { HEjarSVG } from "@/components/chef-assistant/hejar-svg";
+import { KejalSVG } from "@/components/chef-assistant/kejal-svg";
 import { ChefCharacter } from "@/components/chef-assistant/chef-character";
 import "./assistant.css";
 
-// ── App routes Hejar can navigate to ─────────────────────────────────────────
+// ── App routes Kejal can navigate to ──────────────────────────────────────────
 const NAV_ROUTES = {
   "/":             "Explore",
   "/my-recipes":   "My Recipes",
@@ -33,7 +33,7 @@ const SUGGESTIONS = [
   { emoji: "🌙", text: "What should I cook tonight?" },
   { emoji: "🧊", text: "What can I make with what's in my fridge?" },
   { emoji: "📅", text: "Plan my meals for this week" },
-  { emoji: "🫕", text: "Suggest a Kurdish recipe I haven't tried" },
+  { emoji: "🫕", text: "Suggest a recipe I haven't tried yet" },
   { emoji: "⏱️", text: "Quick meals under 30 minutes" },
   { emoji: "🥗", text: "Something healthy for lunch" },
   { emoji: "⚠️", text: "Help me use expiring ingredients" },
@@ -51,7 +51,7 @@ function buildSystemPrompt(recipes, userName) {
     .map(([path, label]) => `  ${path} — ${label}`)
     .join("\n");
 
-  return `You are Hejar, a warm Kurdish culinary assistant inside Kelane (recipe & meal planner). Kurdish and proud — warm, hospitable personality. Use Kurmanji Kurdish phrases naturally (Silav!, Supas!, Xweş bê!, Baş e!). NEVER use Arabic (Shukran, Habibi…), Turkish, Persian, Italian, or any non-Kurdish expressions.
+  return `You are Kejal, a friendly culinary assistant inside Kelane (recipe & meal planner). Warm, enthusiastic, and knowledgeable about cooking from all cuisines. Personality: like a talented home chef who loves sharing good food.
 
 ${greeting}
 
@@ -198,14 +198,14 @@ export default function AssistantPage() {
             /* Welcome state */
             <div className="assistant-welcome">
               <div className="assistant-welcome__avatar">
-                <HEjarSVG pose="greeting" />
+                <KejalSVG pose="greeting" />
               </div>
 
               <div className="assistant-welcome__text">
-                <h2 className="text-xl font-semibold">Silav! I'm Hejar 👋</h2>
+                <h2 className="text-xl font-semibold">Hey! I'm Kejal 👨‍🍳</h2>
                 <p className="text-sm text-muted-foreground max-w-sm">
-                  Your Kurdish culinary assistant. Ask me anything about cooking,
-                  your recipes, or meal planning.
+                  Your culinary assistant. Ask me anything about cooking,
+                  your recipes, or what to make tonight.
                 </p>
               </div>
 
@@ -269,7 +269,7 @@ export default function AssistantPage() {
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask Hejar anything…"
+            placeholder="Ask Kejal anything…"
             disabled={isLoading || status === "unsupported"}
             className="flex-1 h-9 text-sm"
           />
