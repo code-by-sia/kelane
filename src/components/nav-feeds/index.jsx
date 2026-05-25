@@ -32,7 +32,6 @@ import {
   ShoppingBagIcon,
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Separator } from "@/components/ui/separator";
 import useFeedsStore from "@/store/feeds";
 import "./nav-feeds.css";
 import { AddFeedInline } from "./add-feed-inline";
@@ -60,7 +59,7 @@ export function NavFeeds() {
       <SidebarGroupLabel className="nav-group-label group-data-[collapsible=icon]:hidden">
         Feeds &amp; Tools
       </SidebarGroupLabel>
-      <Separator className="mx-2 hidden w-auto group-data-[collapsible=icon]:block" />
+
 
       <SidebarMenu>
         {isCollapsed ? (
