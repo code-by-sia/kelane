@@ -17,12 +17,12 @@ export function NavAssistant() {
         <SidebarMenuItem>
           <SidebarMenuButton
             asChild
-            tooltip="Cooking Assistant"
+            tooltip="Assistant"
             isActive={pathname === "/assistant"}
           >
             <a href="/assistant">
               <SparklesIcon />
-              <span>Cooking Assistant</span>
+              <span>Assistant</span>
             </a>
           </SidebarMenuButton>
         </SidebarMenuItem>
