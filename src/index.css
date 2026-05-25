@@ -421,7 +421,7 @@ html[data-theme="aubergine"] {
 /* Sidebar active item — Slack-style: full-row rounded highlight, brighter text.
    No left-border accent; the background fill carries the indicator. */
 [data-slot="sidebar-menu-button"][data-active="true"] {
-    background: color-mix(in oklch, var(--sidebar-primary) 22%, var(--sidebar));
+    background: var(--sidebar-accent);
     color: var(--sidebar-accent-foreground);
     font-weight: 600;
 }
