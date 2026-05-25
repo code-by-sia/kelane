@@ -11,6 +11,8 @@ import useSetupStore from "@/store/setup";
 import { useChefLLM } from "@/components/chef-assistant/use-chef-llm";
 import { KejalSVG } from "@/components/chef-assistant/kejal-svg";
 import { ChefCharacter } from "@/components/chef-assistant/chef-character";
+import { RecipeScanner } from "@/components/recipe-scanner";
+import { ChatRecipeCard, ChatAddRecipeButton } from "./chat-blocks";
 import "./assistant.css";
 
 // ── App routes Kejal can navigate to ──────────────────────────────────────────
@@ -47,9 +49,6 @@ function buildSystemPrompt(recipes, userName) {
     .slice(0, 60)
     .map((r) => `• ${r.name}${r.categories?.length ? ` [${r.categories.join(", ")}]` : ""}`)
     .join("\n");
-  const routeList = Object.entries(NAV_ROUTES)
-    .map(([path, label]) => `  ${path} — ${label}`)
-    .join("\n");
 
   return `You are Kejal, a friendly culinary assistant inside Kelane (recipe & meal planner). Warm, enthusiastic, and knowledgeable about cooking from all cuisines. Personality: like a talented home chef who loves sharing good food.
 
@@ -62,11 +61,17 @@ Then ALWAYS add 2–4 choice items at the end using exactly this format:
 [CHOICE: Button label here]
 
 Choices should be natural, actionable follow-ups the user might want next.
-Examples by context:
+Examples:
 • After suggesting a recipe  → [CHOICE: Show me the ingredients] [CHOICE: How do I make it?] [CHOICE: Suggest something else]
-• After a cooking tip        → [CHOICE: Give me another tip] [CHOICE: Show me a recipe using this] [CHOICE: Got it, what should I cook?]
-• After navigation/action    → [CHOICE: What else can I do?] [CHOICE: Take me to Groceries] [CHOICE: Back to meal ideas]
-• When asking for more info  → [CHOICE: Yes, tell me more] [CHOICE: No, show me alternatives] [CHOICE: Something quicker]
+• After a cooking tip        → [CHOICE: Give me another tip] [CHOICE: Show me a recipe using this]
+• After navigation/action    → [CHOICE: What else can I do?] [CHOICE: Take me to Groceries]
+
+═══ RICH BLOCKS — embed interactive cards in your response ═══
+• [RECIPE:exact recipe name] — shows a full recipe card with ingredients and steps.
+  Use this EVERY TIME you mention a specific recipe from the collection.
+  The name must match exactly as listed below.
+• [NEW_RECIPE] — place at the VERY END when you write out a full recipe with ingredients + steps
+  for something NOT in the collection. This shows a "Save Recipe" button.
 
 ═══ APP ACTIONS (place at the very end, after choices) ═══
 • [NAV:/path] — navigate the user. Routes: ${Object.entries(NAV_ROUTES).map(([p, l]) => `${p}=${l}`).join(", ")}
@@ -84,16 +89,32 @@ User's recipe collection (${recipes.length} total):
 ${list || "No recipes yet — suggest they scan or add some!"}`;
 }
 
-// ── Choice parser — extracts [CHOICE: ...] tags from a stored message ─────────
-function parseChoices(content) {
-  const choices = [];
+// ── Block parser — extracts all structured tags from a stored message ─────────
+// Strips tags from text and returns them as typed collections.
+// Also sanitises streaming display (strips block tags so they don't flash mid-stream).
+function parseBlocks(content) {
+  const choices    = [];
+  const recipeRefs = []; // names of known recipes → show ChatRecipeCard
+  let   hasNewRecipe = false;
+
   const text = content
-    .replace(/\[CHOICE:\s*([^\]]+)\]/g, (_, c) => {
-      choices.push(c.trim());
-      return "";
-    })
+    .replace(/\[CHOICE:\s*([^\]]+)\]/g, (_, c) => { choices.push(c.trim()); return ""; })
+    .replace(/\[RECIPE:\s*([^\]]+)\]/g,  (_, n) => { recipeRefs.push(n.trim()); return ""; })
+    .replace(/\[NEW_RECIPE\]/g,           ()     => { hasNewRecipe = true; return ""; })
+    // Strip remaining app-action tags (NAV/LIKE/FLAG) from visible text
+    .replace(/\[(?:NAV|LIKE|FLAG):[^\]]+\]/g, "")
     .trim();
-  return { text, choices };
+
+  return { text, choices, recipeRefs, hasNewRecipe };
+}
+
+// Clean block tags from streaming text so they don't flash mid-stream
+function cleanStreamText(content) {
+  return content
+    .replace(/\[RECIPE:[^\]]*\]?/g, "")
+    .replace(/\[NEW_RECIPE\]?/g, "")
+    .replace(/\[(?:NAV|LIKE|FLAG):[^\]]*\]?/g, "")
+    .trim();
 }
 
 // ── Page component ────────────────────────────────────────────────────────────
@@ -103,8 +124,9 @@ export default function AssistantPage() {
   const updateRecipe = useRecipeStore((s) => s.updateRecipe);
   const userName     = useSetupStore((s) => s.profile?.name);
 
-  const [input, setInput]         = useState("");
-  const [greetOverride, setGreet] = useState(false);
+  const [input, setInput]           = useState("");
+  const [greetOverride, setGreet]   = useState(false);
+  const [scannerText, setScannerText] = useState(null); // null = closed
   const bottomRef = useRef(null);
   const inputRef  = useRef(null);
 
@@ -176,7 +198,6 @@ export default function AssistantPage() {
   const handleChoice = (text) => {
     if (isLoading || status === "unsupported") return;
     send(text, systemPrompt);
-    // Scroll to bottom so the new exchange is visible
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
@@ -233,11 +254,14 @@ export default function AssistantPage() {
                   role={msg.role}
                   content={msg.content}
                   onChoice={handleChoice}
+                  onScan={setScannerText}
                   isLast={i === messages.length - 1}
                   isLoading={isLoading}
                 />
               ))}
-              {streaming && <Message role="assistant" content={streaming} isStreaming />}
+              {streaming && (
+                <Message role="assistant" content={streaming} isStreaming />
+              )}
               {status === "thinking" && !streaming && <ThinkingDots />}
               <div ref={bottomRef} />
             </div>
@@ -284,6 +308,7 @@ export default function AssistantPage() {
         </form>
 
       </div>
+
       {/* ── Corner character ─────────────────────────────────────────── */}
       <div className="assistant-actor">
         <ChefCharacter
@@ -294,12 +319,19 @@ export default function AssistantPage() {
         />
       </div>
 
+      {/* ── Recipe scanner — opened when user clicks "Save Recipe" ─── */}
+      <RecipeScanner
+        open={scannerText !== null}
+        onClose={() => setScannerText(null)}
+        initialText={scannerText ?? ""}
+      />
+
     </SidebarPage>
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
-function Message({ role, content, isStreaming, onChoice, isLast, isLoading }) {
+// ── Message component ─────────────────────────────────────────────────────────
+function Message({ role, content, isStreaming, onChoice, onScan, isLast, isLoading }) {
   const isAssistant = role === "assistant";
 
   if (!isAssistant) {
@@ -310,19 +342,46 @@ function Message({ role, content, isStreaming, onChoice, isLast, isLoading }) {
     );
   }
 
-  const { text, choices } = parseChoices(content);
-  const showChoices = !isStreaming && choices.length > 0;
+  // During streaming, strip block tags so they don't flash as raw text
+  if (isStreaming) {
+    const displayText = cleanStreamText(content);
+    return (
+      <div className="asmsg asmsg--assistant">
+        <span className="asmsg__avatar" aria-hidden>🧑‍🍳</span>
+        <div className="asmsg__col">
+          <div className="asmsg__bubble">
+            {displayText}
+            <span className="chef-cursor" aria-hidden />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { text, choices, recipeRefs, hasNewRecipe } = parseBlocks(content);
 
   return (
     <div className="asmsg asmsg--assistant">
       <span className="asmsg__avatar" aria-hidden>🧑‍🍳</span>
       <div className="asmsg__col">
-        <div className="asmsg__bubble">
-          {text}
-          {isStreaming && <span className="chef-cursor" aria-hidden />}
-        </div>
 
-        {showChoices && (
+        {/* Text bubble — only shown if there's text remaining after stripping tags */}
+        {text && (
+          <div className="asmsg__bubble">{text}</div>
+        )}
+
+        {/* Known recipe cards */}
+        {recipeRefs.map((name) => (
+          <ChatRecipeCard key={name} recipeName={name} />
+        ))}
+
+        {/* "Save Recipe" button for new recipes described by the assistant */}
+        {hasNewRecipe && (
+          <ChatAddRecipeButton messageText={content} onScan={onScan} />
+        )}
+
+        {/* Choice chips */}
+        {choices.length > 0 && (
           <div className="asmsg__choices">
             {choices.map((c) => (
               <button
@@ -337,11 +396,13 @@ function Message({ role, content, isStreaming, onChoice, isLast, isLoading }) {
             ))}
           </div>
         )}
+
       </div>
     </div>
   );
 }
 
+// ── Thinking indicator ────────────────────────────────────────────────────────
 function ThinkingDots() {
   return (
     <div className="asmsg asmsg--assistant">

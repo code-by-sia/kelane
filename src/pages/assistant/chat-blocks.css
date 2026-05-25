@@ -1,0 +1,128 @@
+@reference "../../index.css";
+
+/* ──────────────────────────────────────────────────────────────
+   Recipe card
+   ────────────────────────────────────────────────────────────── */
+.cb-recipe-card {
+    @apply rounded-2xl border bg-card overflow-hidden text-sm;
+    width: 100%;
+    max-width: 380px;
+    margin-top: 0.5rem;
+}
+
+.cb-recipe-card__img {
+    @apply w-full object-cover;
+    height: 140px;
+}
+
+.cb-recipe-card__body {
+    @apply flex flex-col gap-2.5 p-3;
+}
+
+.cb-recipe-card__name {
+    @apply font-semibold text-sm leading-snug;
+}
+
+.cb-recipe-card__summary {
+    @apply text-xs text-muted-foreground leading-relaxed mt-0.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.cb-recipe-card__stats {
+    @apply flex items-center gap-3 text-xs text-muted-foreground flex-wrap;
+}
+
+.cb-recipe-card__stats span {
+    @apply flex items-center gap-1;
+}
+
+.cb-recipe-card__tags {
+    @apply flex flex-wrap gap-1;
+}
+
+.cb-recipe-card__accordion {
+    @apply flex items-center justify-between w-full
+           text-xs font-medium text-muted-foreground
+           hover:text-foreground transition-colors
+           py-1.5 border-t;
+}
+
+.cb-recipe-card__actions {
+    @apply flex gap-2 pt-1 border-t;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Ingredient list
+   ────────────────────────────────────────────────────────────── */
+.cb-ingredient-wrap {
+    @apply flex flex-col gap-1.5 py-1;
+}
+
+.cb-ingredient-summary {
+    @apply text-[11px] text-muted-foreground font-medium;
+}
+
+.cb-ingredient-list {
+    @apply flex flex-col gap-1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cb-ingredient {
+    @apply flex items-center gap-2 text-xs text-muted-foreground;
+}
+
+.cb-ingredient--have {
+    @apply text-foreground;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Steps list
+   ────────────────────────────────────────────────────────────── */
+.cb-steps-list {
+    @apply flex flex-col gap-2.5 py-1;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.cb-step {
+    @apply flex gap-2.5 items-start;
+}
+
+.cb-step__num {
+    @apply flex-shrink-0 w-5 h-5 rounded-full
+           bg-primary/10 text-primary
+           text-[10px] font-bold
+           flex items-center justify-center;
+}
+
+.cb-step__body {
+    @apply flex flex-col gap-0.5 flex-1 min-w-0;
+}
+
+.cb-step__action {
+    @apply text-xs leading-relaxed;
+}
+
+.cb-step__dur {
+    @apply flex items-center gap-0.5 text-[10px] text-muted-foreground;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   "Save Recipe to Kelane" button
+   ────────────────────────────────────────────────────────────── */
+.cb-add-recipe-btn {
+    @apply flex items-center gap-1.5
+           text-xs font-medium
+           px-3.5 py-2 mt-2
+           rounded-xl border-2 border-dashed border-primary/40
+           bg-primary/5 text-primary
+           hover:bg-primary/10 hover:border-primary/60
+           transition-colors cursor-pointer;
+    width: fit-content;
+}
