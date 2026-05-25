@@ -5,7 +5,7 @@ import { useLocation } from "react-router";
 import {
   BookHeartIcon,
   CalendarDaysIcon,
-  ChefHatIcon,
+  SparklesIcon,
   CompassIcon,
   ShoppingBagIcon,
   EllipsisIcon,
@@ -33,7 +33,7 @@ const PRIMARY_TABS = [
 ];
 
 const MORE_ITEMS = [
-  { label: "Assistant",   icon: ChefHatIcon,  href: "/assistant" },
+  { label: "Assistant",   icon: SparklesIcon, href: "/assistant" },
   { label: "Categories",  icon: TagIcon,      href: "/categories" },
   { label: "Feeds",       icon: RssIcon,      href: "/feeds" },
   { label: "History",     icon: HistoryIcon,  href: "/history" },

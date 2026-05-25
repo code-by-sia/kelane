@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocation } from "react-router";
-import { ChefHatIcon } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -21,7 +21,7 @@ export function NavAssistant() {
             isActive={pathname === "/assistant"}
           >
             <a href="/assistant">
-              <ChefHatIcon />
+              <SparklesIcon />
               <span>Cooking Assistant</span>
             </a>
           </SidebarMenuButton>

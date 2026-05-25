@@ -4,7 +4,12 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import "./sidebar-page.css";
 
-export default function SidebarPage({ title, header, children }) {
+/**
+ * noScroll — pass this when the page manages its own internal scroll
+ * (e.g. the assistant chat). It bounds the SidebarInset to 100svh so the
+ * viewport never scrolls; content areas inside must handle their own overflow.
+ */
+export default function SidebarPage({ title, header, children, noScroll }) {
   return (
     <SidebarProvider
       style={{
@@ -13,11 +18,11 @@ export default function SidebarPage({ title, header, children }) {
       }}
     >
       <AppSidebar variant="inset" />
-      <SidebarInset>
+      <SidebarInset className={noScroll ? "!h-svh !overflow-hidden" : ""}>
         {title && <SiteHeader title={title}>{header}</SiteHeader>}
         {children}
         {/* Spacer so scrollable content isn't hidden behind the mobile bottom nav */}
-        <div className="md:hidden h-16 shrink-0" aria-hidden="true" />
+        {!noScroll && <div className="md:hidden h-16 shrink-0" aria-hidden="true" />}
       </SidebarInset>
       <MobileNav />
     </SidebarProvider>

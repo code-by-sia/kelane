@@ -10,16 +10,12 @@
 .assistant-layout {
     display: flex;
     flex-direction: column;
-    /* Desktop: full viewport below the site header */
-    height: calc(100svh - var(--header-height, 3rem));
+    /* Fill remaining height inside the bounded SidebarInset (noScroll mode).
+       min-height: 0 is critical — without it a flex child won't shrink below
+       its content size, which would cause the parent to overflow anyway.     */
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
-}
-
-@media (max-width: 767px) {
-    .assistant-layout {
-        /* Mobile: also subtract the fixed bottom nav (h-16 = 4rem) */
-        height: calc(100svh - var(--header-height, 3rem) - 4rem);
-    }
 }
 
 /* ── Scrollable message area ── */
@@ -173,6 +169,38 @@
    ────────────────────────────────────────────────────────────── */
 .assistant-input-row {
     @apply flex items-center gap-2 px-3 sm:px-4 py-3 border-t shrink-0 bg-background;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   History sheet — conversation list items
+   ────────────────────────────────────────────────────────────── */
+.assistant-history-item {
+    @apply relative flex flex-col gap-0.5 w-full text-left px-4 py-3
+           hover:bg-accent transition-colors cursor-pointer;
+}
+
+.assistant-history-item--active {
+    @apply bg-accent;
+}
+
+.assistant-history-item__title {
+    @apply text-sm font-medium leading-snug line-clamp-2 pr-6;
+}
+
+.assistant-history-item__meta {
+    @apply text-xs text-muted-foreground;
+}
+
+/* Delete button — hidden until row is hovered */
+.assistant-history-item__del {
+    @apply absolute right-3 top-1/2 -translate-y-1/2
+           p-1 rounded-md text-muted-foreground
+           opacity-0 hover:text-destructive hover:bg-destructive/10
+           transition-opacity transition-colors;
+}
+
+.assistant-history-item:hover .assistant-history-item__del {
+    @apply opacity-100;
 }
 
 /* ──────────────────────────────────────────────────────────────

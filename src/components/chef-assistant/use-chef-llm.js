@@ -167,7 +167,16 @@ export function useChefLLM() {
     setStatus((s) => (s === "unsupported" ? s : "idle"));
   }, []);
 
+  /** Restore a previous conversation — resets state and LLM history in one shot. */
+  const reset = useCallback((initialMessages = []) => {
+    historyRef.current = [...initialMessages];
+    setMessages([...initialMessages]);
+    setStreaming("");
+    setPendingActions([]);
+    setStatus((s) => (s === "unsupported" ? s : "idle"));
+  }, []);
+
   const clearActions = useCallback(() => setPendingActions([]), []);
 
-  return { messages, streaming, send, status, progress, clear, pendingActions, clearActions };
+  return { messages, streaming, send, status, progress, clear, reset, pendingActions, clearActions };
 }
