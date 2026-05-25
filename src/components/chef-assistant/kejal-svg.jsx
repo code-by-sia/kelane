@@ -83,6 +83,9 @@ export function KejalSVG({ pose = "idle" }) {
 
         {/* ── IDLE — calm dot eyes, gentle smile ── */}
         <g className="tq-pose tq-pose--idle">
+          {/* brows — neutral soft arch */}
+          <path d="M 28 36 Q 37 31 46 36" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          <path d="M 64 36 Q 73 31 82 36" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
           <g className="tq-blink">
             <circle cx="37" cy="47" r="8" fill={OL} />
             <circle cx="73" cy="47" r="8" fill={OL} />
@@ -95,6 +98,9 @@ export function KejalSVG({ pose = "idle" }) {
 
         {/* ── THINKING — eyes up-right, wavy mouth, thought dots ── */}
         <g className="tq-pose tq-pose--thinking">
+          {/* brows — left slightly furrowed inward, right raised */}
+          <path d="M 28 36 Q 37 33 46 37" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          <path d="M 64 33 Q 73 28 82 34" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
           <circle cx="37" cy="47" r="8" fill={OL} />
           <circle cx="73" cy="47" r="8" fill={OL} />
           {/* pupils shifted up-right */}
@@ -110,6 +116,9 @@ export function KejalSVG({ pose = "idle" }) {
 
         {/* ── TALKING — eyes open, oval mouth ── */}
         <g className="tq-pose tq-pose--talking">
+          {/* brows — neutral, same as idle */}
+          <path d="M 28 36 Q 37 31 46 36" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          <path d="M 64 36 Q 73 31 82 36" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
           <g className="tq-blink" style={{ animationDuration: "7s" }}>
             <circle cx="37" cy="47" r="8" fill={OL} />
             <circle cx="73" cy="47" r="8" fill={OL} />
@@ -122,6 +131,9 @@ export function KejalSVG({ pose = "idle" }) {
 
         {/* ── GREETING — happy squint, big smile, blush ── */}
         <g className="tq-pose tq-pose--greeting">
+          {/* brows — raised and arched, cheerful */}
+          <path d="M 27 33 Q 37 27 47 33" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          <path d="M 63 33 Q 73 27 83 33" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
           <circle cx="37" cy="47" r="8" fill={OL} />
           <circle cx="73" cy="47" r="8" fill={OL} />
           {/* squint — cover top half */}
@@ -135,6 +147,9 @@ export function KejalSVG({ pose = "idle" }) {
 
         {/* ── EXCITED — big eyes, wide open grin, blush, sparkles ── */}
         <g className="tq-pose tq-pose--excited">
+          {/* brows — high and wide, very expressive */}
+          <path d="M 26 31 Q 37 24 48 31" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          <path d="M 62 31 Q 73 24 84 31" stroke={OL} strokeWidth="2.5" strokeLinecap="round" fill="none" />
           <circle cx="37" cy="47" r="10" fill={OL} />
           <circle cx="73" cy="47" r="10" fill={OL} />
           <circle cx="42" cy="42" r="3.5" fill="white" />
