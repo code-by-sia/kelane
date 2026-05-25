@@ -4,7 +4,7 @@ import DEFAULT_RECIPES from "../data/recipes.json" with { type: "json" };
 
 export { DEFAULT_RECIPES };
 
-const DEFAULT_CATEGORIES = ["Bakery", "Vegan", "Healthy", "Fish", "Pasta", "Dessert"];
+const DEFAULT_CATEGORIES = ["Bakery", "Vegan", "Vegetarian", "Healthy", "Fish", "Pasta", "Meat", "Soup", "Breakfast", "Dessert"];
 
 const useRecipeStore = create(
   persist(

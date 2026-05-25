@@ -2,102 +2,147 @@
   {
     "code": "1001",
     "name": "Classic Margherita Pizza",
-    "summary": "A traditional Italian pizza topped with fresh tomatoes, mozzarella cheese, and basil.",
+    "summary": "A traditional Neapolitan pizza with a hand-stretched base, bright tomato sauce, fresh mozzarella, and basil. Deceptively simple and endlessly satisfying.",
     "date": "2026-02-20T10:00:00Z",
     "categories": [
       "Bakery",
-      "Vegan"
+      "Vegetarian"
     ],
     "flagged": false,
     "liked": true,
-    "calories": 1000,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Pizza_Margherita_stu_spivack.jpg",
+    "calories": 1200,
+    "prepTime": 90,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg",
     "images": [
-      "https://upload.wikimedia.org/wikipedia/commons/c/c8/Pizza_Margherita_stu_spivack.jpg",
-      "https://upload.wikimedia.org/wikipedia/commons/6/6f/Margherita_Originale.jpg"
+      "https://images.pexels.com/photos/825661/pexels-photo-825661.jpeg",
+      "https://images.pexels.com/photos/4109111/pexels-photo-4109111.jpeg"
     ],
     "ingredients": [
-      "500g flour",
-      "300ml warm water",
-      "10g salt",
-      "7g dry yeast",
-      "200g tomato sauce",
-      "250g fresh mozzarella",
-      "Fresh basil leaves",
-      "2 tbsp olive oil"
+      "500g tipo 00 flour (or strong bread flour)",
+      "320ml warm water",
+      "7g instant dry yeast",
+      "10g fine salt",
+      "1 tsp sugar",
+      "2 tbsp olive oil",
+      "400g canned San Marzano tomatoes",
+      "250g fresh mozzarella (drained)",
+      "Large handful of fresh basil leaves",
+      "Extra-virgin olive oil to finish",
+      "Pinch of dried oregano"
     ],
     "tools": [
-      "Mixing bowl",
+      "Large mixing bowl",
       "Oven",
-      "Baking tray",
+      "Baking tray or pizza stone",
       "Rolling pin"
     ],
     "steps": [
       {
         "id": 1,
-        "action": "Mix flour, yeast, salt, and water to form dough.",
+        "action": "Combine yeast, sugar, and warm water. Let sit 5 minutes until frothy.",
         "tools": [
-          "Mixing bowl",
-          "Rolling pin"
+          "Large mixing bowl"
         ],
         "ingredients": [
-          "flour",
-          "yeast",
-          "salt",
-          "water"
+          "instant dry yeast",
+          "sugar",
+          "warm water"
         ],
-        "duration": 10,
+        "duration": 5,
         "dependsOn": []
       },
       {
         "id": 2,
-        "action": "Knead for 10 minutes and let rise for 1 hour.",
-        "duration": 60,
+        "action": "Add flour, salt, and olive oil to the yeast mixture. Mix until a shaggy dough forms, then knead on a floured surface for 8–10 minutes until smooth and elastic.",
+        "tools": [
+          "Large mixing bowl"
+        ],
+        "ingredients": [
+          "tipo 00 flour",
+          "fine salt",
+          "olive oil"
+        ],
+        "duration": 12,
         "dependsOn": [
           1
         ]
       },
       {
         "id": 3,
-        "action": "Roll out the dough and spread tomato sauce evenly.",
-        "duration": 900,
+        "action": "Shape dough into a ball, place in an oiled bowl, cover with a damp cloth, and leave to rise in a warm spot for 1 hour until doubled in size.",
+        "tools": [
+          "Large mixing bowl"
+        ],
+        "ingredients": [],
+        "duration": 60,
         "dependsOn": [
           2
         ]
       },
       {
         "id": 4,
-        "action": "Add sliced mozzarella and basil leaves.",
-        "duration": 10,
+        "action": "Crush canned tomatoes by hand into a bowl. Season with salt, a pinch of oregano, and a drizzle of olive oil. Do not cook.",
+        "tools": [],
+        "ingredients": [
+          "canned San Marzano tomatoes",
+          "fine salt",
+          "dried oregano",
+          "olive oil"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 5,
+        "action": "Preheat oven to its highest setting (250–280°C) with the baking tray inside for at least 30 minutes.",
+        "tools": [
+          "Oven",
+          "Baking tray or pizza stone"
+        ],
+        "ingredients": [],
+        "duration": 30,
         "dependsOn": [
           3
         ]
       },
       {
-        "id": 5,
-        "action": "Drizzle with olive oil.",
-        "duration": 60,
+        "id": 6,
+        "action": "Stretch the dough by hand into a thin round. Spread tomato sauce, tear over the mozzarella, and slide onto the hot tray.",
+        "tools": [
+          "Rolling pin",
+          "Baking tray or pizza stone"
+        ],
+        "ingredients": [
+          "fresh mozzarella"
+        ],
+        "duration": 8,
         "dependsOn": [
-          4
+          4,
+          5
         ]
       },
       {
-        "id": 6,
-        "action": "Bake at 220°C for 15–20 minutes.",
-        "duration": 15,
+        "id": 7,
+        "action": "Bake for 10–12 minutes until the crust is charred at the edges and cheese is bubbling. Finish with fresh basil and a drizzle of extra-virgin olive oil.",
+        "tools": [
+          "Oven"
+        ],
+        "ingredients": [
+          "fresh basil leaves",
+          "extra-virgin olive oil"
+        ],
+        "duration": 12,
         "dependsOn": [
-          5
+          6
         ]
       }
-    ],
-    "prepTime": 90,
-    "servings": 4
+    ]
   },
   {
     "code": "1002",
-    "calories": 300,
-    "name": "Healthy Avocado Salad",
-    "summary": "A fresh avocado salad combining ripe avocado, tomatoes, and crisp greens with a light dressing — perfect for a healthy meal.",
+    "name": "Avocado & Tomato Salad",
+    "summary": "A bright, no-cook salad of creamy avocado, juicy cherry tomatoes, and cool cucumber in a zingy lemon-herb dressing. On the table in 15 minutes.",
     "date": "2026-02-18T12:30:00Z",
     "categories": [
       "Healthy",
@@ -105,74 +150,87 @@
     ],
     "flagged": false,
     "liked": false,
+    "calories": 480,
+    "prepTime": 15,
+    "servings": 2,
     "image": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
     "images": [
       "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
-      "https://images.pexels.com/photos/853099/pexels-photo-853099.jpeg",
-      "https://images.pexels.com/photos/5754343/pexels-photo-5754343.jpeg"
+      "https://images.pexels.com/photos/5938/salmon-dish-food-meal.jpg"
     ],
     "ingredients": [
       "2 ripe avocados",
-      "1 cup cherry tomatoes",
-      "1 cucumber",
-      "1 tbsp lemon juice",
-      "2 tbsp olive oil",
-      "Salt to taste",
-      "Black pepper to taste"
+      "200g cherry tomatoes (halved)",
+      "1 small cucumber (diced)",
+      "¼ red onion (thinly sliced)",
+      "Small handful of fresh cilantro or parsley",
+      "2 tbsp extra-virgin olive oil",
+      "Juice of 1 lemon",
+      "½ tsp cumin",
+      "Salt and black pepper to taste",
+      "Chilli flakes (optional)"
     ],
     "tools": [
       "Knife",
       "Cutting board",
-      "Salad bowl",
-      "Spoon"
+      "Large salad bowl",
+      "Small bowl"
     ],
     "steps": [
       {
         "id": 1,
-        "action": "Dice the avocados, cucumber, and halve the cherry tomatoes.",
-        "duration": 240,
+        "action": "Whisk together olive oil, lemon juice, cumin, salt, and pepper in a small bowl. Set aside.",
+        "tools": [
+          "Small bowl"
+        ],
+        "ingredients": [
+          "extra-virgin olive oil",
+          "lemon juice",
+          "cumin",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 2,
         "dependsOn": []
       },
       {
         "id": 2,
-        "action": "Place all vegetables in a salad bowl.",
-        "duration": 60,
-        "dependsOn": [
-          1
-        ]
-      },
-      {
-        "id": 3,
-        "action": "Mix lemon juice, olive oil, salt, and pepper.",
-        "duration": 60,
+        "action": "Halve, pit, and dice the avocados. Halve the cherry tomatoes. Dice the cucumber. Thinly slice the red onion.",
+        "tools": [
+          "Knife",
+          "Cutting board"
+        ],
+        "ingredients": [
+          "avocados",
+          "cherry tomatoes",
+          "cucumber",
+          "red onion"
+        ],
+        "duration": 8,
         "dependsOn": []
       },
       {
-        "id": 4,
-        "action": "Pour dressing over salad and toss gently.",
-        "duration": 60,
+        "id": 3,
+        "action": "Combine all vegetables in a salad bowl. Pour over the dressing and toss gently. Scatter cilantro and chilli flakes on top and serve immediately.",
+        "tools": [
+          "Large salad bowl"
+        ],
+        "ingredients": [
+          "fresh cilantro or parsley",
+          "chilli flakes"
+        ],
+        "duration": 2,
         "dependsOn": [
-          2,
-          3
-        ]
-      },
-      {
-        "id": 5,
-        "action": "Serve immediately.",
-        "duration": 60,
-        "dependsOn": [
-          4
+          1,
+          2
         ]
       }
-    ],
-    "prepTime": 15,
-    "servings": 2
+    ]
   },
   {
     "code": "1003",
-    "calories": 300,
-    "name": "Grilled Lemon Garlic Salmon",
-    "summary": "Salmon fillets marinated in garlic, lemon, and herbs then grilled for a tender and flavorful fish entrée.",
+    "name": "Lemon Garlic Grilled Salmon",
+    "summary": "Salmon fillets marinated in garlic, lemon, and herbs then grilled until perfectly flaky. A fast weeknight dinner that feels special.",
     "date": "2026-02-15T18:45:00Z",
     "categories": [
       "Fish",
@@ -180,151 +238,211 @@
     ],
     "flagged": false,
     "liked": true,
+    "calories": 700,
+    "prepTime": 30,
+    "servings": 2,
     "image": "https://images.pexels.com/photos/3296274/pexels-photo-3296274.jpeg",
     "images": [
       "https://images.pexels.com/photos/3296274/pexels-photo-3296274.jpeg",
-      "https://images.pexels.com/photos/5938/salmon-dish-food-meal.jpg",
       "https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg"
     ],
     "ingredients": [
-      "2 salmon fillets",
-      "2 cloves garlic (minced)",
-      "2 tbsp lemon juice",
-      "1 tbsp olive oil",
-      "1 tsp dried parsley",
-      "Salt to taste",
-      "Black pepper to taste"
+      "2 salmon fillets (approx. 180g each, skin on)",
+      "3 cloves garlic (minced)",
+      "Juice and zest of 1 lemon",
+      "2 tbsp olive oil",
+      "1 tbsp fresh dill (or 1 tsp dried)",
+      "1 tsp smoked paprika",
+      "Salt and black pepper to taste",
+      "Lemon wedges and dill to serve"
     ],
     "tools": [
-      "Grill pan",
-      "Mixing bowl",
+      "Grill pan or heavy skillet",
+      "Small bowl",
       "Tongs",
-      "Brush"
+      "Pastry brush"
     ],
     "steps": [
       {
         "id": 1,
-        "action": "Mix garlic, lemon juice, olive oil, parsley, salt, and pepper.",
-        "duration": 60,
+        "action": "Mix garlic, lemon juice, lemon zest, olive oil, dill, smoked paprika, salt, and pepper in a small bowl.",
+        "tools": [
+          "Small bowl"
+        ],
+        "ingredients": [
+          "garlic",
+          "lemon juice",
+          "lemon zest",
+          "olive oil",
+          "fresh dill",
+          "smoked paprika",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 3,
         "dependsOn": []
       },
       {
         "id": 2,
-        "action": "Marinate salmon for 15 minutes.",
-        "duration": 900,
+        "action": "Pat salmon dry, place in a dish, and brush all over with the marinade. Rest for 15 minutes at room temperature.",
+        "tools": [
+          "Pastry brush"
+        ],
+        "ingredients": [
+          "salmon fillets"
+        ],
+        "duration": 15,
         "dependsOn": [
           1
         ]
       },
       {
         "id": 3,
-        "action": "Preheat grill pan over medium heat.",
-        "duration": 120,
+        "action": "Heat grill pan over high heat until smoking. Place salmon skin-side down and cook 4 minutes without moving. Flip and cook 2–3 minutes more until just cooked through.",
+        "tools": [
+          "Grill pan or heavy skillet",
+          "Tongs"
+        ],
+        "ingredients": [],
+        "duration": 8,
         "dependsOn": [
           2
         ]
       },
       {
         "id": 4,
-        "action": "Grill salmon for 4–5 minutes per side.",
-        "duration": 5,
+        "action": "Rest for 2 minutes. Serve with lemon wedges and fresh dill.",
+        "tools": [],
+        "ingredients": [
+          "lemon wedges and dill to serve"
+        ],
+        "duration": 2,
         "dependsOn": [
           3
         ]
-      },
-      {
-        "id": 5,
-        "action": "Serve with garnish.",
-        "duration": 30,
-        "dependsOn": [
-          4
-        ]
       }
-    ],
-    "prepTime": 30,
-    "servings": 2
+    ]
   },
   {
     "code": "1004",
-    "calories": 300,
     "name": "Creamy Mushroom Pasta",
-    "summary": "A rich pasta dish with sautéed mushrooms, garlic, and creamy sauce, topped with parmesan — comforting and satisfying.",
+    "summary": "Silky pasta ribbons coated in a rich garlic-cream sauce with golden sautéed mushrooms and parmesan. A comforting bowl ready in 30 minutes.",
     "date": "2026-02-10T14:20:00Z",
     "categories": [
       "Pasta",
-      "Vegan"
+      "Vegetarian"
     ],
-    "flagged": false,
+    "flagged": true,
     "liked": true,
+    "calories": 1600,
+    "prepTime": 30,
+    "servings": 4,
     "image": "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg",
     "images": [
       "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg",
-      "https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg",
-      "https://images.pexels.com/photos/8500/food-pasta-spaghetti-mushroom.jpg"
+      "https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg"
     ],
     "ingredients": [
-      "250g pasta",
-      "200g mushrooms (sliced)",
-      "2 cloves garlic (minced)",
-      "200ml heavy cream",
-      "50g parmesan cheese",
+      "400g tagliatelle or pappardelle",
+      "400g mixed mushrooms (chestnut, shiitake, or cremini)",
+      "4 cloves garlic (minced)",
+      "200ml double cream",
+      "100ml dry white wine",
+      "60g parmesan (grated, plus extra to serve)",
+      "2 tbsp butter",
       "2 tbsp olive oil",
-      "Salt to taste",
-      "Black pepper to taste"
+      "Small bunch of fresh thyme",
+      "Salt and black pepper",
+      "Fresh parsley to finish"
     ],
     "tools": [
-      "Pot",
-      "Frying pan",
+      "Large pot",
+      "Wide frying pan",
       "Colander",
       "Wooden spoon"
     ],
     "steps": [
       {
         "id": 1,
-        "action": "Cook pasta according to package instructions.",
-        "duration": 120,
+        "action": "Bring a large pot of heavily salted water to a boil.",
+        "tools": [
+          "Large pot"
+        ],
+        "ingredients": [],
+        "duration": 10,
         "dependsOn": []
       },
       {
         "id": 2,
-        "action": "Heat olive oil in a frying pan.",
-        "duration": 60,
+        "action": "Slice mushrooms thickly. Heat butter and olive oil in a wide pan over high heat. Add mushrooms in a single layer — don't stir for 3 minutes so they brown properly. Toss, season, and cook 2 more minutes.",
+        "tools": [
+          "Wide frying pan",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "mixed mushrooms",
+          "butter",
+          "olive oil",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 6,
         "dependsOn": []
       },
       {
         "id": 3,
-        "action": "Sauté garlic and mushrooms until tender.",
-        "duration": 15,
+        "action": "Add garlic and thyme to the mushrooms, cook 1 minute. Pour in the white wine and let it bubble and reduce by half, about 2 minutes.",
+        "tools": [
+          "Wide frying pan"
+        ],
+        "ingredients": [
+          "garlic",
+          "fresh thyme",
+          "dry white wine"
+        ],
+        "duration": 4,
         "dependsOn": [
           2
         ]
       },
       {
         "id": 4,
-        "action": "Add cream and simmer for 5 minutes.",
-        "duration": 300,
+        "action": "Cook pasta in the boiling water until 1 minute before al dente. Reserve 1 cup of pasta water before draining.",
+        "tools": [
+          "Large pot",
+          "Colander"
+        ],
+        "ingredients": [
+          "tagliatelle or pappardelle"
+        ],
+        "duration": 10,
         "dependsOn": [
-          3
+          1
         ]
       },
       {
         "id": 5,
-        "action": "Mix in pasta and parmesan, season, and serve.",
-        "duration": 60,
+        "action": "Add cream to the mushroom pan, simmer 3 minutes. Add pasta and parmesan, tossing vigorously and adding splashes of pasta water to achieve a glossy, coating sauce. Serve with extra parmesan and parsley.",
+        "tools": [
+          "Wide frying pan"
+        ],
+        "ingredients": [
+          "double cream",
+          "parmesan",
+          "fresh parsley"
+        ],
+        "duration": 5,
         "dependsOn": [
-          1,
+          3,
           4
         ]
       }
-    ],
-    "prepTime": 25,
-    "servings": 4
+    ]
   },
   {
     "code": "1005",
-    "calories": 2300,
     "name": "Chocolate Chip Cookies",
-    "summary": "Warm, chewy cookies loaded with chocolate chips — a classic bakery dessert that’s both simple and delicious.",
+    "summary": "Chewy-centred, slightly crisp-edged cookies with pools of melted chocolate. The browned butter and extra yolk give them a bakery-level depth of flavour.",
     "date": "2026-02-05T09:15:00Z",
     "categories": [
       "Bakery",
@@ -332,76 +450,3407 @@
     ],
     "flagged": false,
     "liked": true,
+    "calories": 2400,
+    "prepTime": 35,
+    "servings": 24,
     "image": "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg",
     "images": [
       "https://images.pexels.com/photos/230325/pexels-photo-230325.jpeg",
-      "https://images.pexels.com/photos/159688/cookie-baking-chocolate-chip-159688.jpeg",
-      "https://images.pexels.com/photos/327973/pexels-photo-327973.jpeg"
+      "https://images.pexels.com/photos/159688/cookie-baking-chocolate-chip-159688.jpeg"
     ],
     "ingredients": [
-      "2 cups flour",
-      "1 cup sugar",
-      "1/2 cup brown sugar",
-      "1 cup butter (softened)",
-      "2 eggs",
-      "1 tsp vanilla extract",
+      "225g unsalted butter",
+      "200g light brown sugar",
+      "100g caster sugar",
+      "2 large eggs + 1 extra yolk",
+      "2 tsp vanilla extract",
+      "280g plain flour",
       "1 tsp baking soda",
-      "1 cup chocolate chips"
+      "1 tsp fine salt",
+      "300g dark chocolate chips or roughly chopped chocolate",
+      "Flaky sea salt to finish"
     ],
     "tools": [
-      "Mixing bowl",
-      "Electric mixer",
+      "Small saucepan",
+      "Large mixing bowl",
+      "Electric mixer or wooden spoon",
       "Baking sheet",
-      "Oven"
+      "Oven",
+      "Wire rack"
     ],
     "steps": [
       {
         "id": 1,
-        "action": "Preheat oven to 180°C.",
-        "duration": 60,
+        "action": "Brown the butter: melt in a saucepan over medium heat, stirring until it smells nutty and turns amber, about 5 minutes. Pour into a large bowl and let cool 10 minutes.",
+        "tools": [
+          "Small saucepan",
+          "Large mixing bowl"
+        ],
+        "ingredients": [
+          "unsalted butter"
+        ],
+        "duration": 15,
         "dependsOn": []
       },
       {
         "id": 2,
-        "action": "Cream butter and sugars together.",
-        "duration": 300,
+        "action": "Preheat oven to 180°C. Line baking sheets with parchment.",
+        "tools": [
+          "Oven",
+          "Baking sheet"
+        ],
+        "ingredients": [],
+        "duration": 10,
         "dependsOn": []
       },
       {
         "id": 3,
-        "action": "Add eggs and vanilla extract.",
-        "duration": 60,
+        "action": "Whisk both sugars into the cooled brown butter until combined. Add eggs, extra yolk, and vanilla; whisk vigorously for 1 minute until pale and thick.",
+        "tools": [
+          "Large mixing bowl"
+        ],
+        "ingredients": [
+          "light brown sugar",
+          "caster sugar",
+          "eggs",
+          "vanilla extract"
+        ],
+        "duration": 4,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Fold in flour, baking soda, and salt until just combined. Stir in chocolate chips.",
+        "tools": [
+          "Large mixing bowl"
+        ],
+        "ingredients": [
+          "plain flour",
+          "baking soda",
+          "fine salt",
+          "dark chocolate chips"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Scoop 2-tablespoon balls of dough onto the prepared sheets, spacing 5cm apart. Sprinkle with flaky sea salt. Bake 11–13 minutes until edges are set but centres still look underdone.",
+        "tools": [
+          "Baking sheet",
+          "Oven"
+        ],
+        "ingredients": [
+          "flaky sea salt"
+        ],
+        "duration": 13,
+        "dependsOn": [
+          2,
+          4
+        ]
+      },
+      {
+        "id": 6,
+        "action": "Cool on the tray for 5 minutes — they firm up as they cool. Transfer to a wire rack.",
+        "tools": [
+          "Wire rack"
+        ],
+        "ingredients": [],
+        "duration": 5,
+        "dependsOn": [
+          5
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1006",
+    "name": "Shakshuka",
+    "summary": "Eggs gently poached in a bold, spiced tomato and pepper sauce. A North African and Middle Eastern staple that works equally well for breakfast, lunch, or dinner.",
+    "date": "2026-03-01T09:00:00Z",
+    "categories": [
+      "Healthy",
+      "Vegetarian",
+      "Breakfast"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 520,
+    "prepTime": 30,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/6605923/pexels-photo-6605923.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/6605923/pexels-photo-6605923.jpeg"
+    ],
+    "ingredients": [
+      "4 large eggs",
+      "1 × 400g can crushed tomatoes",
+      "1 red bell pepper (diced)",
+      "1 yellow onion (diced)",
+      "4 cloves garlic (minced)",
+      "2 tbsp olive oil",
+      "1 tsp ground cumin",
+      "1 tsp smoked paprika",
+      "½ tsp ground coriander",
+      "¼ tsp cayenne pepper",
+      "Salt and black pepper",
+      "Fresh parsley or cilantro",
+      "Crusty bread or pita to serve",
+      "Crumbled feta (optional)"
+    ],
+    "tools": [
+      "Large oven-safe skillet or frying pan",
+      "Wooden spoon",
+      "Lid or foil"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Heat olive oil in the skillet over medium heat. Add onion and pepper, cook 7–8 minutes until softened and starting to caramelise.",
+        "tools": [
+          "Large oven-safe skillet or frying pan",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "olive oil",
+          "yellow onion",
+          "red bell pepper"
+        ],
+        "duration": 8,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Add garlic, cumin, smoked paprika, coriander, and cayenne. Stir for 1 minute until fragrant.",
+        "tools": [
+          "Large oven-safe skillet or frying pan"
+        ],
+        "ingredients": [
+          "garlic",
+          "ground cumin",
+          "smoked paprika",
+          "ground coriander",
+          "cayenne pepper"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Pour in the crushed tomatoes. Season generously with salt and pepper. Simmer over medium-low heat for 10 minutes until the sauce thickens slightly.",
+        "tools": [
+          "Large oven-safe skillet or frying pan"
+        ],
+        "ingredients": [
+          "crushed tomatoes",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 10,
         "dependsOn": [
           2
         ]
       },
       {
         "id": 4,
-        "action": "Mix in flour and baking soda.",
-        "duration": 60,
-        "dependsOn": []
+        "action": "Make 4 wells in the sauce. Crack one egg into each well. Cover with a lid and cook 5–7 minutes until whites are set but yolks are still runny.",
+        "tools": [
+          "Large oven-safe skillet or frying pan",
+          "Lid or foil"
+        ],
+        "ingredients": [
+          "eggs"
+        ],
+        "duration": 7,
+        "dependsOn": [
+          3
+        ]
       },
       {
         "id": 5,
-        "action": "Fold in chocolate chips.",
-        "duration": 60,
+        "action": "Scatter with fresh herbs and crumbled feta. Serve directly from the pan with crusty bread.",
+        "tools": [],
+        "ingredients": [
+          "fresh parsley or cilantro",
+          "crumbled feta",
+          "crusty bread or pita"
+        ],
+        "duration": 2,
         "dependsOn": [
-          4,
-          3,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1007",
+    "name": "Red Lentil Soup",
+    "summary": "A warming, golden soup packed with protein-rich red lentils, aromatic spices, and a hit of lemon. Vegan, cheap, and effortlessly good.",
+    "date": "2026-03-05T12:00:00Z",
+    "categories": [
+      "Vegan",
+      "Healthy",
+      "Soup"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 960,
+    "prepTime": 40,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/539451/pexels-photo-539451.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/539451/pexels-photo-539451.jpeg"
+    ],
+    "ingredients": [
+      "300g red lentils (rinsed)",
+      "1 large onion (diced)",
+      "3 cloves garlic (minced)",
+      "1 large carrot (diced)",
+      "1 × 400g can diced tomatoes",
+      "1.2 litres vegetable stock",
+      "2 tbsp olive oil",
+      "1½ tsp ground cumin",
+      "1 tsp ground turmeric",
+      "1 tsp smoked paprika",
+      "Juice of 1 lemon",
+      "Salt and black pepper",
+      "Fresh parsley and chilli flakes to serve"
+    ],
+    "tools": [
+      "Large saucepan or pot",
+      "Wooden spoon",
+      "Blender or immersion blender"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Heat olive oil in a large pot over medium heat. Add onion and carrot, cook 8 minutes until softened.",
+        "tools": [
+          "Large saucepan or pot",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "olive oil",
+          "onion",
+          "carrot"
+        ],
+        "duration": 8,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Add garlic, cumin, turmeric, and paprika. Stir for 1 minute until fragrant.",
+        "tools": [
+          "Large saucepan or pot"
+        ],
+        "ingredients": [
+          "garlic",
+          "ground cumin",
+          "ground turmeric",
+          "smoked paprika"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Add the rinsed lentils, diced tomatoes, and vegetable stock. Bring to a boil then reduce to a steady simmer.",
+        "tools": [
+          "Large saucepan or pot"
+        ],
+        "ingredients": [
+          "red lentils",
+          "diced tomatoes",
+          "vegetable stock"
+        ],
+        "duration": 5,
+        "dependsOn": [
           2
         ]
       },
       {
-        "id": 6,
-        "action": "Bake 10–12 minutes until golden.",
-        "duration": 600,
+        "id": 4,
+        "action": "Simmer for 20–25 minutes until lentils are completely soft and beginning to dissolve.",
+        "tools": [
+          "Large saucepan or pot"
+        ],
+        "ingredients": [],
+        "duration": 22,
         "dependsOn": [
-          1,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Use an immersion blender to partially blend the soup — blitz half to create a creamy texture while leaving some whole lentils. Stir in lemon juice, adjust seasoning.",
+        "tools": [
+          "Blender or immersion blender"
+        ],
+        "ingredients": [
+          "lemon juice",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          4
+        ]
+      },
+      {
+        "id": 6,
+        "action": "Ladle into bowls. Top with a drizzle of olive oil, fresh parsley, and chilli flakes. Serve with warm bread.",
+        "tools": [],
+        "ingredients": [
+          "fresh parsley",
+          "chilli flakes"
+        ],
+        "duration": 2,
+        "dependsOn": [
           5
         ]
       }
+    ]
+  },
+  {
+    "code": "1008",
+    "name": "Banana Oat Pancakes",
+    "summary": "Fluffy, naturally sweet pancakes made from ripe bananas and oats — no refined flour, no refined sugar. Vegan-friendly and ready in 20 minutes.",
+    "date": "2026-03-08T08:30:00Z",
+    "categories": [
+      "Breakfast",
+      "Vegan"
     ],
+    "flagged": false,
+    "liked": false,
+    "calories": 560,
+    "prepTime": 20,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg"
+    ],
+    "ingredients": [
+      "2 ripe bananas",
+      "120g rolled oats",
+      "180ml plant milk (oat, almond, or soy)",
+      "1 tsp baking powder",
+      "½ tsp cinnamon",
+      "1 tsp vanilla extract",
+      "Pinch of salt",
+      "Coconut oil or neutral oil for frying",
+      "Fresh berries, maple syrup, or nut butter to serve"
+    ],
+    "tools": [
+      "Blender or food processor",
+      "Non-stick frying pan",
+      "Spatula",
+      "Ladle"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Add oats, bananas, plant milk, baking powder, cinnamon, vanilla, and salt to a blender. Blend until completely smooth. Let the batter rest 5 minutes.",
+        "tools": [
+          "Blender or food processor"
+        ],
+        "ingredients": [
+          "rolled oats",
+          "bananas",
+          "plant milk",
+          "baking powder",
+          "cinnamon",
+          "vanilla extract",
+          "salt"
+        ],
+        "duration": 7,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Heat a non-stick pan over medium-low heat with a little coconut oil. Pour in ¼ cup of batter per pancake. Cook 3 minutes until bubbles form on the surface and edges look set.",
+        "tools": [
+          "Non-stick frying pan",
+          "Ladle"
+        ],
+        "ingredients": [
+          "coconut oil"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Flip and cook a further 2 minutes until golden. Repeat with remaining batter. Serve stacked with fresh berries and maple syrup.",
+        "tools": [
+          "Spatula"
+        ],
+        "ingredients": [
+          "fresh berries, maple syrup, or nut butter"
+        ],
+        "duration": 8,
+        "dependsOn": [
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1009",
+    "name": "Spaghetti Bolognese",
+    "summary": "A slow-cooked meat ragù from Bologna, built on a soffritto base with wine, milk, and a long, gentle simmer. Time-consuming but deeply rewarding.",
+    "date": "2026-03-10T17:00:00Z",
+    "categories": [
+      "Pasta",
+      "Meat"
+    ],
+    "flagged": true,
+    "liked": true,
+    "calories": 2200,
+    "prepTime": 120,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/4518843/pexels-photo-4518843.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/4518843/pexels-photo-4518843.jpeg"
+    ],
+    "ingredients": [
+      "400g spaghetti or tagliatelle",
+      "300g beef mince (15–20% fat)",
+      "150g pork mince",
+      "1 large onion (finely diced)",
+      "2 carrots (finely diced)",
+      "3 stalks celery (finely diced)",
+      "4 cloves garlic (minced)",
+      "150ml dry red wine",
+      "100ml whole milk",
+      "2 × 400g cans crushed tomatoes",
+      "2 tbsp tomato paste",
+      "2 tbsp olive oil",
+      "1 bay leaf",
+      "Fresh parmesan to serve",
+      "Salt and black pepper"
+    ],
+    "tools": [
+      "Large heavy-bottomed pot or Dutch oven",
+      "Wooden spoon",
+      "Large pot for pasta",
+      "Colander"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Heat olive oil over medium heat. Add onion, carrot, and celery (the soffritto). Cook, stirring frequently, for 12–15 minutes until very soft and lightly golden.",
+        "tools": [
+          "Large heavy-bottomed pot or Dutch oven",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "olive oil",
+          "onion",
+          "carrots",
+          "celery"
+        ],
+        "duration": 15,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Add garlic and tomato paste, cook 2 minutes. Increase heat to high, add both minces and cook, breaking up lumps, until deeply browned — 8–10 minutes.",
+        "tools": [
+          "Large heavy-bottomed pot or Dutch oven",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "garlic",
+          "tomato paste",
+          "beef mince",
+          "pork mince"
+        ],
+        "duration": 12,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Pour in the red wine and stir, scraping up any browned bits. Let it reduce almost completely, about 3 minutes.",
+        "tools": [
+          "Large heavy-bottomed pot or Dutch oven"
+        ],
+        "ingredients": [
+          "dry red wine"
+        ],
+        "duration": 4,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Add crushed tomatoes, bay leaf, salt and pepper. Reduce heat to the lowest setting. Partially cover and simmer for 1 hour, stirring occasionally. Add a splash of water if it looks dry.",
+        "tools": [
+          "Large heavy-bottomed pot or Dutch oven"
+        ],
+        "ingredients": [
+          "crushed tomatoes",
+          "bay leaf",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 60,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Stir in the milk and simmer uncovered for a further 15 minutes. The ragù should be thick, glossy, and rich.",
+        "tools": [
+          "Large heavy-bottomed pot or Dutch oven"
+        ],
+        "ingredients": [
+          "whole milk"
+        ],
+        "duration": 15,
+        "dependsOn": [
+          4
+        ]
+      },
+      {
+        "id": 6,
+        "action": "Cook pasta in well-salted boiling water until al dente. Reserve a mug of pasta water. Drain and toss pasta with the ragù, adding pasta water as needed to loosen.",
+        "tools": [
+          "Large pot for pasta",
+          "Colander"
+        ],
+        "ingredients": [
+          "spaghetti or tagliatelle"
+        ],
+        "duration": 12,
+        "dependsOn": [
+          5
+        ]
+      },
+      {
+        "id": 7,
+        "action": "Serve in warmed bowls. Finish with freshly grated parmesan.",
+        "tools": [],
+        "ingredients": [
+          "fresh parmesan"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          6
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1010",
+    "name": "Classic Caesar Salad",
+    "summary": "Crisp romaine, a bold umami-rich dressing, crunchy croutons, and shaved parmesan. No anchovies needed — the dressing gets its depth from Worcestershire and a generous amount of parmesan.",
+    "date": "2026-03-12T13:00:00Z",
+    "categories": [
+      "Healthy",
+      "Vegetarian"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 640,
+    "prepTime": 20,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg"
+    ],
+    "ingredients": [
+      "1 large head romaine lettuce (chopped)",
+      "2 thick slices sourdough or ciabatta (for croutons)",
+      "60g parmesan (half grated, half shaved)",
+      "2 tbsp olive oil (for croutons)",
+      "1 clove garlic (halved, for croutons)",
+      "1 egg yolk",
+      "1 tsp Dijon mustard",
+      "1 tsp Worcestershire sauce",
+      "1 small clove garlic (minced, for dressing)",
+      "Juice of ½ lemon",
+      "4 tbsp extra-virgin olive oil (for dressing)",
+      "Salt and black pepper"
+    ],
+    "tools": [
+      "Oven or frying pan",
+      "Small bowl",
+      "Whisk",
+      "Large salad bowl",
+      "Baking tray"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Tear bread into rough chunks. Toss with olive oil and rub a cut garlic clove over them. Spread on a baking tray and bake at 200°C for 10–12 minutes until deeply golden and crunchy.",
+        "tools": [
+          "Oven or frying pan",
+          "Baking tray"
+        ],
+        "ingredients": [
+          "sourdough or ciabatta",
+          "olive oil",
+          "garlic (halved)"
+        ],
+        "duration": 12,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Whisk together egg yolk, mustard, minced garlic, Worcestershire, and lemon juice in a small bowl. Slowly drizzle in the olive oil while whisking constantly to emulsify. Stir in grated parmesan, salt, and pepper.",
+        "tools": [
+          "Small bowl",
+          "Whisk"
+        ],
+        "ingredients": [
+          "egg yolk",
+          "Dijon mustard",
+          "Worcestershire sauce",
+          "garlic (minced)",
+          "lemon juice",
+          "extra-virgin olive oil",
+          "parmesan (grated)"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Toss the romaine with enough dressing to coat every leaf. Pile into bowls, add croutons, and shower with shaved parmesan. Season with black pepper.",
+        "tools": [
+          "Large salad bowl"
+        ],
+        "ingredients": [
+          "romaine lettuce",
+          "parmesan (shaved)",
+          "black pepper"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1011",
+    "name": "Blueberry Muffins",
+    "summary": "Tall, bakery-style muffins with a golden dome, juicy blueberry pockets, and a crunchy sugar top. The trick is not overmixing the batter.",
+    "date": "2026-03-15T09:00:00Z",
+    "categories": [
+      "Bakery",
+      "Dessert",
+      "Breakfast"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 2040,
+    "prepTime": 35,
+    "servings": 12,
+    "image": "https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/1028714/pexels-photo-1028714.jpeg"
+    ],
+    "ingredients": [
+      "280g plain flour",
+      "150g caster sugar",
+      "2 tsp baking powder",
+      "½ tsp baking soda",
+      "½ tsp fine salt",
+      "120ml neutral oil (sunflower or vegetable)",
+      "2 large eggs",
+      "180ml buttermilk (or milk + 1 tsp lemon juice)",
+      "1 tsp vanilla extract",
+      "200g fresh or frozen blueberries",
+      "2 tbsp demerara sugar (for topping)"
+    ],
+    "tools": [
+      "Large mixing bowl",
+      "Medium mixing bowl",
+      "12-hole muffin tin",
+      "Muffin liners",
+      "Oven",
+      "Whisk",
+      "Spatula"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Preheat oven to 200°C. Line a 12-hole muffin tin with paper liners.",
+        "tools": [
+          "Oven",
+          "12-hole muffin tin",
+          "Muffin liners"
+        ],
+        "ingredients": [],
+        "duration": 10,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Whisk together flour, caster sugar, baking powder, baking soda, and salt in a large bowl.",
+        "tools": [
+          "Large mixing bowl",
+          "Whisk"
+        ],
+        "ingredients": [
+          "plain flour",
+          "caster sugar",
+          "baking powder",
+          "baking soda",
+          "fine salt"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "In a separate bowl, whisk oil, eggs, buttermilk, and vanilla until combined.",
+        "tools": [
+          "Medium mixing bowl",
+          "Whisk"
+        ],
+        "ingredients": [
+          "neutral oil",
+          "eggs",
+          "buttermilk",
+          "vanilla extract"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 4,
+        "action": "Pour the wet ingredients into the dry. Fold with a spatula until just combined — lumps are fine, do not overmix. Gently fold in blueberries.",
+        "tools": [
+          "Large mixing bowl",
+          "Spatula"
+        ],
+        "ingredients": [
+          "blueberries"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Divide batter evenly among the muffin cups — fill to the top. Sprinkle demerara sugar over each. Bake 18–20 minutes until a skewer comes out clean and tops are golden.",
+        "tools": [
+          "12-hole muffin tin",
+          "Oven"
+        ],
+        "ingredients": [
+          "demerara sugar"
+        ],
+        "duration": 20,
+        "dependsOn": [
+          1,
+          4
+        ]
+      },
+      {
+        "id": 6,
+        "action": "Cool in the tin for 5 minutes then transfer to a wire rack. Best eaten warm.",
+        "tools": [],
+        "ingredients": [],
+        "duration": 5,
+        "dependsOn": [
+          5
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1012",
+    "name": "Honey Garlic Chicken Stir-Fry",
+    "summary": "Tender chicken and crisp vegetables tossed in a sticky, sweet-savoury honey garlic sauce. Faster than a takeaway and considerably better.",
+    "date": "2026-03-18T18:30:00Z",
+    "categories": [
+      "Healthy",
+      "Meat"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 1050,
+    "prepTime": 25,
+    "servings": 3,
+    "image": "https://images.pexels.com/photos/2741448/pexels-photo-2741448.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/2741448/pexels-photo-2741448.jpeg"
+    ],
+    "ingredients": [
+      "500g chicken breast (sliced thin)",
+      "1 red bell pepper (strips)",
+      "1 yellow bell pepper (strips)",
+      "200g broccoli florets",
+      "4 cloves garlic (minced)",
+      "1 tbsp fresh ginger (grated)",
+      "3 tbsp soy sauce",
+      "3 tbsp honey",
+      "1 tbsp rice vinegar",
+      "1 tsp sesame oil",
+      "1 tsp cornstarch",
+      "2 tbsp neutral oil",
+      "Sesame seeds and spring onions to serve",
+      "Steamed rice or noodles to serve"
+    ],
+    "tools": [
+      "Wok or large frying pan",
+      "Small bowl",
+      "Wooden spoon or tongs"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Mix soy sauce, honey, rice vinegar, sesame oil, and cornstarch in a small bowl until smooth. Set aside.",
+        "tools": [
+          "Small bowl"
+        ],
+        "ingredients": [
+          "soy sauce",
+          "honey",
+          "rice vinegar",
+          "sesame oil",
+          "cornstarch"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Heat 1 tbsp oil in a wok over the highest heat until smoking. Add chicken in a single layer. Cook without stirring for 2 minutes to get some colour, then toss and cook 2 more minutes until just cooked. Remove and set aside.",
+        "tools": [
+          "Wok or large frying pan",
+          "Wooden spoon or tongs"
+        ],
+        "ingredients": [
+          "chicken breast",
+          "neutral oil"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Add remaining oil to the hot wok. Stir-fry broccoli, peppers, garlic, and ginger for 3–4 minutes until vegetables are tender-crisp.",
+        "tools": [
+          "Wok or large frying pan"
+        ],
+        "ingredients": [
+          "broccoli florets",
+          "red bell pepper",
+          "yellow bell pepper",
+          "garlic",
+          "ginger"
+        ],
+        "duration": 4,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Return chicken to the wok. Pour over the sauce and toss everything together over high heat for 1–2 minutes until the sauce is thick and glossy.",
+        "tools": [
+          "Wok or large frying pan"
+        ],
+        "ingredients": [],
+        "duration": 2,
+        "dependsOn": [
+          1,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Serve over steamed rice or noodles, topped with sesame seeds and sliced spring onions.",
+        "tools": [],
+        "ingredients": [
+          "sesame seeds and spring onions",
+          "steamed rice or noodles"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1013",
+    "name": "Creamy Homemade Hummus",
+    "summary": "Ultra-smooth hummus made from scratch using the small trick of peeling chickpeas for a silky, restaurant-quality dip in under 15 minutes.",
+    "date": "2026-03-20T11:00:00Z",
+    "categories": [
+      "Vegan",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 840,
+    "prepTime": 15,
+    "servings": 6,
+    "image": "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg"
+    ],
+    "ingredients": [
+      "1 × 400g can chickpeas (drained, liquid reserved)",
+      "3 tbsp good-quality tahini",
+      "3 tbsp extra-virgin olive oil (plus extra to drizzle)",
+      "Juice of 1 large lemon",
+      "1 small clove garlic",
+      "½ tsp ground cumin",
+      "½ tsp fine salt",
+      "2–4 tbsp ice-cold water",
+      "Smoked paprika, fresh parsley, and olive oil to serve"
+    ],
+    "tools": [
+      "Food processor or powerful blender",
+      "Spoon"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Optional but worthwhile: gently squeeze each chickpea to slip off its skin. The skins make hummus grainy.",
+        "tools": [],
+        "ingredients": [
+          "chickpeas"
+        ],
+        "duration": 8,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Add tahini, lemon juice, garlic, cumin, and salt to the food processor. Blend for 2 minutes until pale and creamy.",
+        "tools": [
+          "Food processor or powerful blender"
+        ],
+        "ingredients": [
+          "tahini",
+          "lemon juice",
+          "garlic",
+          "ground cumin",
+          "fine salt"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Add chickpeas and olive oil. Blend 3–4 minutes, adding ice-cold water a tablespoon at a time, until completely smooth and light. Taste and adjust lemon, salt, or garlic.",
+        "tools": [
+          "Food processor or powerful blender"
+        ],
+        "ingredients": [
+          "chickpeas",
+          "extra-virgin olive oil",
+          "ice-cold water"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Spread into a wide bowl, making a well in the centre. Fill with olive oil, a dusting of smoked paprika, and fresh parsley. Serve with warm pita or crudités.",
+        "tools": [
+          "Spoon"
+        ],
+        "ingredients": [
+          "smoked paprika",
+          "fresh parsley",
+          "olive oil"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1014",
+    "name": "French Toast",
+    "summary": "Thick slices of brioche soaked in a vanilla-custard egg mixture and pan-fried until golden and caramelised. Weekend breakfast at its finest.",
+    "date": "2026-03-22T09:00:00Z",
+    "categories": [
+      "Breakfast",
+      "Dessert"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 760,
+    "prepTime": 15,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/9207054/pexels-photo-9207054.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/9207054/pexels-photo-9207054.jpeg"
+    ],
+    "ingredients": [
+      "4 thick slices brioche or challah (2–3cm thick)",
+      "3 large eggs",
+      "80ml whole milk",
+      "1 tbsp double cream",
+      "1 tsp vanilla extract",
+      "½ tsp cinnamon",
+      "1 tbsp caster sugar",
+      "Pinch of salt",
+      "2 tbsp unsalted butter",
+      "Maple syrup, fresh berries, and icing sugar to serve"
+    ],
+    "tools": [
+      "Shallow dish",
+      "Non-stick frying pan",
+      "Spatula",
+      "Whisk"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Whisk together eggs, milk, cream, vanilla, cinnamon, sugar, and salt in a shallow dish until well combined.",
+        "tools": [
+          "Shallow dish",
+          "Whisk"
+        ],
+        "ingredients": [
+          "eggs",
+          "whole milk",
+          "double cream",
+          "vanilla extract",
+          "cinnamon",
+          "caster sugar",
+          "salt"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Soak the brioche slices in the custard for 30 seconds per side, pressing gently so the bread absorbs the mixture.",
+        "tools": [],
+        "ingredients": [
+          "brioche or challah"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Melt butter in a non-stick pan over medium heat until foaming. Cook the soaked slices 2–3 minutes per side until deeply golden and caramelised. Work in batches.",
+        "tools": [
+          "Non-stick frying pan",
+          "Spatula"
+        ],
+        "ingredients": [
+          "unsalted butter"
+        ],
+        "duration": 8,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Serve immediately with maple syrup, a pile of fresh berries, and a dusting of icing sugar.",
+        "tools": [],
+        "ingredients": [
+          "maple syrup, fresh berries, and icing sugar"
+        ],
+        "duration": 1,
+        "dependsOn": [
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1015",
+    "name": "Tiramisu",
+    "summary": "The legendary Italian dessert: espresso-soaked ladyfingers layered with a cloud-like mascarpone cream, finished with a generous dusting of cocoa. Needs overnight chilling — worth every hour.",
+    "date": "2026-03-25T15:00:00Z",
+    "categories": [
+      "Dessert"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 2700,
+    "prepTime": 30,
+    "servings": 6,
+    "image": "https://images.pexels.com/photos/6880219/pexels-photo-6880219.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/6880219/pexels-photo-6880219.jpeg"
+    ],
+    "ingredients": [
+      "24–28 savoiardi ladyfingers",
+      "500g mascarpone (room temperature)",
+      "4 large eggs (separated)",
+      "100g caster sugar",
+      "250ml strong espresso (cooled)",
+      "3 tbsp coffee liqueur (Kahlúa or Marsala, optional)",
+      "Good-quality cocoa powder to dust"
+    ],
+    "tools": [
+      "Electric hand mixer",
+      "Two large mixing bowls",
+      "Shallow dish for dipping",
+      "Deep serving dish (20×30cm or similar)",
+      "Fine-mesh sieve"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Brew espresso and allow to cool completely. Stir in liqueur if using. Pour into a shallow dish.",
+        "tools": [
+          "Shallow dish for dipping"
+        ],
+        "ingredients": [
+          "strong espresso",
+          "coffee liqueur"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Beat egg yolks and sugar with the electric mixer on high for 4–5 minutes until the mixture is pale, thick, and falls in ribbons.",
+        "tools": [
+          "Electric hand mixer",
+          "Two large mixing bowls"
+        ],
+        "ingredients": [
+          "egg yolks",
+          "caster sugar"
+        ],
+        "duration": 6,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Add mascarpone to the yolk mixture and beat on low until smooth and incorporated.",
+        "tools": [
+          "Electric hand mixer"
+        ],
+        "ingredients": [
+          "mascarpone"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "In a clean bowl with clean beaters, whisk egg whites to stiff peaks. Gently fold into the mascarpone cream in three additions, keeping as much air as possible.",
+        "tools": [
+          "Electric hand mixer",
+          "Two large mixing bowls"
+        ],
+        "ingredients": [
+          "egg whites"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Quickly dip each ladyfinger in the espresso (1 second per side — don't soak) and arrange in a single layer in the dish. Spread over half the mascarpone cream.",
+        "tools": [
+          "Deep serving dish"
+        ],
+        "ingredients": [
+          "savoiardi ladyfingers"
+        ],
+        "duration": 8,
+        "dependsOn": [
+          1,
+          4
+        ]
+      },
+      {
+        "id": 6,
+        "action": "Repeat with a second layer of dipped ladyfingers and remaining cream. Smooth the top, cover, and refrigerate for at least 6 hours (overnight is best).",
+        "tools": [
+          "Deep serving dish"
+        ],
+        "ingredients": [],
+        "duration": 5,
+        "dependsOn": [
+          5
+        ]
+      },
+      {
+        "id": 7,
+        "action": "Just before serving, dust generously with cocoa powder through a fine-mesh sieve.",
+        "tools": [
+          "Fine-mesh sieve"
+        ],
+        "ingredients": [
+          "cocoa powder"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          6
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1016",
+    "name": "Street Beef Tacos",
+    "summary": "Tender, cumin-spiced minced beef in warm corn tortillas with pickled onion, fresh cilantro, and a squeeze of lime. Weeknight street food at its best.",
+    "date": "2026-04-01T18:00:00Z",
+    "categories": [
+      "Meat"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 1800,
+    "prepTime": 35,
+    "servings": 3,
+    "image": "https://images.pexels.com/photos/3264572/pexels-photo-3264572.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/3264572/pexels-photo-3264572.jpeg"
+    ],
+    "ingredients": [
+      "400g beef mince (15% fat)",
+      "8 small corn or flour tortillas",
+      "1 red onion (finely diced)",
+      "3 tbsp red wine vinegar",
+      "1 tsp sugar",
+      "3 cloves garlic (minced)",
+      "1 tsp ground cumin",
+      "1 tsp smoked paprika",
+      "½ tsp dried oregano",
+      "½ tsp chilli powder",
+      "2 tbsp neutral oil",
+      "Salt and black pepper",
+      "Fresh cilantro leaves",
+      "2 limes (wedges)",
+      "Hot sauce and sour cream to serve"
+    ],
+    "tools": [
+      "Frying pan",
+      "Small bowl",
+      "Wooden spoon"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Quick-pickle the onion: toss diced red onion with red wine vinegar, sugar, and a pinch of salt. Set aside — it will turn pink within 10 minutes.",
+        "tools": [
+          "Small bowl"
+        ],
+        "ingredients": [
+          "red onion",
+          "red wine vinegar",
+          "sugar",
+          "salt"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Heat oil in a frying pan over high heat. Add mince and cook, breaking it up, for 5–6 minutes until deeply browned in places — don't stir constantly.",
+        "tools": [
+          "Frying pan",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "beef mince",
+          "neutral oil"
+        ],
+        "duration": 6,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Add garlic, cumin, smoked paprika, oregano, and chilli powder. Stir for 1 minute. Season well with salt and pepper.",
+        "tools": [
+          "Frying pan"
+        ],
+        "ingredients": [
+          "garlic",
+          "ground cumin",
+          "smoked paprika",
+          "dried oregano",
+          "chilli powder"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Warm tortillas in a dry pan for 30 seconds per side or directly over a gas flame. Keep wrapped in a clean cloth to stay soft.",
+        "tools": [
+          "Frying pan"
+        ],
+        "ingredients": [
+          "corn or flour tortillas"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 5,
+        "action": "Fill each tortilla with beef, pickled onion, fresh cilantro, and a squeeze of lime. Serve with hot sauce and sour cream.",
+        "tools": [],
+        "ingredients": [
+          "fresh cilantro leaves",
+          "limes",
+          "hot sauce and sour cream"
+        ],
+        "duration": 4,
+        "dependsOn": [
+          3,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1017",
+    "name": "Thai Yellow Vegetable Curry",
+    "summary": "A fragrant, golden curry of seasonal vegetables in creamy coconut milk, spiked with lemongrass and lime leaves. Serve over jasmine rice.",
+    "date": "2026-04-03T12:00:00Z",
+    "categories": [
+      "Vegan",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 1200,
     "prepTime": 40,
-    "servings": 24
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/2116093/pexels-photo-2116093.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/2116093/pexels-photo-2116093.jpeg"
+    ],
+    "ingredients": [
+      "2 × 400ml cans full-fat coconut milk",
+      "3 tbsp yellow curry paste",
+      "1 stalk lemongrass (bruised)",
+      "4 kaffir lime leaves",
+      "300g sweet potato (cubed)",
+      "200g broccoli florets",
+      "1 red bell pepper (sliced)",
+      "150g baby spinach",
+      "200g firm tofu (cubed)",
+      "1 tbsp coconut oil",
+      "1 tbsp soy sauce",
+      "1 tsp brown sugar",
+      "Juice of 1 lime",
+      "Fresh Thai basil and toasted peanuts to serve",
+      "Steamed jasmine rice to serve"
+    ],
+    "tools": [
+      "Large wok or deep pan",
+      "Wooden spoon"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Heat coconut oil over medium heat. Add curry paste and fry, stirring constantly, for 2 minutes until fragrant and deepened in colour.",
+        "tools": [
+          "Large wok or deep pan",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "coconut oil",
+          "yellow curry paste"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Pour in coconut milk. Add lemongrass and lime leaves. Stir to combine and bring to a gentle simmer.",
+        "tools": [
+          "Large wok or deep pan"
+        ],
+        "ingredients": [
+          "coconut milk",
+          "lemongrass",
+          "kaffir lime leaves"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Add sweet potato. Simmer for 12 minutes until just tender.",
+        "tools": [
+          "Large wok or deep pan"
+        ],
+        "ingredients": [
+          "sweet potato"
+        ],
+        "duration": 12,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Add broccoli, red pepper, and tofu. Simmer 5 minutes more. Season with soy sauce, brown sugar, and lime juice. Stir in spinach until wilted.",
+        "tools": [
+          "Large wok or deep pan"
+        ],
+        "ingredients": [
+          "broccoli florets",
+          "red bell pepper",
+          "firm tofu",
+          "soy sauce",
+          "brown sugar",
+          "lime juice",
+          "baby spinach"
+        ],
+        "duration": 7,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Remove lemongrass and lime leaves. Serve over jasmine rice, topped with Thai basil and toasted peanuts.",
+        "tools": [],
+        "ingredients": [
+          "fresh Thai basil and toasted peanuts",
+          "steamed jasmine rice"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1018",
+    "name": "Classic Greek Salad",
+    "summary": "Chunky tomatoes, crisp cucumber, briny olives, and a slab of feta in herb-scented olive oil. No lettuce — this is the real horiatiki.",
+    "date": "2026-04-05T13:00:00Z",
+    "categories": [
+      "Vegetarian",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 480,
+    "prepTime": 10,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/724669/pexels-photo-724669.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/724669/pexels-photo-724669.jpeg"
+    ],
+    "ingredients": [
+      "3 large ripe tomatoes (cut into wedges)",
+      "1 cucumber (thickly sliced or quartered)",
+      "½ green bell pepper (sliced into rings)",
+      "½ red onion (thinly sliced)",
+      "80g Kalamata olives",
+      "150g block of good feta (do not crumble)",
+      "4 tbsp extra-virgin olive oil",
+      "1 tsp dried oregano",
+      "Salt and black pepper",
+      "Crusty bread to serve"
+    ],
+    "tools": [
+      "Knife",
+      "Cutting board",
+      "Serving plate or bowl"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Cut tomatoes into large wedges, cucumber into thick half-moons, and pepper into rings. Slice red onion thinly.",
+        "tools": [
+          "Knife",
+          "Cutting board"
+        ],
+        "ingredients": [
+          "tomatoes",
+          "cucumber",
+          "green bell pepper",
+          "red onion"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Arrange all vegetables and olives on a serving plate. Place the whole block of feta on top — do not crumble it.",
+        "tools": [
+          "Serving plate or bowl"
+        ],
+        "ingredients": [
+          "Kalamata olives",
+          "feta"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Drizzle generously with olive oil, crumble oregano over the feta, and season with salt and pepper. Serve immediately with crusty bread.",
+        "tools": [],
+        "ingredients": [
+          "extra-virgin olive oil",
+          "dried oregano",
+          "salt",
+          "black pepper",
+          "crusty bread"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1019",
+    "name": "Overnight Oats",
+    "summary": "Creamy no-cook oats assembled the night before and customised with your favourite toppings in the morning. Breakfast that's ready before you are.",
+    "date": "2026-04-07T08:00:00Z",
+    "categories": [
+      "Breakfast",
+      "Vegan",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 620,
+    "prepTime": 10,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/2147647/pexels-photo-2147647.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/2147647/pexels-photo-2147647.jpeg"
+    ],
+    "ingredients": [
+      "150g rolled oats",
+      "300ml plant milk (oat or almond)",
+      "100g dairy-free yogurt",
+      "2 tbsp chia seeds",
+      "2 tsp maple syrup",
+      "½ tsp vanilla extract",
+      "Pinch of salt",
+      "Fresh berries, banana slices, nut butter, or granola to serve"
+    ],
+    "tools": [
+      "2 mason jars or bowls",
+      "Spoon"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Divide oats, chia seeds, and salt equally between two jars.",
+        "tools": [
+          "2 mason jars or bowls"
+        ],
+        "ingredients": [
+          "rolled oats",
+          "chia seeds",
+          "salt"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Whisk together plant milk, yogurt, maple syrup, and vanilla. Pour over the oats and stir well to combine.",
+        "tools": [
+          "2 mason jars or bowls",
+          "Spoon"
+        ],
+        "ingredients": [
+          "plant milk",
+          "dairy-free yogurt",
+          "maple syrup",
+          "vanilla extract"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Seal jars and refrigerate overnight (or at least 4 hours). In the morning, stir, add a splash more milk if too thick, and top with berries, banana, or nut butter.",
+        "tools": [],
+        "ingredients": [
+          "fresh berries, banana slices, nut butter, or granola"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1020",
+    "name": "Classic Smash Burger",
+    "summary": "Two thin beef patties smashed on a screaming-hot skillet for maximum crust, layered with American cheese, pickles, and a punchy burger sauce in a toasted brioche bun.",
+    "date": "2026-04-10T19:00:00Z",
+    "categories": [
+      "Meat"
+    ],
+    "flagged": true,
+    "liked": true,
+    "calories": 1400,
+    "prepTime": 25,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/5374420/pexels-photo-5374420.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/5374420/pexels-photo-5374420.jpeg"
+    ],
+    "ingredients": [
+      "400g beef mince (20% fat — don't skimp)",
+      "4 slices American or cheddar cheese",
+      "2 brioche buns",
+      "2 tbsp butter (for buns)",
+      "Dill pickle slices",
+      "Shredded iceberg lettuce",
+      "2 tbsp mayonnaise",
+      "1 tbsp ketchup",
+      "1 tbsp yellow mustard",
+      "1 tsp pickle brine",
+      "½ tsp smoked paprika",
+      "Salt and black pepper"
+    ],
+    "tools": [
+      "Cast-iron skillet or heavy frying pan",
+      "Sturdy spatula",
+      "Small bowl"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Mix mayo, ketchup, mustard, pickle brine, and smoked paprika in a small bowl. Set aside.",
+        "tools": [
+          "Small bowl"
+        ],
+        "ingredients": [
+          "mayonnaise",
+          "ketchup",
+          "yellow mustard",
+          "pickle brine",
+          "smoked paprika"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Divide mince into 4 loose balls (about 100g each) — do not compact them. Season the tops generously with salt and pepper.",
+        "tools": [],
+        "ingredients": [
+          "beef mince",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Heat cast-iron skillet over the highest heat for 3 minutes until smoking. Toast bun cut-sides in butter until golden; set aside.",
+        "tools": [
+          "Cast-iron skillet or heavy frying pan"
+        ],
+        "ingredients": [
+          "brioche buns",
+          "butter"
+        ],
+        "duration": 4,
+        "dependsOn": []
+      },
+      {
+        "id": 4,
+        "action": "Place two beef balls on the hot skillet. Immediately smash flat with the spatula and hold for 10 seconds. Cook 2 minutes until edges are deeply browned. Flip, lay cheese on top, and cook 1 more minute.",
+        "tools": [
+          "Cast-iron skillet or heavy frying pan",
+          "Sturdy spatula"
+        ],
+        "ingredients": [
+          "American or cheddar cheese"
+        ],
+        "duration": 6,
+        "dependsOn": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Repeat for the second pair of patties. Build burgers: sauce on both bun halves, lettuce, double patty stack, pickles. Serve immediately.",
+        "tools": [],
+        "ingredients": [
+          "dill pickle slices",
+          "shredded iceberg lettuce"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          1,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1021",
+    "name": "Tom Yum Soup",
+    "summary": "Thailand's famous hot-and-sour prawn soup — a clear, fiery broth fragrant with lemongrass, galangal, kaffir lime, and fish sauce. Bold, aromatic, and ready in 30 minutes.",
+    "date": "2026-04-12T18:00:00Z",
+    "categories": [
+      "Soup",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 640,
+    "prepTime": 30,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/18765531/pexels-photo-18765531.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/18765531/pexels-photo-18765531.jpeg"
+    ],
+    "ingredients": [
+      "1 litre good chicken or vegetable stock",
+      "300g raw prawns (peeled, tail on)",
+      "200g mushrooms (oyster or button, halved)",
+      "2 stalks lemongrass (bruised, cut into 4cm pieces)",
+      "4cm piece galangal or ginger (sliced)",
+      "6 kaffir lime leaves (torn)",
+      "3 bird's eye chillies (bruised)",
+      "3 tbsp fish sauce",
+      "2 tbsp lime juice",
+      "1 tsp sugar",
+      "2 spring onions (sliced)",
+      "Small bunch of fresh cilantro",
+      "1 tbsp chilli paste in oil (nam prik pao)"
+    ],
+    "tools": [
+      "Medium saucepan",
+      "Ladle"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Bring stock to a boil. Add lemongrass, galangal, lime leaves, and chillies. Simmer 10 minutes to infuse.",
+        "tools": [
+          "Medium saucepan"
+        ],
+        "ingredients": [
+          "chicken or vegetable stock",
+          "lemongrass",
+          "galangal or ginger",
+          "kaffir lime leaves",
+          "bird's eye chillies"
+        ],
+        "duration": 12,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Add mushrooms and chilli paste. Simmer 3 minutes.",
+        "tools": [
+          "Medium saucepan"
+        ],
+        "ingredients": [
+          "mushrooms",
+          "chilli paste in oil"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Add prawns. Cook 2–3 minutes until pink and just cooked through.",
+        "tools": [
+          "Medium saucepan"
+        ],
+        "ingredients": [
+          "raw prawns"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Season with fish sauce, lime juice, and sugar. Taste and adjust — it should be sour, salty, and hot in equal measure. Serve topped with spring onions and cilantro.",
+        "tools": [
+          "Ladle"
+        ],
+        "ingredients": [
+          "fish sauce",
+          "lime juice",
+          "sugar",
+          "spring onions",
+          "fresh cilantro"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1022",
+    "name": "Egg Fried Rice",
+    "summary": "The essential use for leftover rice — high-heat wok cooking transforms cold grains into fragrant, lightly charred fried rice studded with vegetables and fluffy egg.",
+    "date": "2026-04-14T19:00:00Z",
+    "categories": [
+      "Healthy",
+      "Vegan"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 1050,
+    "prepTime": 20,
+    "servings": 3,
+    "image": "https://images.pexels.com/photos/3926124/pexels-photo-3926124.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/3926124/pexels-photo-3926124.jpeg"
+    ],
+    "ingredients": [
+      "600g cold cooked jasmine rice (day-old works best)",
+      "3 large eggs (lightly beaten)",
+      "150g frozen peas or edamame",
+      "2 medium carrots (finely diced)",
+      "4 spring onions (sliced, greens and whites separated)",
+      "4 cloves garlic (minced)",
+      "1 tbsp fresh ginger (grated)",
+      "3 tbsp soy sauce",
+      "1 tbsp oyster sauce (or hoisin for vegan)",
+      "1 tsp sesame oil",
+      "3 tbsp neutral oil",
+      "White pepper to taste"
+    ],
+    "tools": [
+      "Wok or large frying pan",
+      "Wooden spoon or wok spatula"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Heat 1 tbsp oil in a wok over high heat until smoking. Add eggs and scramble loosely — remove while still slightly underdone.",
+        "tools": [
+          "Wok or large frying pan"
+        ],
+        "ingredients": [
+          "eggs",
+          "neutral oil"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Add remaining oil. Stir-fry carrots and spring onion whites for 2 minutes. Add garlic and ginger, stir 30 seconds.",
+        "tools": [
+          "Wok or large frying pan",
+          "Wooden spoon or wok spatula"
+        ],
+        "ingredients": [
+          "carrots",
+          "spring onions (whites)",
+          "garlic",
+          "ginger"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Add cold rice and break up any clumps. Spread across the wok and let it sit undisturbed for 1–2 minutes to get some colour, then toss. Repeat twice.",
+        "tools": [
+          "Wok or large frying pan"
+        ],
+        "ingredients": [
+          "cold cooked jasmine rice"
+        ],
+        "duration": 6,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Add peas, soy sauce, oyster sauce, and white pepper. Toss to combine. Return eggs, drizzle sesame oil, and scatter spring onion greens. Toss once more and serve.",
+        "tools": [
+          "Wok or large frying pan"
+        ],
+        "ingredients": [
+          "frozen peas",
+          "soy sauce",
+          "oyster sauce",
+          "sesame oil",
+          "spring onions (greens)",
+          "white pepper"
+        ],
+        "duration": 4,
+        "dependsOn": [
+          1,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1023",
+    "name": "Eggs Benedict",
+    "summary": "Perfectly poached eggs and Canadian bacon on toasted English muffins, draped in a rich, buttery hollandaise sauce. The ultimate weekend brunch.",
+    "date": "2026-04-16T10:00:00Z",
+    "categories": [
+      "Breakfast"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 920,
+    "prepTime": 30,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/9840182/pexels-photo-9840182.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/9840182/pexels-photo-9840182.jpeg"
+    ],
+    "ingredients": [
+      "4 large eggs",
+      "4 slices Canadian bacon or ham",
+      "2 English muffins (split)",
+      "1 tbsp white wine vinegar (for poaching)",
+      "Chives and smoked paprika to garnish",
+      "3 egg yolks",
+      "150g unsalted butter (clarified or melted)",
+      "1 tbsp lemon juice",
+      "1 tsp Dijon mustard",
+      "Salt and cayenne pepper"
+    ],
+    "tools": [
+      "Medium saucepan",
+      "Heatproof bowl",
+      "Whisk",
+      "Slotted spoon",
+      "Small saucepan for butter",
+      "Toaster"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Make hollandaise: whisk egg yolks and lemon juice in a heatproof bowl. Set over a saucepan of barely simmering water (don't let the bowl touch the water). Whisk constantly for 3–4 minutes until thick and pale.",
+        "tools": [
+          "Medium saucepan",
+          "Heatproof bowl",
+          "Whisk"
+        ],
+        "ingredients": [
+          "egg yolks",
+          "lemon juice"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Remove from heat. Slowly drizzle in melted butter a few drops at a time, whisking constantly, until emulsified and thick. Add mustard, season with salt and cayenne. Keep warm.",
+        "tools": [
+          "Whisk"
+        ],
+        "ingredients": [
+          "unsalted butter",
+          "Dijon mustard",
+          "salt",
+          "cayenne pepper"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Bring a deep pan of water to a gentle simmer. Add vinegar. Crack each egg into a small cup, stir the water to create a gentle whirlpool, and slide in one egg at a time. Poach 3 minutes for a runny yolk.",
+        "tools": [
+          "Medium saucepan",
+          "Slotted spoon"
+        ],
+        "ingredients": [
+          "eggs",
+          "white wine vinegar"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 4,
+        "action": "Toast English muffins. Warm bacon in the pan for 1 minute per side.",
+        "tools": [
+          "Toaster",
+          "Small saucepan for butter"
+        ],
+        "ingredients": [
+          "English muffins",
+          "Canadian bacon or ham"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 5,
+        "action": "Assemble: muffin, bacon, poached egg. Spoon hollandaise generously over the top. Garnish with chives and a dusting of smoked paprika.",
+        "tools": [],
+        "ingredients": [
+          "chives and smoked paprika"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          2,
+          3,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1024",
+    "name": "Spaghetti Carbonara",
+    "summary": "The real Roman carbonara — no cream, ever. Silky spaghetti coated in a glossy egg-and-parmesan sauce with crispy guanciale. Done in 25 minutes.",
+    "date": "2026-04-18T19:30:00Z",
+    "categories": [
+      "Pasta"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 2000,
+    "prepTime": 25,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/546945/pexels-photo-546945.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/546945/pexels-photo-546945.jpeg"
+    ],
+    "ingredients": [
+      "400g spaghetti",
+      "200g guanciale or pancetta (cut into lardons)",
+      "4 large eggs + 2 extra yolks",
+      "100g Pecorino Romano (finely grated)",
+      "50g Parmesan (finely grated)",
+      "2 tsp coarsely cracked black pepper",
+      "Salt for pasta water"
+    ],
+    "tools": [
+      "Large pot",
+      "Wide frying pan",
+      "Large bowl",
+      "Whisk",
+      "Colander"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Whisk eggs, yolks, Pecorino, Parmesan, and cracked black pepper together in a large bowl until combined. Set aside.",
+        "tools": [
+          "Large bowl",
+          "Whisk"
+        ],
+        "ingredients": [
+          "eggs",
+          "Pecorino Romano",
+          "Parmesan",
+          "coarsely cracked black pepper"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Cook pasta in heavily salted boiling water until al dente. Reserve at least 1 cup of starchy pasta water before draining.",
+        "tools": [
+          "Large pot",
+          "Colander"
+        ],
+        "ingredients": [
+          "spaghetti",
+          "salt"
+        ],
+        "duration": 12,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Meanwhile, cook guanciale in a dry frying pan over medium heat for 6–8 minutes until golden and crispy. Remove from heat.",
+        "tools": [
+          "Wide frying pan"
+        ],
+        "ingredients": [
+          "guanciale or pancetta"
+        ],
+        "duration": 8,
+        "dependsOn": []
+      },
+      {
+        "id": 4,
+        "action": "Add hot drained pasta to the guanciale pan (off the heat). Quickly pour in the egg mixture and toss vigorously, adding pasta water a tablespoon at a time, until you have a glossy, creamy sauce that coats every strand. The residual heat cooks the eggs — never let it get too hot or they'll scramble.",
+        "tools": [
+          "Wide frying pan"
+        ],
+        "ingredients": [],
+        "duration": 4,
+        "dependsOn": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Divide into warm bowls. Finish with extra Pecorino and more cracked pepper.",
+        "tools": [],
+        "ingredients": [
+          "Pecorino Romano",
+          "coarsely cracked black pepper"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1025",
+    "name": "Apple & Blackberry Crumble",
+    "summary": "Warm, bubbling spiced apple and blackberry beneath a buttery, oat-studded crumble topping. A British classic best served with a generous pour of custard.",
+    "date": "2026-04-20T15:00:00Z",
+    "categories": [
+      "Dessert",
+      "Bakery"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 2100,
+    "prepTime": 50,
+    "servings": 6,
+    "image": "https://images.pexels.com/photos/5426888/pexels-photo-5426888.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/5426888/pexels-photo-5426888.jpeg"
+    ],
+    "ingredients": [
+      "800g Bramley or Granny Smith apples (peeled, cored, sliced)",
+      "200g blackberries (fresh or frozen)",
+      "3 tbsp caster sugar",
+      "1 tsp ground cinnamon",
+      "½ tsp ground ginger",
+      "1 tbsp cornstarch",
+      "180g plain flour",
+      "120g cold unsalted butter (cubed)",
+      "80g rolled oats",
+      "100g demerara sugar",
+      "Pinch of salt",
+      "Vanilla custard or ice cream to serve"
+    ],
+    "tools": [
+      "Large mixing bowl",
+      "Deep baking dish (approx. 28cm)",
+      "Oven"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Preheat oven to 190°C.",
+        "tools": [
+          "Oven"
+        ],
+        "ingredients": [],
+        "duration": 10,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Toss apple slices with blackberries, caster sugar, cinnamon, ginger, and cornstarch. Pour into the baking dish.",
+        "tools": [
+          "Deep baking dish"
+        ],
+        "ingredients": [
+          "apples",
+          "blackberries",
+          "caster sugar",
+          "ground cinnamon",
+          "ground ginger",
+          "cornstarch"
+        ],
+        "duration": 8,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Rub cold butter into flour and salt until the mixture resembles coarse breadcrumbs. Stir in oats and demerara sugar. Don't overwork — you want clumps.",
+        "tools": [
+          "Large mixing bowl"
+        ],
+        "ingredients": [
+          "plain flour",
+          "cold unsalted butter",
+          "rolled oats",
+          "demerara sugar",
+          "salt"
+        ],
+        "duration": 8,
+        "dependsOn": []
+      },
+      {
+        "id": 4,
+        "action": "Scatter the crumble topping evenly over the fruit. Bake 35–40 minutes until the top is golden and the fruit is bubbling around the edges.",
+        "tools": [
+          "Oven"
+        ],
+        "ingredients": [],
+        "duration": 38,
+        "dependsOn": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Rest for 5 minutes. Serve warm with custard or ice cream.",
+        "tools": [],
+        "ingredients": [
+          "vanilla custard or ice cream"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1026",
+    "name": "Chicken Tikka Masala",
+    "summary": "Charred, yogurt-marinated chicken in a rich, creamy tomato-based masala sauce. Britain's adopted national dish — for good reason.",
+    "date": "2026-04-22T18:30:00Z",
+    "categories": [
+      "Meat",
+      "Healthy"
+    ],
+    "flagged": true,
+    "liked": true,
+    "calories": 1800,
+    "prepTime": 55,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/6522616/pexels-photo-6522616.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/6522616/pexels-photo-6522616.jpeg"
+    ],
+    "ingredients": [
+      "700g chicken thighs (boneless, skinless, cubed)",
+      "150g full-fat yogurt",
+      "4 cloves garlic (minced)",
+      "2cm fresh ginger (grated)",
+      "2 tsp garam masala",
+      "1 tsp ground cumin",
+      "1 tsp ground coriander",
+      "1 tsp turmeric",
+      "1 tsp smoked paprika",
+      "1 large onion (finely diced)",
+      "1 × 400g can crushed tomatoes",
+      "150ml double cream",
+      "2 tbsp butter or ghee",
+      "1 tbsp neutral oil",
+      "Salt to taste",
+      "Fresh cilantro and basmati rice to serve"
+    ],
+    "tools": [
+      "Large bowl",
+      "Heavy-bottomed pan or Dutch oven",
+      "Wooden spoon",
+      "Grill pan or oven grill"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Combine yogurt, half the garlic and ginger, 1 tsp garam masala, cumin, turmeric, and paprika. Add chicken, toss to coat, and marinate at least 20 minutes (overnight is ideal).",
+        "tools": [
+          "Large bowl"
+        ],
+        "ingredients": [
+          "yogurt",
+          "garlic",
+          "ginger",
+          "garam masala",
+          "ground cumin",
+          "turmeric",
+          "smoked paprika",
+          "chicken thighs"
+        ],
+        "duration": 20,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Grill or bake the marinated chicken at 220°C / under a hot grill for 12–15 minutes, turning once, until charred at the edges and cooked through.",
+        "tools": [
+          "Grill pan or oven grill"
+        ],
+        "ingredients": [],
+        "duration": 14,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Meanwhile, melt butter and oil in a heavy pan. Cook onion over medium heat 10 minutes until golden. Add remaining garlic, ginger, and spices; cook 2 minutes.",
+        "tools": [
+          "Heavy-bottomed pan or Dutch oven",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "butter or ghee",
+          "neutral oil",
+          "onion",
+          "garlic",
+          "ginger",
+          "ground coriander",
+          "garam masala"
+        ],
+        "duration": 12,
+        "dependsOn": []
+      },
+      {
+        "id": 4,
+        "action": "Add crushed tomatoes and simmer 10 minutes until sauce thickens. Stir in cream and season with salt.",
+        "tools": [
+          "Heavy-bottomed pan or Dutch oven"
+        ],
+        "ingredients": [
+          "crushed tomatoes",
+          "double cream",
+          "salt"
+        ],
+        "duration": 10,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Add grilled chicken to the sauce. Simmer 5 minutes to marry the flavours. Serve over basmati rice, topped with fresh cilantro.",
+        "tools": [
+          "Heavy-bottomed pan or Dutch oven"
+        ],
+        "ingredients": [
+          "fresh cilantro",
+          "basmati rice"
+        ],
+        "duration": 6,
+        "dependsOn": [
+          2,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1027",
+    "name": "Caprese with Burrata",
+    "summary": "Ripe heritage tomatoes with creamy, molten-centred burrata, fresh basil, and aged balsamic. An Italian antipasto that is greater than the sum of its parts.",
+    "date": "2026-04-24T13:00:00Z",
+    "categories": [
+      "Vegetarian",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 540,
+    "prepTime": 10,
+    "servings": 2,
+    "image": "https://images.pexels.com/photos/5639959/pexels-photo-5639959.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/5639959/pexels-photo-5639959.jpeg"
+    ],
+    "ingredients": [
+      "2 balls burrata (or 200g fresh mozzarella)",
+      "400g ripe mixed-colour tomatoes",
+      "Large handful of fresh basil leaves",
+      "3 tbsp best-quality extra-virgin olive oil",
+      "1–2 tsp aged balsamic vinegar or balsamic glaze",
+      "Flaky sea salt and cracked black pepper",
+      "Crusty sourdough to serve"
+    ],
+    "tools": [
+      "Knife",
+      "Cutting board",
+      "Serving plate"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Slice tomatoes into varying thicknesses — some thick rounds, some wedges. Season generously with flaky salt and let them sit for 5 minutes to draw out juices.",
+        "tools": [
+          "Knife",
+          "Cutting board"
+        ],
+        "ingredients": [
+          "ripe mixed-colour tomatoes",
+          "flaky sea salt"
+        ],
+        "duration": 6,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Arrange tomatoes on a serving plate. Tear burrata and place over the tomatoes. Scatter basil leaves.",
+        "tools": [
+          "Serving plate"
+        ],
+        "ingredients": [
+          "burrata",
+          "fresh basil leaves"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Drizzle with olive oil and balsamic, season with cracked pepper. Serve immediately with good bread — do not refrigerate.",
+        "tools": [],
+        "ingredients": [
+          "extra-virgin olive oil",
+          "aged balsamic vinegar",
+          "cracked black pepper",
+          "crusty sourdough"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1028",
+    "name": "Butter Croissants",
+    "summary": "Proper laminated croissants with flaky, honeycomb layers and a shattering crust. A weekend project, but the result is incomparable to anything from a packet.",
+    "date": "2026-04-26T08:00:00Z",
+    "categories": [
+      "Bakery",
+      "Breakfast"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 2800,
+    "prepTime": 180,
+    "servings": 8,
+    "image": "https://images.pexels.com/photos/13425794/pexels-photo-13425794.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/13425794/pexels-photo-13425794.jpeg"
+    ],
+    "ingredients": [
+      "500g strong white bread flour",
+      "10g instant yeast",
+      "10g fine salt",
+      "60g caster sugar",
+      "50g unsalted butter (softened, for dough)",
+      "280ml warm whole milk",
+      "250g cold European-style butter (82%+ fat, for lamination)",
+      "1 egg + 1 tbsp milk (for egg wash)"
+    ],
+    "tools": [
+      "Stand mixer or large bowl",
+      "Rolling pin",
+      "Baking tray",
+      "Oven",
+      "Clingfilm",
+      "Ruler"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Mix flour, yeast, salt, and sugar. Add warm milk and softened butter. Knead 8–10 minutes until smooth but not over-developed. Shape into a rectangle, wrap in clingfilm, and refrigerate 1 hour.",
+        "tools": [
+          "Stand mixer or large bowl",
+          "Clingfilm"
+        ],
+        "ingredients": [
+          "strong white bread flour",
+          "instant yeast",
+          "fine salt",
+          "caster sugar",
+          "warm whole milk",
+          "unsalted butter (softened)"
+        ],
+        "duration": 70,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Beat cold butter into a 20cm square between two sheets of clingfilm using a rolling pin. Refrigerate if it warms up.",
+        "tools": [
+          "Rolling pin",
+          "Clingfilm"
+        ],
+        "ingredients": [
+          "cold European-style butter"
+        ],
+        "duration": 10,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Roll chilled dough into a 40×20cm rectangle. Place butter square in the centre, fold dough over it like an envelope. Seal edges. Roll to 60×20cm, fold into thirds (letter fold). Wrap and chill 30 minutes. Repeat fold and chill twice more.",
+        "tools": [
+          "Rolling pin",
+          "Clingfilm",
+          "Ruler"
+        ],
+        "ingredients": [],
+        "duration": 90,
+        "dependsOn": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Roll final dough to 4mm thick. Cut into long triangles. Roll each from the base towards the tip, stretching slightly as you go. Place on lined baking trays, curving into a crescent. Prove at room temperature for 2 hours until puffy.",
+        "tools": [
+          "Baking tray",
+          "Rolling pin"
+        ],
+        "ingredients": [],
+        "duration": 120,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Brush gently with egg wash. Bake at 200°C for 16–18 minutes until deep mahogany brown. Cool on a rack for at least 20 minutes before eating.",
+        "tools": [
+          "Oven"
+        ],
+        "ingredients": [
+          "egg",
+          "milk"
+        ],
+        "duration": 18,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1029",
+    "name": "Slow-Cooked Beef Stew",
+    "summary": "Beef shin braised low and slow with root vegetables and red wine until meltingly tender. A deeply comforting one-pot meal that improves overnight.",
+    "date": "2026-04-28T17:00:00Z",
+    "categories": [
+      "Meat",
+      "Soup"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 1600,
+    "prepTime": 150,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/3981486/pexels-photo-3981486.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/3981486/pexels-photo-3981486.jpeg"
+    ],
+    "ingredients": [
+      "800g beef shin or chuck (cut into 5cm chunks)",
+      "3 large carrots (roughly chopped)",
+      "3 stalks celery (chopped)",
+      "1 large onion (diced)",
+      "4 cloves garlic (minced)",
+      "400ml red wine",
+      "400ml beef stock",
+      "2 tbsp tomato paste",
+      "2 sprigs fresh rosemary",
+      "3 sprigs fresh thyme",
+      "2 bay leaves",
+      "3 tbsp plain flour",
+      "2 tbsp neutral oil",
+      "Salt and black pepper",
+      "Mashed potato or crusty bread to serve"
+    ],
+    "tools": [
+      "Large Dutch oven or heavy pot",
+      "Tongs",
+      "Wooden spoon"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Pat beef dry and season with salt and pepper. Toss in flour to coat. Heat oil in a Dutch oven over high heat. Brown beef in batches for 3–4 minutes per side. Remove and set aside.",
+        "tools": [
+          "Large Dutch oven or heavy pot",
+          "Tongs"
+        ],
+        "ingredients": [
+          "beef shin",
+          "plain flour",
+          "neutral oil",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 15,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Reduce heat to medium. Cook onion, carrot, and celery for 8 minutes. Add garlic and tomato paste, cook 2 minutes.",
+        "tools": [
+          "Large Dutch oven or heavy pot",
+          "Wooden spoon"
+        ],
+        "ingredients": [
+          "onion",
+          "carrots",
+          "celery",
+          "garlic",
+          "tomato paste"
+        ],
+        "duration": 10,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Pour in wine and let it bubble for 3 minutes, scraping up any browned bits. Add stock, rosemary, thyme, and bay leaves. Return beef. Bring to a simmer.",
+        "tools": [
+          "Large Dutch oven or heavy pot"
+        ],
+        "ingredients": [
+          "red wine",
+          "beef stock",
+          "fresh rosemary",
+          "fresh thyme",
+          "bay leaves"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Cover and cook over the lowest heat for 2 hours, stirring occasionally, until beef is fall-apart tender and sauce is rich and glossy. Remove herb sprigs. Adjust seasoning.",
+        "tools": [
+          "Large Dutch oven or heavy pot"
+        ],
+        "ingredients": [],
+        "duration": 120,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Serve over mashed potato or with crusty bread to soak up the sauce.",
+        "tools": [],
+        "ingredients": [
+          "mashed potato or crusty bread"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1030",
+    "name": "Pad Thai",
+    "summary": "Thailand's iconic stir-fried noodle dish — rice noodles, egg, tofu or prawns, and a sweet-sour tamarind sauce, finished with peanuts, lime, and bean sprouts.",
+    "date": "2026-04-30T19:00:00Z",
+    "categories": [
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 1500,
+    "prepTime": 30,
+    "servings": 3,
+    "image": "https://images.pexels.com/photos/19062750/pexels-photo-19062750.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/19062750/pexels-photo-19062750.jpeg"
+    ],
+    "ingredients": [
+      "200g flat rice noodles (4–5mm)",
+      "200g raw prawns or firm tofu (cubed)",
+      "2 large eggs",
+      "150g bean sprouts",
+      "3 spring onions (cut into 4cm pieces)",
+      "3 cloves garlic (minced)",
+      "2 tbsp neutral oil",
+      "3 tbsp tamarind paste",
+      "2 tbsp fish sauce (or soy sauce)",
+      "1 tbsp oyster sauce",
+      "2 tsp sugar",
+      "60g roasted peanuts (roughly chopped)",
+      "2 limes (wedges)",
+      "Fresh cilantro and dried chilli flakes to serve"
+    ],
+    "tools": [
+      "Wok or large frying pan",
+      "Wooden spoon or tongs"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Soak rice noodles in cold water for 30 minutes (or follow package instructions). Drain and set aside.",
+        "tools": [],
+        "ingredients": [
+          "flat rice noodles"
+        ],
+        "duration": 30,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Mix tamarind paste, fish sauce, oyster sauce, and sugar in a small bowl. Taste — it should be tangy, salty, and slightly sweet.",
+        "tools": [],
+        "ingredients": [
+          "tamarind paste",
+          "fish sauce",
+          "oyster sauce",
+          "sugar"
+        ],
+        "duration": 2,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Heat oil in a wok over the highest heat. Stir-fry prawns or tofu with garlic for 2–3 minutes until cooked. Push to one side, scramble in the eggs until just set.",
+        "tools": [
+          "Wok or large frying pan",
+          "Wooden spoon or tongs"
+        ],
+        "ingredients": [
+          "prawns or tofu",
+          "garlic",
+          "neutral oil",
+          "eggs"
+        ],
+        "duration": 4,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Add drained noodles and pour over the sauce. Toss everything together vigorously for 2–3 minutes until noodles absorb the sauce and start to caramelise slightly.",
+        "tools": [
+          "Wok or large frying pan"
+        ],
+        "ingredients": [],
+        "duration": 3,
+        "dependsOn": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Add bean sprouts and spring onions. Toss for 30 seconds — keep them crisp. Serve immediately topped with peanuts, lime wedges, cilantro, and chilli flakes.",
+        "tools": [],
+        "ingredients": [
+          "bean sprouts",
+          "spring onions",
+          "roasted peanuts",
+          "limes",
+          "fresh cilantro",
+          "dried chilli flakes"
+        ],
+        "duration": 2,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1031",
+    "name": "Homemade Granola",
+    "summary": "Golden, clumping oat granola with nuts, seeds, and honey — infinitely better than shop-bought. Make a big batch and it keeps for two weeks.",
+    "date": "2026-05-02T09:00:00Z",
+    "categories": [
+      "Breakfast",
+      "Vegan",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 1200,
+    "prepTime": 35,
+    "servings": 6,
+    "image": "https://images.pexels.com/photos/6708435/pexels-photo-6708435.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/6708435/pexels-photo-6708435.jpeg"
+    ],
+    "ingredients": [
+      "300g rolled oats",
+      "100g mixed nuts (almonds, pecans, cashews)",
+      "50g pumpkin seeds",
+      "50g sunflower seeds",
+      "4 tbsp maple syrup or honey",
+      "3 tbsp coconut oil (melted)",
+      "1 tsp vanilla extract",
+      "1 tsp cinnamon",
+      "½ tsp fine salt",
+      "100g dried fruit (raisins, cranberries, or apricots — added after baking)",
+      "Greek yogurt, plant milk, or fresh fruit to serve"
+    ],
+    "tools": [
+      "Large mixing bowl",
+      "Baking tray",
+      "Oven",
+      "Spatula"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Preheat oven to 160°C. Line a large baking tray with parchment.",
+        "tools": [
+          "Oven",
+          "Baking tray"
+        ],
+        "ingredients": [],
+        "duration": 10,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Combine oats, nuts, seeds, cinnamon, and salt in a large bowl. Stir in maple syrup, melted coconut oil, and vanilla until every oat is coated.",
+        "tools": [
+          "Large mixing bowl"
+        ],
+        "ingredients": [
+          "rolled oats",
+          "mixed nuts",
+          "pumpkin seeds",
+          "sunflower seeds",
+          "cinnamon",
+          "fine salt",
+          "maple syrup",
+          "coconut oil",
+          "vanilla extract"
+        ],
+        "duration": 5,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Spread in an even layer on the baking tray — press it down slightly for more clusters. Bake 25–30 minutes, rotating the tray halfway, until golden. Do not stir during baking.",
+        "tools": [
+          "Baking tray",
+          "Oven",
+          "Spatula"
+        ],
+        "ingredients": [],
+        "duration": 28,
+        "dependsOn": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Leave to cool completely on the tray without disturbing — this is how the clusters form. Once cool, break into pieces and stir in dried fruit. Store in an airtight jar.",
+        "tools": [],
+        "ingredients": [
+          "dried fruit"
+        ],
+        "duration": 15,
+        "dependsOn": [
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1032",
+    "name": "Chocolate Lava Cakes",
+    "summary": "Individual warm chocolate cakes with a molten, flowing centre. The batter is made ahead and refrigerated — pull them out 20 minutes before your guests arrive.",
+    "date": "2026-05-04T19:00:00Z",
+    "categories": [
+      "Dessert"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 2000,
+    "prepTime": 20,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/27819686/pexels-photo-27819686.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/27819686/pexels-photo-27819686.jpeg"
+    ],
+    "ingredients": [
+      "150g dark chocolate (70%)",
+      "150g unsalted butter",
+      "3 large eggs + 3 egg yolks",
+      "120g caster sugar",
+      "50g plain flour",
+      "Pinch of fine salt",
+      "Cocoa powder for dusting the moulds",
+      "Vanilla ice cream or crème fraîche to serve"
+    ],
+    "tools": [
+      "Heatproof bowl",
+      "Saucepan",
+      "Electric hand mixer",
+      "4 ramekins (approx. 150ml)",
+      "Oven"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Butter 4 ramekins thoroughly and dust with cocoa powder, tapping out excess. Refrigerate.",
+        "tools": [
+          "4 ramekins"
+        ],
+        "ingredients": [
+          "unsalted butter",
+          "cocoa powder"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Melt chocolate and butter together over a pan of barely simmering water, stirring until smooth. Cool slightly.",
+        "tools": [
+          "Heatproof bowl",
+          "Saucepan"
+        ],
+        "ingredients": [
+          "dark chocolate",
+          "unsalted butter"
+        ],
+        "duration": 7,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Beat eggs, yolks, and sugar with an electric mixer for 3–4 minutes until pale and thick. Fold in the cooled chocolate mixture, then sift in flour and salt. Fold until just combined.",
+        "tools": [
+          "Electric hand mixer"
+        ],
+        "ingredients": [
+          "eggs",
+          "caster sugar",
+          "plain flour",
+          "fine salt"
+        ],
+        "duration": 6,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Divide batter between the prepared ramekins. Refrigerate for at least 30 minutes (up to 24 hours). Preheat oven to 200°C when ready to bake.",
+        "tools": [
+          "4 ramekins",
+          "Oven"
+        ],
+        "ingredients": [],
+        "duration": 10,
+        "dependsOn": [
+          1,
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Bake chilled ramekins for exactly 12 minutes — edges should be set but the centre should still wobble. Run a knife around the edge, invert onto plates, and serve immediately with ice cream.",
+        "tools": [
+          "Oven"
+        ],
+        "ingredients": [
+          "vanilla ice cream or crème fraîche"
+        ],
+        "duration": 13,
+        "dependsOn": [
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1033",
+    "name": "Gazpacho",
+    "summary": "Andalusia's legendary chilled tomato and vegetable soup — blended smooth and served ice-cold. Intensely refreshing on a hot day, and no cooking required.",
+    "date": "2026-05-06T12:00:00Z",
+    "categories": [
+      "Vegan",
+      "Healthy",
+      "Soup"
+    ],
+    "flagged": false,
+    "liked": false,
+    "calories": 480,
+    "prepTime": 15,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/8357688/pexels-photo-8357688.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/8357688/pexels-photo-8357688.jpeg"
+    ],
+    "ingredients": [
+      "1kg very ripe tomatoes (roughly chopped)",
+      "1 red bell pepper (roughly chopped)",
+      "1 cucumber (peeled, roughly chopped, plus extra to garnish)",
+      "1 small red onion (roughly chopped)",
+      "2 cloves garlic",
+      "100ml extra-virgin olive oil (plus extra to drizzle)",
+      "3 tbsp sherry vinegar or red wine vinegar",
+      "1 thick slice day-old white bread (crusts removed, soaked in water)",
+      "1 tsp salt",
+      "Ice-cold water to adjust consistency",
+      "Croutons, diced cucumber, and a drizzle of olive oil to serve"
+    ],
+    "tools": [
+      "Blender",
+      "Fine-mesh sieve",
+      "Bowl"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Combine tomatoes, pepper, cucumber, red onion, garlic, squeezed-out soaked bread, salt, olive oil, and vinegar in a blender. Blend on high for 2 minutes until completely smooth.",
+        "tools": [
+          "Blender"
+        ],
+        "ingredients": [
+          "tomatoes",
+          "red bell pepper",
+          "cucumber",
+          "red onion",
+          "garlic",
+          "day-old white bread",
+          "extra-virgin olive oil",
+          "sherry vinegar",
+          "salt"
+        ],
+        "duration": 4,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Pass through a fine-mesh sieve, pressing with a ladle to extract maximum liquid. Discard the solids.",
+        "tools": [
+          "Fine-mesh sieve",
+          "Bowl"
+        ],
+        "ingredients": [],
+        "duration": 5,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Taste and adjust seasoning and vinegar. Add ice-cold water to reach a pourable but not watery consistency. Chill for at least 1 hour — it must be served very cold.",
+        "tools": [],
+        "ingredients": [
+          "ice-cold water"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Pour into bowls or glasses. Garnish with diced cucumber, croutons, and a generous drizzle of olive oil.",
+        "tools": [],
+        "ingredients": [
+          "croutons",
+          "diced cucumber",
+          "olive oil"
+        ],
+        "duration": 3,
+        "dependsOn": [
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1034",
+    "name": "Roasted Pumpkin Soup",
+    "summary": "Sweet roasted pumpkin blended with coconut milk and warming spices into a velvety, vibrant orange soup. Topped with toasted pumpkin seeds and a swirl of cream.",
+    "date": "2026-05-08T12:00:00Z",
+    "categories": [
+      "Vegan",
+      "Healthy",
+      "Soup"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 840,
+    "prepTime": 55,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/10110910/pexels-photo-10110910.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/10110910/pexels-photo-10110910.jpeg"
+    ],
+    "ingredients": [
+      "1.2kg pumpkin or butternut squash (peeled, seeded, cubed)",
+      "1 large onion (quartered)",
+      "4 cloves garlic (unpeeled)",
+      "3 tbsp olive oil",
+      "1 × 400ml can coconut milk",
+      "600ml vegetable stock",
+      "1 tsp ground cumin",
+      "1 tsp smoked paprika",
+      "½ tsp ground ginger",
+      "Salt and black pepper",
+      "Toasted pumpkin seeds, coconut cream, and fresh chilli to serve"
+    ],
+    "tools": [
+      "Large baking tray",
+      "Oven",
+      "Blender or immersion blender",
+      "Large saucepan"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Preheat oven to 200°C. Toss pumpkin cubes and quartered onion with olive oil, cumin, paprika, ginger, salt, and pepper. Add unpeeled garlic cloves. Spread on a baking tray.",
+        "tools": [
+          "Large baking tray",
+          "Oven"
+        ],
+        "ingredients": [
+          "pumpkin",
+          "onion",
+          "garlic",
+          "olive oil",
+          "ground cumin",
+          "smoked paprika",
+          "ground ginger",
+          "salt",
+          "black pepper"
+        ],
+        "duration": 8,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Roast for 35–40 minutes until pumpkin is tender and caramelised at the edges.",
+        "tools": [
+          "Oven"
+        ],
+        "ingredients": [],
+        "duration": 38,
+        "dependsOn": [
+          1
+        ]
+      },
+      {
+        "id": 3,
+        "action": "Squeeze garlic from their skins. Transfer all roasted vegetables and garlic to a large saucepan. Add stock and coconut milk. Blend until completely smooth.",
+        "tools": [
+          "Blender or immersion blender",
+          "Large saucepan"
+        ],
+        "ingredients": [
+          "vegetable stock",
+          "coconut milk"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Heat gently over medium heat. Taste and adjust seasoning. Serve in warmed bowls with a swirl of coconut cream, toasted pumpkin seeds, and fresh chilli.",
+        "tools": [
+          "Large saucepan"
+        ],
+        "ingredients": [
+          "toasted pumpkin seeds",
+          "coconut cream",
+          "fresh chilli"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "code": "1035",
+    "name": "Falafel Wraps",
+    "summary": "Crispy, herb-packed chickpea falafel in warm pita with tahini sauce, pickled cabbage, and fresh salad. A Middle Eastern street-food classic that's entirely vegan.",
+    "date": "2026-05-10T13:00:00Z",
+    "categories": [
+      "Vegan",
+      "Healthy"
+    ],
+    "flagged": false,
+    "liked": true,
+    "calories": 1600,
+    "prepTime": 40,
+    "servings": 4,
+    "image": "https://images.pexels.com/photos/4722522/pexels-photo-4722522.jpeg",
+    "images": [
+      "https://images.pexels.com/photos/4722522/pexels-photo-4722522.jpeg"
+    ],
+    "ingredients": [
+      "1 × 400g can chickpeas (drained and dried)",
+      "1 small onion (roughly chopped)",
+      "3 cloves garlic",
+      "Large handful flat-leaf parsley",
+      "Large handful cilantro",
+      "1½ tsp ground cumin",
+      "1 tsp ground coriander",
+      "½ tsp cayenne pepper",
+      "3 tbsp plain flour",
+      "1 tsp baking powder",
+      "Salt and pepper",
+      "Neutral oil for frying",
+      "4 pita breads",
+      "3 tbsp tahini + 2 tbsp lemon juice + 2 tbsp water (tahini sauce)",
+      "Shredded red cabbage, sliced tomato, cucumber, and fresh herbs to serve"
+    ],
+    "tools": [
+      "Food processor",
+      "Large frying pan or deep pan",
+      "Slotted spoon",
+      "Small bowl"
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "action": "Blend tahini, lemon juice, water, and a pinch of salt into a smooth sauce. Add more water if needed. Set aside.",
+        "tools": [
+          "Small bowl"
+        ],
+        "ingredients": [
+          "tahini",
+          "lemon juice",
+          "water",
+          "salt"
+        ],
+        "duration": 3,
+        "dependsOn": []
+      },
+      {
+        "id": 2,
+        "action": "Pulse chickpeas, onion, garlic, parsley, cilantro, cumin, coriander, and cayenne in a food processor until the mixture resembles coarse sand — not smooth. Do not over-blend.",
+        "tools": [
+          "Food processor"
+        ],
+        "ingredients": [
+          "chickpeas",
+          "onion",
+          "garlic",
+          "flat-leaf parsley",
+          "cilantro",
+          "ground cumin",
+          "ground coriander",
+          "cayenne pepper"
+        ],
+        "duration": 4,
+        "dependsOn": []
+      },
+      {
+        "id": 3,
+        "action": "Add flour, baking powder, salt, and pepper. Pulse to combine. Refrigerate for 20 minutes — this helps the mixture hold together.",
+        "tools": [
+          "Food processor"
+        ],
+        "ingredients": [
+          "plain flour",
+          "baking powder",
+          "salt",
+          "pepper"
+        ],
+        "duration": 22,
+        "dependsOn": [
+          2
+        ]
+      },
+      {
+        "id": 4,
+        "action": "Shape into balls (golf ball-sized). Heat 3cm of oil in a pan to 175°C. Fry in batches for 3–4 minutes until deeply golden and crispy. Drain on paper towels.",
+        "tools": [
+          "Large frying pan or deep pan",
+          "Slotted spoon"
+        ],
+        "ingredients": [
+          "neutral oil"
+        ],
+        "duration": 10,
+        "dependsOn": [
+          3
+        ]
+      },
+      {
+        "id": 5,
+        "action": "Warm pitas in a dry pan. Fill with falafel, drizzle tahini sauce, and pile in the shredded cabbage, tomato, cucumber, and fresh herbs.",
+        "tools": [],
+        "ingredients": [
+          "pita breads",
+          "shredded red cabbage",
+          "sliced tomato",
+          "cucumber",
+          "fresh herbs"
+        ],
+        "duration": 5,
+        "dependsOn": [
+          1,
+          4
+        ]
+      }
+    ]
   }
 ]

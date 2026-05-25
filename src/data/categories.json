@@ -1,8 +1,12 @@
 [
   "Bakery",
   "Vegan",
+  "Vegetarian",
   "Healthy",
   "Fish",
   "Pasta",
+  "Meat",
+  "Soup",
+  "Breakfast",
   "Dessert"
 ]

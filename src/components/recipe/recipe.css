@@ -8,7 +8,7 @@
 
 /* ── Stats grid ── */
 .recipe-stats {
-    @apply grid grid-cols-4 divide-x border-y mx-5 my-3 rounded-lg overflow-hidden;
+    @apply grid grid-cols-4 divide-x border mx-5 my-3 rounded-lg overflow-hidden;
 }
 
 .recipe-stat {
