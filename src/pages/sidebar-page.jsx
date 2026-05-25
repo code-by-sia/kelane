@@ -23,6 +23,7 @@ export default function SidebarPage({ title, header, children, noScroll }) {
   return (
     <SidebarProvider
       defaultOpen={getSidebarDefault()}
+      className={noScroll ? "!h-svh !overflow-hidden" : undefined}
       style={{
         "--sidebar-width": "calc(var(--spacing) * 56)",
         "--header-height": "calc(var(--spacing) * 12)",
