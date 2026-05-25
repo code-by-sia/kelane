@@ -82,7 +82,7 @@ export default function ExplorePage() {
     const preventExpiry =
       expiringItems.length > 0
         ? recipes
-            .filter((r) => !recentlyCookedSet.has(String(r.code)))
+            .filter((r) => !recentlyCookedSet.has(r.code))
             .map((recipe) => {
               const matches = expiringItems.filter((item) =>
                 (recipe.ingredients ?? []).some((ing) =>
@@ -104,9 +104,9 @@ export default function ExplorePage() {
         : [];
 
     // ── Coverage split (exclude recently cooked + already in expiry row) ──
-    const expirySet = new Set(preventExpiry.map((r) => String(r.code)));
+    const expirySet = new Set(preventExpiry.map((r) => r.code));
     const withPct = recipes
-      .filter((r) => !recentlyCookedSet.has(String(r.code)) && !expirySet.has(String(r.code)))
+      .filter((r) => !recentlyCookedSet.has(r.code) && !expirySet.has(r.code))
       .map((r) => ({ r, pct: coverage(r, fridgeItems) }));
 
     const canCook     = withPct.filter(({ pct }) => pct === 1).map(({ r }) => r);
@@ -145,8 +145,8 @@ export default function ExplorePage() {
     const mealTimeSuggestions = mealPeriod
       ? recipes
           .filter((r) =>
-            !recentlyCookedSet.has(String(r.code)) &&
-            !expirySet.has(String(r.code)) &&
+            !recentlyCookedSet.has(r.code) &&
+            !expirySet.has(r.code) &&
             mealTimeAffinity(r) === mealPeriod,
           )
           .sort((a, b) => coverage(b, fridgeItems) - coverage(a, fridgeItems))

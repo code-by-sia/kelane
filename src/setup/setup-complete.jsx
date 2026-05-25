@@ -1,13 +1,17 @@
 import { useNavigate } from "react-router";
 import { ChefHatIcon } from "lucide-react";
 import useSetupStore from "@/store/setup";
+import useRecipeStore from "@/store/recipe";
 import { Button } from "@/components/ui/button";
 
 export function SetupComplete() {
-  const navigate = useNavigate();
-  const completeSetup = useSetupStore((s) => s.completeSetup);
+  const navigate           = useNavigate();
+  const completeSetup      = useSetupStore((s) => s.completeSetup);
+  const seedExampleData    = useSetupStore((s) => s.preferences.seedExampleData);
+  const seedDefaultRecipes = useRecipeStore((s) => s.seedDefaultRecipes);
 
   const finish = () => {
+    if (seedExampleData) seedDefaultRecipes();
     completeSetup();
     navigate("/");
   };
@@ -18,7 +22,9 @@ export function SetupComplete() {
       <div className="text-center">
         <h1 className="text-3xl font-light mb-2">You're all set!</h1>
         <p className="text-muted-foreground">
-          Kelane is ready. Start exploring recipes and planning your meals.
+          {seedExampleData
+            ? "Kelane is ready with sample recipes. Start exploring!"
+            : "Kelane is ready. Add your first recipe and start cooking."}
         </p>
       </div>
       <Button size="lg" onClick={finish}>

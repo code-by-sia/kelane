@@ -121,7 +121,7 @@ function mapJsonLdToRecipe(ld) {
 
   // Servings — may be "4 servings" or just "4"
   const yieldRaw = Array.isArray(ld.recipeYield) ? ld.recipeYield[0] : ld.recipeYield;
-  const guests = parseInt(String(yieldRaw ?? "")) || null;
+  const servings = parseInt(String(yieldRaw ?? "")) || null;
 
   // Calories — may be "450 calories" or 450
   const calRaw = ld.nutrition?.calories;
@@ -153,8 +153,8 @@ function mapJsonLdToRecipe(ld) {
     name: String(ld.name ?? "").trim(),
     summary: String(ld.description ?? "").trim(),
     calories,
-    guests,
-    preperationTime: totalTime,
+    servings,
+    prepTime: totalTime,
     image,
     categories,
     ingredients,

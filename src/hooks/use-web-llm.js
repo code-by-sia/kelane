@@ -26,8 +26,8 @@ Use exactly this schema:
   "name": "string — exact recipe title",
   "summary": "string — 1-2 sentence description of the dish and its key flavour profile",
   "calories": number|null,
-  "guests": number|null,
-  "preperationTime": number|null,
+  "servings": number|null,
+  "prepTime": number|null,
   "image": "",
   "categories": ["string"],
   "ingredients": ["string"],
@@ -37,8 +37,8 @@ Use exactly this schema:
 
 Field rules:
 • calories — total kcal per serving; integer or null
-• guests — number of servings; integer or null
-• preperationTime — total prep + cook time in minutes; integer or null
+• servings — number of servings; integer or null
+• prepTime — total prep + cook time in minutes; integer or null
 • categories — cuisine or dish-type tags, e.g. ["Italian", "Pasta", "Vegetarian"]
 • ingredients — one string per ingredient; always include quantity + unit when given, e.g. "250 g flour", "2 large eggs", "1 tsp salt". Keep the original wording where possible.
 • steps — 6–15 steps for a typical recipe; each step must:

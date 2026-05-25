@@ -1,0 +1,135 @@
+@reference "../../index.css";
+
+/* ── Recipe editor page ──────────────────────────────────────────────────── */
+
+.re-page {
+  @apply flex flex-col min-h-screen bg-background;
+}
+
+.re-header {
+  @apply sticky top-0 z-20 flex items-center gap-3 px-4 sm:px-6 py-3
+         bg-background/90 backdrop-blur border-b;
+}
+
+.re-back-btn {
+  @apply flex items-center justify-center size-8 rounded-md
+         text-muted-foreground hover:text-foreground hover:bg-accent
+         transition-colors shrink-0;
+}
+
+.re-title {
+  @apply text-base font-semibold truncate;
+}
+
+.re-body {
+  @apply flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8 flex flex-col gap-0;
+}
+
+/* ── Sections ── */
+
+.re-section {
+  @apply flex flex-col gap-4 py-8;
+}
+
+.re-section-title {
+  @apply text-sm font-semibold uppercase tracking-wide text-muted-foreground;
+}
+
+.re-field {
+  @apply flex flex-col gap-1.5;
+}
+
+.re-error {
+  @apply text-xs text-destructive;
+}
+
+.re-hint {
+  @apply text-xs text-muted-foreground -mt-2;
+}
+
+/* ── Flag toggles ── */
+
+.re-flag-btn {
+  @apply flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer
+         transition-colors hover:bg-accent;
+}
+
+.re-flag-btn--on {
+  @apply border-primary/40 bg-primary/5;
+}
+
+/* ── Category chips ── */
+
+.re-cat-chip {
+  @apply px-3 py-1 rounded-full border text-sm transition-colors
+         hover:bg-accent cursor-pointer;
+}
+
+.re-cat-chip--active {
+  @apply bg-primary text-primary-foreground border-primary;
+}
+
+/* ── Step card ── */
+
+.re-step-card {
+  @apply rounded-xl border bg-card overflow-hidden;
+}
+
+.re-step-header {
+  @apply flex items-start gap-3 p-3;
+}
+
+.re-step-num {
+  @apply flex items-center justify-center size-6 rounded-full bg-primary/10
+         text-primary text-xs font-semibold shrink-0 mt-1;
+}
+
+.re-step-action {
+  @apply flex-1 min-h-[2.5rem] resize-none;
+}
+
+.re-step-meta {
+  @apply flex items-center gap-1.5 shrink-0;
+}
+
+.re-step-icon-btn {
+  @apply flex items-center justify-center size-7 rounded-md text-muted-foreground
+         hover:bg-accent hover:text-foreground transition-colors disabled:opacity-30
+         disabled:cursor-not-allowed;
+}
+
+/* ── Step expanded details ── */
+
+.re-step-details {
+  @apply flex flex-col gap-3 px-4 pb-4 pt-1 border-t bg-muted/20;
+}
+
+.re-step-detail-row {
+  @apply flex flex-col gap-1.5;
+}
+
+.re-step-detail-label {
+  @apply text-xs font-medium text-muted-foreground;
+}
+
+/* ── Tag pills (used inside step detail rows) ── */
+
+.re-tag-group {
+  @apply flex flex-wrap gap-1.5;
+}
+
+.re-tag {
+  @apply px-2 py-0.5 rounded-md border text-xs transition-colors cursor-pointer
+         hover:border-primary/50 hover:bg-primary/5;
+}
+
+.re-tag--active {
+  @apply bg-primary/10 border-primary/50 text-primary font-medium;
+}
+
+/* ── Bottom save bar ── */
+
+.re-bottom-bar {
+  @apply sticky bottom-0 flex justify-end gap-2 py-4 mt-4
+         bg-background/90 backdrop-blur border-t;
+}

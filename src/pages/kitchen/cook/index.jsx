@@ -122,7 +122,7 @@ export default function CookPage() {
             <img src={recipe.image} alt={recipe.name} className="w-full h-full object-cover" />
             <div className="cook-hero__overlay" />
             <div className="cook-hero__pills">
-              {recipe.preperationTime && <MetaPill icon={<ClockIcon size={11} />}>{recipe.preperationTime} min</MetaPill>}
+              {recipe.prepTime && <MetaPill icon={<ClockIcon size={11} />}>{recipe.prepTime} min</MetaPill>}
               {recipe.calories && <MetaPill icon={<FlameIcon size={11} />}>{recipe.calories} kcal</MetaPill>}
               {recipe.servings && <MetaPill icon={<UsersIcon size={11} />}>{recipe.servings}</MetaPill>}
             </div>

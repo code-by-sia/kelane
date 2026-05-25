@@ -20,7 +20,7 @@ const schema = z.object({
   summary: z.string().optional(),
   image: z.string().url("Must be a valid URL").or(z.literal("")).optional(),
   calories: z.coerce.number().min(0).optional(),
-  preperationTime: z.coerce.number().min(0).optional(),
+  prepTime: z.coerce.number().min(0).optional(),
   categories: z.array(z.string()).optional(),
   ingredients: z.array(z.object({ value: z.string().min(1) })),
   steps: z.array(
@@ -54,7 +54,7 @@ function defaultValues(recipe) {
       summary: "",
       image: "",
       calories: "",
-      preperationTime: "",
+      prepTime: "",
       categories: [],
       ingredients: [{ value: "" }],
       steps: [{ action: "", duration: "" }],
@@ -65,7 +65,7 @@ function defaultValues(recipe) {
     summary: recipe.summary ?? "",
     image: recipe.image ?? "",
     calories: recipe.calories ?? "",
-    preperationTime: recipe.preperationTime ?? "",
+    prepTime: recipe.prepTime ?? "",
     categories: recipe.categories ?? [],
     ingredients: toIngredientArray(recipe.ingredients).map((v) => ({ value: v })),
     steps: toStepArray(recipe.steps).map((s) => ({
@@ -124,7 +124,7 @@ export function RecipeFormDialog({ open, onOpenChange, recipe }) {
       summary: data.summary || "",
       image: data.image || "",
       calories: data.calories || 0,
-      preperationTime: data.preperationTime || 0,
+      prepTime: data.prepTime || 0,
       categories: data.categories ?? [],
       ingredients: data.ingredients.map((i) => i.value).filter(Boolean),
       steps: data.steps
@@ -142,7 +142,7 @@ export function RecipeFormDialog({ open, onOpenChange, recipe }) {
       liked: false,
       images: [],
       tools: [],
-      guests: 2,
+      servings: 2,
     };
 
     if (isEdit) {
@@ -194,7 +194,7 @@ export function RecipeFormDialog({ open, onOpenChange, recipe }) {
                 type="number"
                 min="0"
                 placeholder="minutes"
-                {...register("preperationTime")}
+                {...register("prepTime")}
               />
             </div>
             <div className="col-span-2 flex flex-col gap-1">

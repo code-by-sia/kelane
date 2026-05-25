@@ -53,10 +53,10 @@ export default function PrintPage() {
 
           {/* Meta row */}
           <div className="print-meta">
-            {recipe.preperationTime && (
+            {recipe.prepTime && (
               <span className="print-meta__item">
                 <ClockIcon size={13} />
-                {recipe.preperationTime} min
+                {recipe.prepTime} min
               </span>
             )}
             {recipe.calories && (
@@ -65,10 +65,10 @@ export default function PrintPage() {
                 {recipe.calories} kcal
               </span>
             )}
-            {recipe.guests && (
+            {recipe.servings && (
               <span className="print-meta__item">
                 <Users2Icon size={13} />
-                {recipe.guests} serving{recipe.guests !== 1 ? "s" : ""}
+                {recipe.servings} serving{recipe.servings !== 1 ? "s" : ""}
               </span>
             )}
             {recipe.ingredients?.length > 0 && (

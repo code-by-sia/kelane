@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { DEFAULT_MODEL_ID } from "@/data/llm-models";
-import { idbStorage } from "@/lib/idb-storage";
 
 export const PROXY_PRESETS = [
   {
@@ -53,7 +52,17 @@ const useSettingsStore = create(
       setModel: (id) => set({ modelId: id }),
       setChefTemperature: (t) => set({ chefTemperature: t }),
     }),
-    { name: "kelane-settings", storage: idbStorage },
+    {
+      name: "kelane-settings",
+
+      partialize: (s) => ({
+        proxyPresetId: s.proxyPresetId,
+        customProxyPrefix: s.customProxyPrefix,
+        themeId: s.themeId,
+        modelId: s.modelId,
+        chefTemperature: s.chefTemperature,
+      }),
+    },
   ),
 );
 

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { idbStorage } from "@/lib/idb-storage";
 
 function mergeIntoFridge(fridgeItems, newItem) {
   const existing = fridgeItems.find(
@@ -160,7 +159,11 @@ const useGroceriesStore = create(
         });
       },
     }),
-    { name: "groceries-storage", storage: idbStorage },
+    {
+      name: "groceries-storage",
+
+      partialize: (s) => ({ fridgeItems: s.fridgeItems, toBuyItems: s.toBuyItems }),
+    },
   ),
 );
 

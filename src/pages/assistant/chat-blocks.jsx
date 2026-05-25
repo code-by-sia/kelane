@@ -119,8 +119,8 @@ export function ChatRecipeCard({ recipeName }) {
 
         {/* Stats */}
         <div className="cb-recipe-card__stats">
-          {recipe.preperationTime && <span><ClockIcon size={11} /> {recipe.preperationTime}m</span>}
-          {recipe.guests          && <span><UsersIcon size={11} /> {recipe.guests} servings</span>}
+          {recipe.prepTime && <span><ClockIcon size={11} /> {recipe.prepTime}m</span>}
+          {recipe.servings          && <span><UsersIcon size={11} /> {recipe.servings} servings</span>}
           {recipe.calories        && <span><FlameIcon size={11} /> {recipe.calories} kcal</span>}
         </div>
 

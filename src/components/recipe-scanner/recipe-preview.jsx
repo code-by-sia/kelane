@@ -45,14 +45,14 @@ export function RecipePreview({ recipe, source }) {
               🔥 {recipe.calories} kcal
             </span>
           )}
-          {recipe.guests > 0 && (
+          {recipe.servings > 0 && (
             <span className="text-xs bg-muted/60 rounded-full px-2.5 py-0.5">
-              👥 {recipe.guests} serv.
+              👥 {recipe.servings} serv.
             </span>
           )}
-          {recipe.preperationTime > 0 && (
+          {recipe.prepTime > 0 && (
             <span className="text-xs bg-muted/60 rounded-full px-2.5 py-0.5">
-              ⏱ {recipe.preperationTime} min
+              ⏱ {recipe.prepTime} min
             </span>
           )}
           {recipe.ingredients?.length > 0 && (

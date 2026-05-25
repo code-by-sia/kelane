@@ -25,7 +25,6 @@ import {
   PopoverTrigger,
 } from "../ui/popover";
 import useRecipeStore from "@/store/recipe";
-import { RecipeFormDialog } from "../recipe-form";
 import { GroceriesSheet } from "./groceries-sheet";
 import { AdjustToDietDialog } from "./adjust-to-diet-dialog";
 import "./recipe.css";
@@ -34,9 +33,9 @@ function recipeToPlainText(recipe) {
   const lines = [];
   lines.push(recipe.name);
   if (recipe.summary) lines.push("", recipe.summary);
-  if (recipe.preperationTime) lines.push(`Prep time: ${recipe.preperationTime} min`);
+  if (recipe.prepTime) lines.push(`Prep time: ${recipe.prepTime} min`);
   if (recipe.calories) lines.push(`Calories: ${recipe.calories} kcal`);
-  if (recipe.guests) lines.push(`Servings: ${recipe.guests}`);
+  if (recipe.servings) lines.push(`Servings: ${recipe.servings}`);
   if (recipe.ingredients?.length) {
     lines.push("", "Ingredients:");
     recipe.ingredients.forEach((ing) => lines.push(`  - ${ing}`));
@@ -74,7 +73,6 @@ export function RecipeViewer({ recipeId }) {
   const go = useNavigate();
   const getRecipe = useRecipeStore((store) => store.getRecipe);
   const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
-  const [editOpen, setEditOpen] = useState(false);
   const [scaledGuests, setScaledGuests] = useState(null); // null = use recipe default
   const [dietOpen, setDietOpen] = useState(false);
   // dietIngredients = null means show recipe original; non-null overrides
@@ -127,8 +125,8 @@ export function RecipeViewer({ recipeId }) {
               : "—",
             label: "kcal",
           },
-          { icon: Users2Icon, value: recipe?.guests || 1, label: "serv" },
-          { icon: ClockFadingIcon, value: recipe?.preperationTime ? `${recipe.preperationTime}` : "—", label: "min" },
+          { icon: Users2Icon, value: recipe?.servings || 1, label: "serv" },
+          { icon: ClockFadingIcon, value: recipe?.prepTime ? `${recipe.prepTime}` : "—", label: "min" },
           { icon: SaladIcon, value: recipe?.ingredients?.length ?? "—", label: "ing" },
         ].map(({ icon: Icon, value, label }) => (
           <div key={label} className="recipe-stat">
@@ -146,7 +144,7 @@ export function RecipeViewer({ recipeId }) {
           Cook
         </Button>
         <GroceriesSheet recipe={recipe} />
-        <Button variant="outline" onClick={() => setEditOpen(true)}>
+        <Button variant="outline" onClick={() => go(`/recipe/${recipeId}/edit`)}>
           <PencilIcon size={15} className="text-primary" />
           Edit
         </Button>
@@ -164,7 +162,7 @@ export function RecipeViewer({ recipeId }) {
           <PopoverTrigger asChild>
             <Button variant="outline">
               <RulerIcon size={15} className="text-primary" />
-              Scale{scaledGuests !== null && scaledGuests !== (recipe.guests || 1)
+              Scale{scaledGuests !== null && scaledGuests !== (recipe.servings || 1)
                 ? ` (${scaledGuests})`
                 : ""}
             </Button>
@@ -174,29 +172,29 @@ export function RecipeViewer({ recipeId }) {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => setScaledGuests((g) => Math.max(1, (g ?? recipe.guests ?? 1) - 1))}
+                onClick={() => setScaledGuests((g) => Math.max(1, (g ?? recipe.servings ?? 1) - 1))}
                 className="scale-counter-btn"
               >
                 −
               </button>
               <span className="flex-1 text-center text-lg font-light">
-                {scaledGuests ?? recipe.guests ?? 1}
+                {scaledGuests ?? recipe.servings ?? 1}
               </span>
               <button
                 type="button"
-                onClick={() => setScaledGuests((g) => (g ?? recipe.guests ?? 1) + 1)}
+                onClick={() => setScaledGuests((g) => (g ?? recipe.servings ?? 1) + 1)}
                 className="scale-counter-btn"
               >
                 +
               </button>
             </div>
-            {scaledGuests !== null && scaledGuests !== (recipe.guests || 1) && (
+            {scaledGuests !== null && scaledGuests !== (recipe.servings || 1) && (
               <button
                 type="button"
                 onClick={() => setScaledGuests(null)}
                 className="text-xs text-muted-foreground hover:text-foreground text-center cursor-pointer"
               >
-                Reset to {recipe.guests || 1}
+                Reset to {recipe.servings || 1}
               </button>
             )}
           </PopoverContent>
@@ -224,7 +222,6 @@ export function RecipeViewer({ recipeId }) {
           Export
         </Button>
       </div>
-      <RecipeFormDialog open={editOpen} onOpenChange={setEditOpen} recipe={recipe} />
       <AdjustToDietDialog
         open={dietOpen}
         onClose={() => setDietOpen(false)}
@@ -240,7 +237,7 @@ export function RecipeViewer({ recipeId }) {
         </p>
       )}
       {recipe.ingredients?.length > 0 && (() => {
-        const baseGuests = recipe.guests || 1;
+        const baseGuests = recipe.servings || 1;
         const targetGuests = scaledGuests ?? baseGuests;
         const factor = targetGuests / baseGuests;
         const displayIngredients = dietIngredients ?? recipe.ingredients;

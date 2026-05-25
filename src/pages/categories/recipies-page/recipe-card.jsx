@@ -1,7 +1,7 @@
 import { ClockIcon, FlameIcon, HeartIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 
-export function RecipeCard({ code, name, calories, preperationTime, image, liked }) {
+export function RecipeCard({ code, name, calories, prepTime, image, liked }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -30,10 +30,10 @@ export function RecipeCard({ code, name, calories, preperationTime, image, liked
       <div className="recipe-card__body">
         <p className="font-semibold text-sm leading-tight line-clamp-2">{name}</p>
         <div className="flex items-center gap-3 mt-1">
-          {preperationTime && (
+          {prepTime && (
             <span className="flex items-center gap-1 text-xs text-white/70">
               <ClockIcon size={11} />
-              {preperationTime} min
+              {prepTime} min
             </span>
           )}
           {calories && (

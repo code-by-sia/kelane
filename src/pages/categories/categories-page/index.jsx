@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router";
 import SidebarPage from "@/pages/sidebar-page";
 import "./categories-page.css";
 import {
@@ -11,7 +12,6 @@ import {
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import useRecipeStore from "@/store/recipe";
-import { RecipeFormDialog } from "@/components/recipe-form";
 import { CategoryManagerDialog } from "@/components/category-manager";
 import { CategoryMosaicCard } from "./category-mosaic-card";
 import { CategoryListRow } from "./category-list-row";
@@ -24,6 +24,7 @@ const VIEWS = [
 ];
 
 export default function CategoriesPage() {
+  const navigate = useNavigate();
   const categories = useRecipeStore((s) => s.categories);
   const recipes = useRecipeStore((s) => s.recipes);
   const getUncategorizedRecipes = useRecipeStore((s) => s.getUncategorizedRecipes);
@@ -55,7 +56,6 @@ export default function CategoriesPage() {
     const saved = localStorage.getItem("categories.view");
     return saved && saved !== "columns" ? saved : "grid";
   });
-  const [addOpen, setAddOpen] = useState(false);
   const [manageOpen, setManageOpen] = useState(false);
 
   const changeView = (v) => {
@@ -70,7 +70,7 @@ export default function CategoriesPage() {
       title="Categories"
       header={
         <div className="flex items-center gap-2">
-          <Button size="sm" onClick={() => setAddOpen(true)}>
+          <Button size="sm" onClick={() => navigate("/recipe/new")}>
             <PlusIcon size={14} /> Add Recipe
           </Button>
           <Button size="sm" variant="outline" onClick={() => setManageOpen(true)}>
@@ -92,7 +92,6 @@ export default function CategoriesPage() {
         </div>
       }
     >
-      <RecipeFormDialog open={addOpen} onOpenChange={setAddOpen} />
       <CategoryManagerDialog open={manageOpen} onOpenChange={setManageOpen} />
 
       {view === "grid" && (

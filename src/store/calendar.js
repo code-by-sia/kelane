@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { idbStorage } from "@/lib/idb-storage";
 
 const useCalendarStore = create(
   persist(
@@ -53,7 +52,11 @@ const useCalendarStore = create(
           return { meals };
         }),
     }),
-    { name: "calendar-storage", storage: idbStorage },
+    {
+      name: "calendar-storage",
+
+      partialize: (s) => ({ meals: s.meals }),
+    },
   ),
 );
 

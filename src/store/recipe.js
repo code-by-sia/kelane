@@ -1,13 +1,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import DEFAULT_RECIPES from "../data/recipes.json" with { type: "json" };
-import { idbStorage } from "@/lib/idb-storage";
+
+export { DEFAULT_RECIPES };
+
+const DEFAULT_CATEGORIES = ["Bakery", "Vegan", "Healthy", "Fish", "Pasta", "Dessert"];
 
 const useRecipeStore = create(
   persist(
     (set, get) => ({
-      recipes: DEFAULT_RECIPES,
-      categories: ["Bakery", "Vegan", "Healthy", "Fish", "Pasta", "Dessert"],
+      // Start empty — seeded during setup if the user wants example data.
+      // Existing users with data in IndexedDB get their data hydrated normally.
+      recipes: [],
+      categories: DEFAULT_CATEGORIES,
 
       getCategoriesWithCounts: () => {
         const { categories, recipes } = get();
@@ -17,9 +22,7 @@ const useRecipeStore = create(
         }));
       },
 
-      // Compare as strings so both legacy numeric codes and UUID-based string
-      // codes (from the recipe scanner) resolve correctly.
-      getRecipe: (code) => get().recipes.find((r) => String(r.code) === String(code)),
+      getRecipe: (code) => get().recipes.find((r) => r.code === code),
       getRecipesInCategory: (category) =>
         get().recipes.filter((it) => it.categories.includes(category)),
       getFlaggedRecipes: () => get().recipes.filter((recipe) => recipe.flagged),
@@ -46,14 +49,24 @@ const useRecipeStore = create(
       /** Merge new recipes in (skip duplicates by code). */
       mergeRecipes: (incoming) =>
         set((state) => {
-          const existing = new Set(state.recipes.map((r) => String(r.code)));
-          const toAdd = incoming.filter((r) => !existing.has(String(r.code)));
+          const existing = new Set(state.recipes.map((r) => r.code));
+          const toAdd = incoming.filter((r) => !existing.has(r.code));
           return { recipes: [...state.recipes, ...toAdd] };
         }),
 
       /** Replace the entire library. */
       replaceRecipes: (recipes, categories) =>
         set({ recipes, categories }),
+
+      /** Seed built-in example recipes (skip any that already exist by code). */
+      seedDefaultRecipes: () => {
+        const { recipes } = get();
+        const existing = new Set(recipes.map((r) => r.code));
+        const toAdd = DEFAULT_RECIPES.filter((r) => !existing.has(r.code));
+        if (toAdd.length > 0) {
+          set((s) => ({ recipes: [...s.recipes, ...toAdd] }));
+        }
+      },
 
       addCategory: (category) => {
         const { categories } = get();
@@ -86,7 +99,18 @@ const useRecipeStore = create(
     }),
     {
       name: "recipe-app-storage",
-      storage: idbStorage,
+
+      partialize: (s) => ({ recipes: s.recipes, categories: s.categories }),
+
+      // v1 migration: coerce legacy numeric codes to strings so route params
+      // (always strings) match correctly after the schema refactor.
+      migrate: (persisted) => ({
+        ...persisted,
+        recipes: (persisted.recipes ?? []).map((r) =>
+          typeof r.code === "number" ? { ...r, code: String(r.code) } : r,
+        ),
+      }),
+      version: 1,
     },
   ),
 );

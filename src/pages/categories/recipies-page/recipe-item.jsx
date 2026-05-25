@@ -1,11 +1,16 @@
 import { ClockIcon, FlameIcon, HeartIcon } from "lucide-react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-export function RecipeItem({ code, name, summary, calories, preperationTime, image, liked }) {
+export function RecipeItem({ code, name, summary, calories, prepTime, image, liked }) {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   return (
-    <a href={`/categories/${id}/${code}`} className="recipe-item">
+    <a
+      href={`/categories/${id}/${code}`}
+      onClick={(e) => { e.preventDefault(); navigate(`/categories/${id}/${code}`); }}
+      className="recipe-item"
+    >
       {image ? (
         <img className="recipe-item__thumb" src={image} alt={name} />
       ) : (
@@ -17,9 +22,9 @@ export function RecipeItem({ code, name, summary, calories, preperationTime, ima
         <p className="font-semibold text-sm truncate">{name}</p>
         {summary && <p className="text-xs text-muted-foreground truncate mt-0.5">{summary}</p>}
         <div className="flex gap-3 mt-1">
-          {preperationTime && (
+          {prepTime && (
             <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <ClockIcon size={10} /> {preperationTime} min
+              <ClockIcon size={10} /> {prepTime} min
             </span>
           )}
           {calories && (

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { idbStorage } from "@/lib/idb-storage";
 
 const useHistoryStore = create(
   persist(
@@ -28,7 +27,11 @@ const useHistoryStore = create(
       removeEntry: (id) =>
         set((s) => ({ entries: s.entries.filter((e) => e.id !== id) })),
     }),
-    { name: "cooking-history-storage", storage: idbStorage },
+    {
+      name: "cooking-history-storage",
+
+      partialize: (s) => ({ entries: s.entries }),
+    },
   ),
 );
 
