@@ -502,7 +502,7 @@ export default function AssistantPage() {
       <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
         <SheetContent side="right" className="flex flex-col w-80 sm:w-96 p-0">
           <SheetHeader className="px-4 pt-5 pb-3 border-b shrink-0">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pr-7">
               <SheetTitle className="text-base">Chat History</SheetTitle>
               <Button
                 variant="ghost"
