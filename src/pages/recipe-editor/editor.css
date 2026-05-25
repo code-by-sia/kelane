@@ -133,3 +133,21 @@
   @apply sticky bottom-0 flex justify-end gap-2 py-4 mt-4
          bg-background/90 backdrop-blur border-t;
 }
+
+/* ── Variant cards ── */
+
+.re-variant-card {
+  @apply rounded-xl border bg-card overflow-hidden;
+}
+
+.re-variant-header {
+  @apply flex items-center gap-2 px-4 py-3 bg-muted/30 border-b;
+}
+
+.re-variant-body {
+  @apply flex flex-col gap-4 p-4;
+}
+
+.re-variant-override {
+  @apply flex flex-col gap-1 rounded-lg border border-dashed p-3;
+}

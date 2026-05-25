@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { toast } from "sonner";
 import { Loading } from "@/components/loading";
 import { useChef } from "@/hooks/chef";
@@ -7,6 +7,7 @@ import Step from "../step";
 import useRecipeStore from "@/store/recipe";
 import useGroceriesStore from "@/store/groceries";
 import useHistoryStore from "@/store/history";
+import { applyVariant } from "@/lib/variants";
 import "./cook.css";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,10 +36,18 @@ function parseIngredient(str) {
 
 export default function CookPage() {
   const { recipeId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const getRecipe = useRecipeStore((store) => store.getRecipe);
-  const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
+  const baseRecipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
+
+  // Apply variant override if ?variant= is present in the URL
+  const variantId = searchParams.get("variant") || null;
+  const recipe = useMemo(
+    () => applyVariant(baseRecipe, variantId),
+    [baseRecipe, variantId],
+  );
   const deductFridgeIngredient = useGroceriesStore((s) => s.deductFridgeIngredient);
   const startCooking = useHistoryStore((s) => s.startCooking);
   const completeCooking = useHistoryStore((s) => s.completeCooking);
@@ -98,7 +107,13 @@ export default function CookPage() {
           </Button>
 
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm truncate leading-tight">{recipe?.name}</p>
+            <p className="font-semibold text-sm truncate leading-tight">
+              {recipe?.name}
+              {variantId && (() => {
+                const v = baseRecipe?.variants?.find((vr) => vr.id === variantId);
+                return v ? <span className="font-normal text-muted-foreground ml-1">— {v.name}</span> : null;
+              })()}
+            </p>
             <p className="text-xs text-muted-foreground leading-tight">
               {allDone ? "All done!" : steps.length > 0 ? `${completedCount} of ${steps.length} steps` : "No steps"}
             </p>

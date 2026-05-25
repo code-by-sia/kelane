@@ -1,7 +1,7 @@
 import { ClockIcon, FlameIcon, HeartIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 
-export function RecipeItem({ code, name, summary, calories, prepTime, image, liked }) {
+export function RecipeItem({ code, name, summary, calories, prepTime, image, liked, variants }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -35,6 +35,11 @@ export function RecipeItem({ code, name, summary, calories, prepTime, image, lik
         </div>
       </div>
       {liked && <HeartIcon size={14} className="fill-red-500 stroke-red-400 shrink-0" />}
+      {variants?.length > 0 && (
+        <span className="text-[10px] font-medium text-muted-foreground border rounded px-1.5 py-0.5 shrink-0">
+          {variants.length}v
+        </span>
+      )}
     </a>
   );
 }

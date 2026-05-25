@@ -18,10 +18,10 @@ import {
   Trash2Icon,
   HeartIcon,
   FlagIcon,
-  ImageIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   GripVerticalIcon,
+  CopyPlusIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +31,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import useRecipeStore from "@/store/recipe";
+import { variantSlug } from "@/lib/variants";
 import "./editor.css";
 
 // ── Zod schema ────────────────────────────────────────────────────────────────
@@ -41,6 +42,19 @@ const stepSchema = z.object({
   tools:       z.array(z.string()).optional(),
   ingredients: z.array(z.string()).optional(),
   dependsOn:   z.array(z.number()).optional(),
+});
+
+const variantSchema = z.object({
+  id:                  z.string().optional(),
+  name:                z.string().min(1, "Variant name is required"),
+  description:         z.string().optional(),
+  image:               z.string().url("Must be a valid URL").or(z.literal("")).optional(),
+  calories:            z.coerce.number().min(0).optional().or(z.literal("")),
+  prepTime:            z.coerce.number().min(0).optional().or(z.literal("")),
+  overrideIngredients: z.boolean().optional(),
+  ingredients:         z.array(z.object({ value: z.string() })).optional(),
+  overrideSteps:       z.boolean().optional(),
+  steps:               z.array(stepSchema).optional(),
 });
 
 const schema = z.object({
@@ -57,6 +71,7 @@ const schema = z.object({
   steps:           z.array(stepSchema),
   liked:           z.boolean().optional(),
   flagged:         z.boolean().optional(),
+  variants:        z.array(variantSchema).optional(),
 });
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -83,6 +98,26 @@ function toStepArray(val) {
   );
 }
 
+function toVariantArray(variants) {
+  if (!variants?.length) return [];
+  return variants.map((v) => ({
+    id:                  v.id ?? "",
+    name:                v.name ?? "",
+    description:         v.description ?? "",
+    image:               v.image ?? "",
+    calories:            v.calories ?? "",
+    prepTime:            v.prepTime ?? "",
+    overrideIngredients: Boolean(v.ingredients?.length),
+    ingredients:         toFieldArray(v.ingredients ?? []).length
+                           ? toFieldArray(v.ingredients)
+                           : [{ value: "" }],
+    overrideSteps:       Boolean(v.steps?.length),
+    steps:               toStepArray(v.steps ?? []).length
+                           ? toStepArray(v.steps)
+                           : [{ action: "", duration: "", tools: [], ingredients: [], dependsOn: [] }],
+  }));
+}
+
 function buildDefaultValues(recipe) {
   if (!recipe) {
     return {
@@ -90,6 +125,7 @@ function buildDefaultValues(recipe) {
       servings: "", categories: [], tools: [], liked: false, flagged: false,
       ingredients: [{ value: "" }],
       steps: [{ action: "", duration: "", tools: [], ingredients: [], dependsOn: [] }],
+      variants: [],
     };
   }
   return {
@@ -110,6 +146,7 @@ function buildDefaultValues(recipe) {
     steps:           toStepArray(recipe.steps).length
                        ? toStepArray(recipe.steps)
                        : [{ action: "", duration: "", tools: [], ingredients: [], dependsOn: [] }],
+    variants:        toVariantArray(recipe.variants ?? []),
   };
 }
 
@@ -223,6 +260,169 @@ function StepCard({ index, total, field, register, control, setValue, getValues,
   );
 }
 
+// ── Sub-component: variant card ───────────────────────────────────────────────
+
+function VariantCard({ index, register, control, setValue, getValues, watch, onRemove, recipeTags }) {
+  const [expanded, setExpanded] = useState(true);
+  const [stepsExpanded, setStepsExpanded] = useState(false);
+
+  const overrideIngredients = watch(`variants.${index}.overrideIngredients`);
+  const overrideSteps       = watch(`variants.${index}.overrideSteps`);
+  const variantName         = watch(`variants.${index}.name`) || `Variant ${index + 1}`;
+
+  const { fields: ingFields,  append: appendIng,  remove: removeIng  } =
+    useFieldArray({ control, name: `variants.${index}.ingredients` });
+  const { fields: stepFields, append: appendStep, remove: removeStep } =
+    useFieldArray({ control, name: `variants.${index}.steps` });
+
+  return (
+    <div className="re-variant-card">
+      {/* Header */}
+      <div className="re-variant-header">
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="flex items-center gap-2 flex-1 text-left"
+        >
+          {expanded ? <ChevronUpIcon size={14} /> : <ChevronDownIcon size={14} />}
+          <span className="text-sm font-medium">{variantName}</span>
+        </button>
+        <button
+          type="button"
+          className="re-step-icon-btn text-destructive/60 hover:text-destructive"
+          onClick={onRemove}
+          title="Remove variant"
+        >
+          <Trash2Icon size={13} />
+        </button>
+      </div>
+
+      {expanded && (
+        <div className="re-variant-body">
+          {/* Name + Description row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="re-field">
+              <Label>Variant name <span className="text-destructive">*</span></Label>
+              <Input placeholder="e.g. Vegan, Gluten-free…" {...register(`variants.${index}.name`)} />
+            </div>
+            <div className="re-field">
+              <Label>Description</Label>
+              <Input placeholder="Short description of this variant…" {...register(`variants.${index}.description`)} />
+            </div>
+          </div>
+
+          {/* Optional overrides row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="re-field">
+              <Label>Calories override (kcal)</Label>
+              <Input type="number" min="0" placeholder="inherit from base" {...register(`variants.${index}.calories`)} />
+            </div>
+            <div className="re-field">
+              <Label>Prep time override (min)</Label>
+              <Input type="number" min="0" placeholder="inherit from base" {...register(`variants.${index}.prepTime`)} />
+            </div>
+          </div>
+
+          {/* Override image */}
+          <div className="re-field">
+            <Label>Image URL (optional override)</Label>
+            <Input placeholder="https://… — leave blank to use base image" {...register(`variants.${index}.image`)} />
+          </div>
+
+          {/* Override ingredients toggle */}
+          <div className="re-variant-override">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <Checkbox
+                checked={!!overrideIngredients}
+                onCheckedChange={(v) => setValue(`variants.${index}.overrideIngredients`, !!v)}
+              />
+              <span className="text-sm font-medium">Override ingredients</span>
+              <span className="text-xs text-muted-foreground">(unchecked = inherit from base)</span>
+            </label>
+
+            {overrideIngredients && (
+              <div className="flex flex-col gap-2 mt-2 pl-6">
+                {ingFields.map((field, idx) => (
+                  <div key={field.id} className="flex gap-2 items-center">
+                    <Input
+                      placeholder={`Ingredient ${idx + 1}…`}
+                      {...register(`variants.${index}.ingredients.${idx}.value`)}
+                    />
+                    <Button
+                      type="button" variant="ghost" size="icon-sm"
+                      onClick={() => removeIng(idx)} disabled={ingFields.length === 1}
+                    >
+                      <Trash2Icon size={14} />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button" variant="outline" size="sm" className="self-start"
+                  onClick={() => appendIng({ value: "" })}
+                >
+                  <PlusIcon size={13} /> Add ingredient
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Override steps toggle */}
+          <div className="re-variant-override">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <Checkbox
+                checked={!!overrideSteps}
+                onCheckedChange={(v) => setValue(`variants.${index}.overrideSteps`, !!v)}
+              />
+              <span className="text-sm font-medium">Override steps</span>
+              <span className="text-xs text-muted-foreground">(unchecked = inherit from base)</span>
+            </label>
+
+            {overrideSteps && (
+              <div className="flex flex-col gap-3 mt-2 pl-6">
+                {stepFields.map((field, idx) => (
+                  <div key={field.id} className="re-step-card">
+                    <div className="re-step-header">
+                      <div className="re-step-num">{idx + 1}</div>
+                      <Textarea
+                        className="re-step-action"
+                        placeholder="Describe this step…"
+                        rows={2}
+                        {...register(`variants.${index}.steps.${idx}.action`)}
+                      />
+                      <div className="re-step-meta">
+                        <Input
+                          type="number" min="0" placeholder="min"
+                          className="w-16 text-sm"
+                          {...register(`variants.${index}.steps.${idx}.duration`)}
+                        />
+                        <button
+                          type="button"
+                          className="re-step-icon-btn text-destructive/60 hover:text-destructive"
+                          onClick={() => removeStep(idx)}
+                          disabled={stepFields.length === 1}
+                          title="Delete step"
+                        >
+                          <Trash2Icon size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <Button
+                  type="button" variant="outline" size="sm" className="self-start"
+                  onClick={() => appendStep({ action: "", duration: "", tools: [], ingredients: [], dependsOn: [] })}
+                >
+                  <PlusIcon size={13} /> Add step
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main editor ───────────────────────────────────────────────────────────────
 
 export default function RecipeEditorPage() {
@@ -248,10 +448,11 @@ export default function RecipeEditorPage() {
   }, [recipe?.code]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Field arrays ──
-  const { fields: ingFields,  append: appendIng,   remove: removeIng   } = useFieldArray({ control, name: "ingredients" });
-  const { fields: stepFields, append: appendStep,  remove: removeStep  } = useFieldArray({ control, name: "steps" });
-  const { fields: imgFields,  append: appendImg,   remove: removeImg   } = useFieldArray({ control, name: "images" });
-  const { fields: toolFields, append: appendTool,  remove: removeTool  } = useFieldArray({ control, name: "tools" });
+  const { fields: ingFields,     append: appendIng,     remove: removeIng     } = useFieldArray({ control, name: "ingredients" });
+  const { fields: stepFields,    append: appendStep,    remove: removeStep    } = useFieldArray({ control, name: "steps" });
+  const { fields: imgFields,     append: appendImg,     remove: removeImg     } = useFieldArray({ control, name: "images" });
+  const { fields: toolFields,    append: appendTool,    remove: removeTool    } = useFieldArray({ control, name: "tools" });
+  const { fields: variantFields, append: appendVariant, remove: removeVariant } = useFieldArray({ control, name: "variants" });
 
   // Live values used for step detail pickers
   const watchedCats    = watch("categories") ?? [];
@@ -292,6 +493,18 @@ export default function RecipeEditorPage() {
 
   // ── Submit ──
   const onSubmit = (data) => {
+    const serializeSteps = (steps) =>
+      (steps ?? [])
+        .filter((s) => s.action)
+        .map((s, idx) => ({
+          id:          idx + 1,
+          action:      s.action,
+          duration:    s.duration ? Number(s.duration) : 0,
+          tools:       s.tools ?? [],
+          ingredients: s.ingredients ?? [],
+          dependsOn:   s.dependsOn ?? [],
+        }));
+
     const payload = {
       name:            data.name,
       summary:         data.summary || "",
@@ -305,17 +518,27 @@ export default function RecipeEditorPage() {
       liked:           data.liked ?? false,
       flagged:         data.flagged ?? false,
       ingredients:     data.ingredients.map((i) => i.value).filter(Boolean),
-      steps:           data.steps
-        .filter((s) => s.action)
-        .map((s, idx) => ({
-          id:          idx + 1,
-          action:      s.action,
-          duration:    s.duration ? Number(s.duration) : 0,
-          tools:       s.tools ?? [],
-          ingredients: s.ingredients ?? [],
-          dependsOn:   s.dependsOn ?? [],
-        })),
+      steps:           serializeSteps(data.steps),
       date: isEdit ? (recipe.date ?? new Date().toISOString()) : new Date().toISOString(),
+      variants: (data.variants ?? [])
+        .filter((v) => v.name?.trim())
+        .map((v) => {
+          const id = v.id || variantSlug(v.name);
+          const variant = { id, name: v.name.trim() };
+          if (v.description?.trim()) variant.description = v.description.trim();
+          if (v.image?.trim())       variant.image = v.image.trim();
+          if (v.calories !== "")     variant.calories = Number(v.calories);
+          if (v.prepTime !== "")     variant.prepTime = Number(v.prepTime);
+          if (v.overrideIngredients) {
+            const ings = (v.ingredients ?? []).map((i) => i.value).filter(Boolean);
+            if (ings.length) variant.ingredients = ings;
+          }
+          if (v.overrideSteps) {
+            const steps = serializeSteps(v.steps);
+            if (steps.length) variant.steps = steps;
+          }
+          return variant;
+        }),
     };
 
     if (isEdit) {
@@ -554,6 +777,56 @@ export default function RecipeEditorPage() {
             <Button type="button" variant="outline" size="sm" className="self-start"
               onClick={() => appendStep({ action: "", duration: "", tools: [], ingredients: [], dependsOn: [] })}>
               <PlusIcon size={13} /> Add step
+            </Button>
+          </div>
+        </section>
+
+        <Separator />
+
+        {/* ══ Section: Variants ════════════════════════════════════════════════ */}
+        <section className="re-section">
+          <h2 className="re-section-title">Variants</h2>
+          <p className="re-hint">
+            Add alternate versions of this recipe (e.g. Vegan, Gluten-free, Spicy). Each variant can
+            override any combination of ingredients, steps, calories, or prep time while keeping everything
+            else from the base recipe.
+          </p>
+
+          <div className="flex flex-col gap-3">
+            {variantFields.map((field, idx) => (
+              <VariantCard
+                key={field.id}
+                index={idx}
+                register={register}
+                control={control}
+                setValue={setValue}
+                getValues={getValues}
+                watch={watch}
+                onRemove={() => removeVariant(idx)}
+                recipeTags={recipeTags}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="self-start"
+              onClick={() =>
+                appendVariant({
+                  id: "",
+                  name: "",
+                  description: "",
+                  image: "",
+                  calories: "",
+                  prepTime: "",
+                  overrideIngredients: false,
+                  ingredients: [{ value: "" }],
+                  overrideSteps: false,
+                  steps: [{ action: "", duration: "", tools: [], ingredients: [], dependsOn: [] }],
+                })
+              }
+            >
+              <CopyPlusIcon size={13} /> Add variant
             </Button>
           </div>
         </section>

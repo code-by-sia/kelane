@@ -47,3 +47,13 @@
     @apply w-8 h-8 rounded-md border flex items-center justify-center
            text-lg hover:bg-accent cursor-pointer;
 }
+
+/* ── Variant switcher pills ── */
+.recipe-variant-pill {
+    @apply px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer
+           border-border hover:border-primary/40 hover:bg-primary/5;
+}
+
+.recipe-variant-pill--active {
+    @apply bg-primary text-primary-foreground border-primary hover:bg-primary hover:border-primary;
+}

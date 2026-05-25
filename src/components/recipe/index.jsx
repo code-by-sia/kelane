@@ -16,6 +16,7 @@ import {
   XIcon,
 } from "lucide-react";
 import { DIETS } from "@/lib/diet-substitutions";
+import { applyVariant } from "@/lib/variants";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -72,14 +73,32 @@ function scaleIngredient(str, factor) {
 export function RecipeViewer({ recipeId }) {
   const go = useNavigate();
   const getRecipe = useRecipeStore((store) => store.getRecipe);
-  const recipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
+  const baseRecipe = useMemo(() => getRecipe(recipeId), [getRecipe, recipeId]);
+
+  // Variant selection — null means base recipe
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
+
+  // Merge selected variant's overrides over the base recipe
+  const recipe = useMemo(
+    () => applyVariant(baseRecipe, selectedVariantId),
+    [baseRecipe, selectedVariantId],
+  );
+
   const [scaledGuests, setScaledGuests] = useState(null); // null = use recipe default
   const [dietOpen, setDietOpen] = useState(false);
   // dietIngredients = null means show recipe original; non-null overrides
   const [dietIngredients, setDietIngredients] = useState(null);
   const [appliedDiet, setAppliedDiet] = useState(null);
 
-  if (!recipe)
+  // Reset diet/scale whenever variant changes
+  const handleVariantChange = (id) => {
+    setSelectedVariantId(id);
+    setDietIngredients(null);
+    setAppliedDiet(null);
+    setScaledGuests(null);
+  };
+
+  if (!baseRecipe)
     return (
       <div className="flex items-center justify-center flex-1">
         <LibraryBigIcon
@@ -89,6 +108,13 @@ export function RecipeViewer({ recipeId }) {
         />
       </div>
     );
+
+  const hasVariants = baseRecipe.variants?.length > 0;
+
+  // Build the cook URL — include ?variant= when a non-base variant is active
+  const cookUrl = selectedVariantId
+    ? `/cook/${recipeId}?variant=${selectedVariantId}`
+    : `/cook/${recipeId}`;
 
   return (
     <div className="relative flex-1">
@@ -108,9 +134,49 @@ export function RecipeViewer({ recipeId }) {
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
       </div>
 
+      {/* ── Variant switcher ── */}
+      {hasVariants && (
+        <div className="flex items-center gap-1.5 px-5 pt-3 flex-wrap">
+          <button
+            type="button"
+            onClick={() => handleVariantChange(null)}
+            className={`recipe-variant-pill ${selectedVariantId === null ? "recipe-variant-pill--active" : ""}`}
+          >
+            Original
+          </button>
+          {baseRecipe.variants.map((v) => (
+            <button
+              key={v.id}
+              type="button"
+              onClick={() => handleVariantChange(v.id)}
+              className={`recipe-variant-pill ${selectedVariantId === v.id ? "recipe-variant-pill--active" : ""}`}
+            >
+              {v.name}
+            </button>
+          ))}
+        </div>
+      )}
+      {/* Show the active variant description if it has one */}
+      {hasVariants && selectedVariantId && (() => {
+        const v = baseRecipe.variants.find((vr) => vr.id === selectedVariantId);
+        return v?.description ? (
+          <p className="mx-5 mt-2 mb-0 text-xs text-muted-foreground leading-relaxed bg-muted/40 rounded-lg px-3 py-2 border border-border/50">
+            {v.description}
+          </p>
+        ) : null;
+      })()}
+
       {/* Title */}
       <h1 className="font-semibold text-2xl px-5 pt-3 pb-1 leading-tight">
         {recipe?.name}
+        {selectedVariantId && (() => {
+          const v = baseRecipe.variants.find((vr) => vr.id === selectedVariantId);
+          return v ? (
+            <span className="ml-2 text-sm font-normal text-muted-foreground align-middle">
+              — {v.name}
+            </span>
+          ) : null;
+        })()}
       </h1>
 
       {/* ── Stats grid ── */}
@@ -139,9 +205,9 @@ export function RecipeViewer({ recipeId }) {
 
       {/* ── Action buttons ── */}
       <div className="flex flex-wrap gap-2 mx-5 mb-3">
-        <Button onClick={() => go(`/cook/${recipeId}`)}>
+        <Button onClick={() => go(cookUrl)}>
           <CookingPotIcon size={15} />
-          Cook
+          Cook{selectedVariantId ? ` (${baseRecipe.variants.find((v) => v.id === selectedVariantId)?.name})` : ""}
         </Button>
         <GroceriesSheet recipe={recipe} />
         <Button variant="outline" onClick={() => go(`/recipe/${recipeId}/edit`)}>

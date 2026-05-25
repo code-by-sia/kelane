@@ -137,6 +137,114 @@
           6
         ]
       }
+    ],
+    "variants": [
+      {
+        "id": "vegan",
+        "name": "Vegan",
+        "description": "All the classic pizza flavour without any animal products — vegan mozzarella melts beautifully and nutritional yeast adds a subtle umami depth.",
+        "calories": 680,
+        "ingredients": [
+          "500g tipo 00 flour (or strong bread flour)",
+          "320ml warm water",
+          "7g instant dry yeast",
+          "10g fine salt",
+          "1 tsp sugar",
+          "2 tbsp olive oil",
+          "400g canned San Marzano tomatoes",
+          "250g vegan mozzarella (drained)",
+          "2 tbsp nutritional yeast",
+          "Large handful of fresh basil leaves",
+          "Extra-virgin olive oil to finish",
+          "Pinch of dried oregano"
+        ],
+        "steps": [
+          {
+            "id": 1,
+            "action": "Combine yeast, sugar, and warm water. Let sit 5 minutes until frothy.",
+            "duration": 5,
+            "tools": [],
+            "ingredients": [
+              "yeast",
+              "sugar",
+              "warm water"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 2,
+            "action": "Add flour, salt, and olive oil to the yeast mixture. Mix until a shaggy dough forms, then knead on a floured surface for 8–10 minutes until smooth and elastic.",
+            "duration": 10,
+            "tools": [],
+            "ingredients": [
+              "flour",
+              "salt",
+              "olive oil"
+            ],
+            "dependsOn": [
+              1
+            ]
+          },
+          {
+            "id": 3,
+            "action": "Shape dough into a ball, place in an oiled bowl, cover with a damp cloth, and leave to rise for 1 hour until doubled in size.",
+            "duration": 60,
+            "tools": [],
+            "ingredients": [],
+            "dependsOn": [
+              2
+            ]
+          },
+          {
+            "id": 4,
+            "action": "Crush canned tomatoes by hand into a bowl. Season with salt, a pinch of oregano, and a drizzle of olive oil. Keep it rough and chunky.",
+            "duration": 5,
+            "tools": [],
+            "ingredients": [
+              "canned tomatoes",
+              "oregano",
+              "olive oil"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 5,
+            "action": "Preheat oven to its highest setting (250–280°C) with the baking tray inside for 30 minutes.",
+            "duration": 30,
+            "tools": [],
+            "ingredients": [],
+            "dependsOn": []
+          },
+          {
+            "id": 6,
+            "action": "Stretch the dough by hand into a thin round. Spread tomato sauce, tear over the vegan mozzarella, and sprinkle with nutritional yeast.",
+            "duration": 5,
+            "tools": [],
+            "ingredients": [
+              "vegan mozzarella",
+              "nutritional yeast"
+            ],
+            "dependsOn": [
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "id": 7,
+            "action": "Bake for 10–12 minutes until the crust is charred at the edges. Scatter basil and finish with a drizzle of extra-virgin olive oil.",
+            "duration": 12,
+            "tools": [],
+            "ingredients": [
+              "basil",
+              "extra-virgin olive oil"
+            ],
+            "dependsOn": [
+              6
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -2227,6 +2335,102 @@
           4
         ]
       }
+    ],
+    "variants": [
+      {
+        "id": "veggie",
+        "name": "Veggie",
+        "description": "Black bean and mushroom smash patties with the same sear, same sauce, same satisfying crunch — no beef required.",
+        "calories": 520,
+        "ingredients": [
+          "400g canned black beans (drained, well dried)",
+          "150g portobello mushrooms (very finely chopped)",
+          "40g breadcrumbs",
+          "1 egg",
+          "1 tsp smoked paprika",
+          "1 tsp cumin",
+          "Salt and black pepper",
+          "4 slices cheddar or vegan cheese",
+          "2 brioche buns",
+          "2 tbsp butter (for buns)",
+          "Dill pickle slices",
+          "Shredded iceberg lettuce",
+          "2 tbsp mayonnaise",
+          "1 tbsp ketchup",
+          "1 tbsp yellow mustard",
+          "1 tsp pickle brine",
+          "½ tsp smoked paprika"
+        ],
+        "steps": [
+          {
+            "id": 1,
+            "action": "Mix mayo, ketchup, mustard, pickle brine, and smoked paprika in a small bowl. Set aside.",
+            "duration": 3,
+            "tools": [],
+            "ingredients": [
+              "mayonnaise",
+              "ketchup",
+              "mustard",
+              "pickle brine",
+              "smoked paprika"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 2,
+            "action": "Mash black beans until about 80% smooth. Add mushrooms, breadcrumbs, egg, smoked paprika, cumin, salt and pepper. Mix until it holds together. Divide into 4 balls.",
+            "duration": 8,
+            "tools": [],
+            "ingredients": [
+              "black beans",
+              "mushrooms",
+              "breadcrumbs",
+              "egg",
+              "smoked paprika",
+              "cumin"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 3,
+            "action": "Heat cast-iron skillet over high heat for 3 minutes. Toast bun halves cut-side down in butter for 2 minutes until golden. Set aside.",
+            "duration": 5,
+            "tools": [],
+            "ingredients": [
+              "brioche buns",
+              "butter"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 4,
+            "action": "Place two bean balls on the hot skillet. Smash flat with a spatula. Season with salt and pepper. Cook 3 minutes until a dark crust forms. Flip, lay cheese on top, cook 2 more minutes.",
+            "duration": 6,
+            "tools": [],
+            "ingredients": [
+              "cheddar cheese"
+            ],
+            "dependsOn": [
+              2,
+              3
+            ]
+          },
+          {
+            "id": 5,
+            "action": "Build burgers: sauce on both bun halves, lettuce on the base, two veggie patties, pickles, top bun. Serve immediately.",
+            "duration": 3,
+            "tools": [],
+            "ingredients": [
+              "lettuce",
+              "pickles"
+            ],
+            "dependsOn": [
+              1,
+              4
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -2649,6 +2853,88 @@
         "duration": 2,
         "dependsOn": [
           4
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "vegetarian",
+        "name": "Vegetarian",
+        "description": "Crispy smoked mushrooms replicate the savory, chewy texture of guanciale. The egg-and-cheese sauce is identical — creamy, rich, and deeply satisfying.",
+        "calories": 620,
+        "ingredients": [
+          "400g spaghetti",
+          "250g king oyster or shiitake mushrooms (torn into thick strips)",
+          "1 tsp smoked paprika",
+          "1 tbsp soy sauce",
+          "2 tbsp olive oil",
+          "4 large eggs + 2 extra yolks",
+          "100g Pecorino Romano (finely grated)",
+          "50g Parmesan (finely grated)",
+          "2 tsp coarsely cracked black pepper",
+          "Salt for pasta water"
+        ],
+        "steps": [
+          {
+            "id": 1,
+            "action": "Whisk eggs, yolks, Pecorino, Parmesan, and cracked black pepper together in a large bowl. Set aside.",
+            "duration": 5,
+            "tools": [],
+            "ingredients": [
+              "eggs",
+              "Pecorino",
+              "Parmesan",
+              "black pepper"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 2,
+            "action": "Cook pasta in heavily salted boiling water until al dente. Reserve at least 1 cup pasta water before draining.",
+            "duration": 10,
+            "tools": [],
+            "ingredients": [
+              "spaghetti"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 3,
+            "action": "Heat olive oil in a wide frying pan over high heat. Add mushroom strips, smoked paprika, and soy sauce. Cook without stirring for 4–5 minutes until deeply golden and crispy at the edges.",
+            "duration": 6,
+            "tools": [],
+            "ingredients": [
+              "mushrooms",
+              "smoked paprika",
+              "soy sauce",
+              "olive oil"
+            ],
+            "dependsOn": []
+          },
+          {
+            "id": 4,
+            "action": "Add hot drained pasta to the mushroom pan off the heat. Quickly pour in the egg mixture and toss rapidly, adding pasta water a splash at a time until the sauce is silky and clings to the pasta.",
+            "duration": 3,
+            "tools": [],
+            "ingredients": [],
+            "dependsOn": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "id": 5,
+            "action": "Divide into warm bowls. Finish with extra Pecorino and more cracked pepper.",
+            "duration": 2,
+            "tools": [],
+            "ingredients": [
+              "Pecorino"
+            ],
+            "dependsOn": [
+              4
+            ]
+          }
         ]
       }
     ]
