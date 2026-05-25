@@ -7,6 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 import { useLocation } from "react-router";
 import {
   BookHeartIcon,
@@ -26,7 +27,8 @@ export function NavCategories() {
   return (
     <>
       <SidebarGroup>
-        <SidebarGroupLabel className="nav-group-label">Recipes</SidebarGroupLabel>
+        <SidebarGroupLabel className="nav-group-label group-data-[collapsible=icon]:hidden">Recipes</SidebarGroupLabel>
+        <Separator className="mx-2 hidden w-auto group-data-[collapsible=icon]:block" />
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Explore" isActive={pathname === "/"}>
