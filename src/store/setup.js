@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { idbStorage } from "@/lib/idb-storage";
 
 const useSetupStore = create(
   persist(
@@ -23,7 +24,7 @@ const useSetupStore = create(
       completeSetup: () => set({ completed: true, step: 0 }),
       resetSetup: () => set({ completed: false, step: 0 }),
     }),
-    { name: "kelane-setup-storage" },
+    { name: "kelane-setup-storage", storage: idbStorage },
   ),
 );
 

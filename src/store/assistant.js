@@ -12,6 +12,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { idbStorage } from "@/lib/idb-storage";
 
 const useAssistantStore = create(
   persist(
@@ -60,7 +61,7 @@ const useAssistantStore = create(
       /** Wipe everything. */
       clearAll: () => set({ conversations: [] }),
     }),
-    { name: "assistant-storage" }
+    { name: "assistant-storage", storage: idbStorage }
   )
 );
 

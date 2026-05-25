@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { idbStorage } from "@/lib/idb-storage";
 
 const DEFAULT_FEEDS = [
   {
@@ -64,6 +65,7 @@ const useFeedsStore = create(
     }),
     {
       name: "feeds-storage",
+      storage: idbStorage,
       version: 2,
       migrate: (persisted, version) => {
         // Merge any new default feeds that don't already exist in persisted state

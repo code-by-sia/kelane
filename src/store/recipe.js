@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import DEFAULT_RECIPES from "../data/recipes.json" with { type: "json" };
+import { idbStorage } from "@/lib/idb-storage";
 
 const useRecipeStore = create(
   persist(
@@ -85,7 +86,7 @@ const useRecipeStore = create(
     }),
     {
       name: "recipe-app-storage",
-      storage: window.localStorage,
+      storage: idbStorage,
     },
   ),
 );
