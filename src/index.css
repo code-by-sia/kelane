@@ -422,7 +422,7 @@ html[data-theme="aubergine"] {
    No left-border accent; the background fill carries the indicator. */
 [data-slot="sidebar-menu-button"][data-active="true"] {
     background: var(--background);
-    color: var(--sidebar-accent-foreground);
+    color: var(--foreground);
     font-weight: 600;
 }
 
