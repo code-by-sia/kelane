@@ -29,3 +29,10 @@
 .sidebar-search {
     @apply px-0 pt-1 group-data-[collapsible=icon]:hidden;
 }
+
+/* Search button — slightly dimmed sidebar background */
+.sidebar-search [data-slot="button"] {
+    background: color-mix(in oklch, var(--sidebar-foreground) 7%, var(--sidebar));
+    border-color: color-mix(in oklch, var(--sidebar-foreground) 12%, var(--sidebar));
+    color: var(--sidebar-foreground);
+}
