@@ -4,11 +4,13 @@
    Sidebar logo / workspace mark
    ──────────────────────────────────────────────────────────── */
 .sidebar-logo {
-    @apply flex items-center gap-2.5 overflow-hidden;
+    @apply flex items-center gap-2.5 overflow-hidden
+           group-data-[collapsible=icon]:justify-center;
 }
 
 .sidebar-logo__icon {
-    @apply size-6 shrink-0;
+    @apply size-5 shrink-0
+           group-data-[collapsible=icon]:size-6;
 }
 
 .sidebar-logo__text {
