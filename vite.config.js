@@ -13,7 +13,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.png", "icon-180.png", "icon.svg"],
       manifest: {
-        name: "Kelane — Recipes",
+        name: "Kelane",
         short_name: "Kelane",
         description: "Your personal recipe manager and meal planner",
         theme_color: "#150404",
