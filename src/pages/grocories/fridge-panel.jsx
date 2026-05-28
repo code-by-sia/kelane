@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { differenceInDays, parseISO } from "date-fns";
-import { CalendarOffIcon, ListTodoIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { CalendarOffIcon, ListTodoIcon, PlusIcon, RefrigeratorIcon, ShoppingCartIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SmartExpiryPicker } from "@/components/smart-expiry-picker";
@@ -58,7 +59,7 @@ function groupFridgeItems(items) {
 
 const EMPTY = { name: "", quantity: "", unit: "pcs", expiresAt: null };
 
-export default function FridgePanel() {
+export default function FridgePanel({ onCookFromRecipe, fridgeIsLight }) {
   const fridgeItems = useGroceriesStore((s) => s.fridgeItems);
   const addFridgeItem = useGroceriesStore((s) => s.addFridgeItem);
   const removeFridgeItems = useGroceriesStore((s) => s.removeFridgeItems);
@@ -116,9 +117,68 @@ export default function FridgePanel() {
 
   return (
     <div className="flex flex-col h-full">
+
+      {/* ── Top toolbar ── */}
+      <div className="flex items-center gap-2 px-4 py-2 border-b shrink-0">
+        {addOpen ? (
+          <form onSubmit={submit} className="flex flex-col gap-2 w-full py-1">
+            <IngredientInput
+              placeholder="Item name"
+              autoFocus
+              value={form.name}
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            />
+            <div className="flex gap-2">
+              <Input
+                type="number"
+                min="0"
+                placeholder="Qty"
+                className="w-20"
+                value={form.quantity}
+                onChange={(e) => setForm((f) => ({ ...f, quantity: e.target.value }))}
+              />
+              <select
+                value={form.unit}
+                onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
+                className="border rounded-md px-2 text-sm bg-card"
+              >
+                {UNITS.map((u) => <option key={u}>{u}</option>)}
+              </select>
+            </div>
+            <div className="grocery-expiry-section">
+              <p className="text-xs text-muted-foreground mb-1.5">Expiry date (optional)</p>
+              <SmartExpiryPicker
+                value={form.expiresAt}
+                onChange={(val) => setForm((f) => ({ ...f, expiresAt: val }))}
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setAddOpen(false)}>Cancel</Button>
+              <Button type="submit" size="sm">Add</Button>
+            </div>
+          </form>
+        ) : (
+          <Button variant="outline" size="sm" onClick={() => setAddOpen(true)}>
+            <PlusIcon size={14} /> Add item
+          </Button>
+        )}
+      </div>
+
       <div className="flex-1 overflow-y-auto divide-y">
-        {grouped.length === 0 && (
-          <p className="text-sm text-muted-foreground p-4">No items in fridge.</p>
+        {grouped.length === 0 && !addOpen && (
+          <div className="flex flex-col items-center justify-center gap-4 py-16 px-6 text-center text-muted-foreground">
+            <RefrigeratorIcon size={40} strokeWidth={0.8} />
+            <div>
+              <p className="text-sm font-medium">Your fridge is empty</p>
+              <p className="text-xs mt-1">Add items manually or pick a recipe to auto-fill your buy list.</p>
+            </div>
+            {onCookFromRecipe && (
+              <Button onClick={onCookFromRecipe} variant="default" size="sm" className="gap-1.5">
+                <ShoppingCartIcon size={14} />
+                Cook from recipe
+              </Button>
+            )}
+          </div>
         )}
 
         {grouped.map((group) => {
@@ -207,55 +267,6 @@ export default function FridgePanel() {
         </div>
       )}
 
-      {/* Add form */}
-      <div className="border-t p-4">
-        {addOpen ? (
-          <form onSubmit={submit} className="flex flex-col gap-2">
-            <IngredientInput
-              placeholder="Item name"
-              autoFocus
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            />
-            <div className="flex gap-2">
-              <Input
-                type="number"
-                min="0"
-                placeholder="Qty"
-                className="w-20"
-                value={form.quantity}
-                onChange={(e) => setForm((f) => ({ ...f, quantity: e.target.value }))}
-              />
-              <select
-                value={form.unit}
-                onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
-                className="border rounded-md px-2 text-sm bg-card"
-              >
-                {UNITS.map((u) => <option key={u}>{u}</option>)}
-              </select>
-            </div>
-
-            <div className="grocery-expiry-section">
-              <p className="text-xs text-muted-foreground mb-1.5">Expiry date (optional)</p>
-              <SmartExpiryPicker
-                value={form.expiresAt}
-                onChange={(val) => setForm((f) => ({ ...f, expiresAt: val }))}
-              />
-            </div>
-
-            <div className="flex gap-2 justify-end">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setAddOpen(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" size="sm">Add</Button>
-            </div>
-          </form>
-        ) : (
-          <Button variant="outline" size="sm" className="w-full" onClick={() => setAddOpen(true)}>
-            <PlusIcon /> Add item
-          </Button>
-        )}
-      </div>
     </div>
   );
 }

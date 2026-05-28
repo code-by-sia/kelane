@@ -75,9 +75,65 @@ export default function ToBuyPanel() {
 
   return (
     <div className="flex flex-col h-full">
+
+      {/* ── Top toolbar ── */}
+      <div className="flex items-center gap-2 px-4 py-2 border-b shrink-0">
+        {open ? (
+          <form onSubmit={submit} className="flex flex-col gap-2 w-full py-1">
+            <IngredientInput
+              placeholder="Item name"
+              autoFocus
+              value={form.name}
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            />
+            <div className="flex gap-2">
+              <Input
+                type="number"
+                min="0"
+                placeholder="Qty"
+                className="w-20"
+                value={form.quantity}
+                onChange={(e) => setForm((f) => ({ ...f, quantity: e.target.value }))}
+              />
+              <select
+                value={form.unit}
+                onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
+                className="border rounded-md px-2 text-sm bg-card"
+              >
+                {UNITS.map((u) => <option key={u}>{u}</option>)}
+              </select>
+            </div>
+            <div className="grocery-expiry-section">
+              <p className="text-xs text-muted-foreground mb-1.5">Expiry date (optional)</p>
+              <SmartExpiryPicker value={formExpiry} onChange={setFormExpiry} />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button type="button" variant="ghost" size="sm" onClick={() => { setOpen(false); setFormExpiry(null); }}>Cancel</Button>
+              <Button type="submit" size="sm">Add</Button>
+            </div>
+          </form>
+        ) : (
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+              <PlusIcon size={14} /> Add item
+            </Button>
+            <Button variant="outline" size="sm" title="Find items with camera" onClick={() => setCameraOpen(true)}>
+              <CameraIcon size={14} />
+            </Button>
+            {checkedCount > 0 && selected.size === 0 && (
+              <Button variant="ghost" size="sm" className="ml-auto text-muted-foreground" onClick={clearCheckedToBuyItems}>
+                Clear {checkedCount} checked
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+
       <div className="flex-1 overflow-y-auto divide-y">
         {toBuyItems.length === 0 && (
-          <p className="text-sm text-muted-foreground p-4">Nothing to buy.</p>
+          <div className="flex flex-col items-center justify-center gap-2 py-16 text-muted-foreground">
+            <p className="text-sm">Nothing to buy yet.</p>
+          </div>
         )}
         {toBuyItems.map((item) => {
           const isSelected = selected.has(item.id);
@@ -161,77 +217,6 @@ export default function ToBuyPanel() {
         </div>
       )}
 
-      <div className="border-t p-4 flex flex-col gap-2">
-        {checkedCount > 0 && selected.size === 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground self-end"
-            onClick={clearCheckedToBuyItems}
-          >
-            Clear {checkedCount} checked
-          </Button>
-        )}
-
-        {open ? (
-          <form onSubmit={submit} className="flex flex-col gap-2">
-            <IngredientInput
-              placeholder="Item name"
-              autoFocus
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            />
-            <div className="flex gap-2">
-              <Input
-                type="number"
-                min="0"
-                placeholder="Qty"
-                className="w-20"
-                value={form.quantity}
-                onChange={(e) => setForm((f) => ({ ...f, quantity: e.target.value }))}
-              />
-              <select
-                value={form.unit}
-                onChange={(e) => setForm((f) => ({ ...f, unit: e.target.value }))}
-                className="border rounded-md px-2 text-sm bg-card"
-              >
-                {UNITS.map((u) => <option key={u}>{u}</option>)}
-              </select>
-            </div>
-
-            <div className="grocery-expiry-section">
-              <p className="text-xs text-muted-foreground mb-1.5">Expiry date (optional)</p>
-              <SmartExpiryPicker value={formExpiry} onChange={setFormExpiry} />
-            </div>
-
-            <div className="flex gap-2 justify-end">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => { setOpen(false); setFormExpiry(null); }}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" size="sm">Add</Button>
-            </div>
-          </form>
-        ) : (
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="flex-1" onClick={() => setOpen(true)}>
-              <PlusIcon /> Add item
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              title="Find items with camera"
-              onClick={() => setCameraOpen(true)}
-            >
-              <CameraIcon size={14} />
-            </Button>
-          </div>
-        )}
-      </div>
 
       {moveDialogOpen && (
         <MoveFridgeDialog
