@@ -7,8 +7,10 @@ import { TimerRing } from "./timer-ring";
 import { IngredientChips } from "./ingredient-chips";
 
 export default function Step({ step, stepNumber, totalSteps, onStart, onDone }) {
-  const hasTimer = (step.duration ?? 0) > 3;
-  const [remaining, setRemaining] = useState(step.duration ?? 0);
+  // step.duration is stored in minutes; convert to seconds for the countdown.
+  const durationSec = (step.duration ?? 0) * 60;
+  const hasTimer = (step.duration ?? 0) > 0;
+  const [remaining, setRemaining] = useState(durationSec);
   const cardRef = useRef(null);
 
   const isActive = step.status === "in_progress";
@@ -61,7 +63,7 @@ export default function Step({ step, stepNumber, totalSteps, onStart, onDone }) 
 
         {hasTimer && (
           <div className="flex justify-center py-2">
-            <TimerRing total={step.duration} remaining={remaining} />
+            <TimerRing total={durationSec} remaining={remaining} />
           </div>
         )}
 

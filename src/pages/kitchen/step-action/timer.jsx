@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { playDoneMelody } from "@/lib/beep";
 
 export function Timer({ duration, onDone }) {
-  const [i, setI] = useState(duration);
+  // duration is in minutes; convert to seconds for the countdown.
+  const [i, setI] = useState(duration * 60);
 
   useEffect(() => {
     if (i > 0) {

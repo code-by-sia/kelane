@@ -17,7 +17,7 @@
 import { useState, useCallback, useRef } from "react";
 import { CreateMLCEngine } from "@mlc-ai/web-llm";
 import useSettingsStore from "@/store/settings";
-import { DEFAULT_MODEL_ID } from "@/data/llm-models";
+import { DEFAULT_MODEL_ID } from "@/data/llm-models"; // Phi-3.5 mini by default
 
 // ── Module-level singleton ─────────────────────────────────────────────────────
 let _engine = null;

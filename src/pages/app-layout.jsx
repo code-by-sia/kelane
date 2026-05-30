@@ -5,7 +5,7 @@
  */
 
 import { Suspense } from "react";
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, useNavigation } from "react-router";
 import { AppSidebar } from "@/components/app-sidebar";
 import { CookingIcon } from "@/components/loading/cooking-icon";
 import { MobileNav } from "@/components/mobile-nav";
@@ -19,7 +19,7 @@ function getSidebarDefault() {
   return entry ? entry.split("=")[1] === "true" : true;
 }
 
-/** Loading indicator shown inside the content area while a page chunk loads. */
+/** Shown only on the very first visit to a page (before the JS chunk is cached). */
 function ContentSkeleton() {
   return (
     <div className="flex flex-col items-center justify-center gap-3 h-64 text-muted-foreground">
@@ -29,9 +29,26 @@ function ContentSkeleton() {
   );
 }
 
+/**
+ * Slim top bar shown during within-session navigations (chunks already cached,
+ * React Router uses startTransition so old content stays visible — this bar
+ * is the only visual signal that a navigation is in progress).
+ */
+function NavigationProgress() {
+  const { state } = useNavigation();
+  if (state === "idle") return null;
+  return (
+    <div
+      className="absolute inset-x-0 top-0 h-0.5 z-50 overflow-hidden"
+      aria-hidden="true"
+    >
+      <div className="h-full w-1/2 bg-primary animate-nav-progress" />
+    </div>
+  );
+}
+
 export default function AppLayout() {
   const { pathname } = useLocation();
-  // Only the assistant chat page needs a fixed-height, no-scroll shell.
   const noScroll = pathname === "/assistant";
 
   return (
@@ -44,7 +61,8 @@ export default function AppLayout() {
       }}
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="overflow-hidden">
+      <SidebarInset className="relative overflow-hidden">
+        <NavigationProgress />
         <Suspense fallback={<ContentSkeleton />}>
           <Outlet />
         </Suspense>

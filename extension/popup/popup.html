@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kelane Recipe Importer</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <img src="../icons/icon.svg" alt="Kelane" />
+    <span class="header-title">Kelane</span>
+    <span class="header-spacer"></span>
+    <button class="settings-toggle" id="settingsToggle" title="Settings">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ── Loading ────────────────────────────────────────────────────────── -->
+  <div class="state" id="stateLoading">
+    <div class="spinner"></div>
+    <span class="state-sub">Scanning page for a recipe…</span>
+  </div>
+
+  <!-- ── No recipe ──────────────────────────────────────────────────────── -->
+  <div class="state" id="stateNone" hidden>
+    <div class="state-icon">🍽️</div>
+    <p class="state-title">No recipe found</p>
+    <p class="state-sub">
+      This page doesn't appear to have structured recipe data.<br/>
+      Try a site like AllRecipes, BBC Good Food, or NYT Cooking.
+    </p>
+  </div>
+
+  <!-- ── Error ──────────────────────────────────────────────────────────── -->
+  <div class="state" id="stateError" hidden>
+    <div class="state-icon">⚠️</div>
+    <p class="state-title">Cannot access this page</p>
+    <p class="state-sub">Chrome restricts access to browser system pages.</p>
+  </div>
+
+  <!-- ── Recipe found ───────────────────────────────────────────────────── -->
+  <div class="recipe-card" id="stateRecipe" hidden>
+    <div class="recipe-hero" id="recipeHero">
+      <div class="recipe-hero-placeholder">🍳</div>
+    </div>
+
+    <div class="recipe-body">
+      <p class="recipe-name" id="recipeName"></p>
+
+      <div class="recipe-source" id="recipeSource">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span id="recipeSourceText"></span>
+      </div>
+
+      <div class="recipe-meta" id="recipeMeta"></div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-primary" id="importBtn">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Import to Kelane
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Settings ───────────────────────────────────────────────────────── -->
+  <div class="settings-panel" id="settingsPanel" hidden>
+    <span class="settings-label">Settings</span>
+    <div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">
+        Kelane app URL
+      </div>
+      <div class="settings-row">
+        <input
+          class="settings-input"
+          id="kelaneUrl"
+          type="url"
+          placeholder="https://chef.samalstudios.com"
+          spellcheck="false"
+        />
+        <button class="btn btn-ghost settings-save" id="saveSettings">Save</button>
+      </div>
+    </div>
+    <span class="saved-toast" id="savedToast" hidden>✓ Saved</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

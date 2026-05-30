@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { DEFAULT_MODEL_ID } from "@/data/llm-models";
+import { DEFAULT_MODEL_ID, DEFAULT_SCANNER_MODEL_ID } from "@/data/llm-models";
 
 export const PROXY_PRESETS = [
   {
@@ -40,16 +40,20 @@ const useSettingsStore = create(
       // "tomato" | "warm-kitchen" | "sage" | "ocean" | "aubergine"
       themeId: "tomato",
 
-      // LLM model used by the recipe scanner and Hejar assistant (on-device WebLLM)
+      // LLM model for the chef assistant chat (on-device WebLLM, WebGPU)
       modelId: DEFAULT_MODEL_ID,
 
-      // Hejar assistant settings
+      // LLM model used specifically for recipe scanning (can be different from chat)
+      scannerModelId: DEFAULT_SCANNER_MODEL_ID,
+
+      // Chef assistant personality settings
       chefTemperature: 0.72,   // 0.4 = precise · 0.72 = balanced · 1.1 = creative
 
       setProxyPreset: (id) => set({ proxyPresetId: id }),
       setCustomProxyPrefix: (prefix) => set({ customProxyPrefix: prefix }),
       setTheme: (id) => set({ themeId: id }),
       setModel: (id) => set({ modelId: id }),
+      setScannerModel: (id) => set({ scannerModelId: id }),
       setChefTemperature: (t) => set({ chefTemperature: t }),
     }),
     {
@@ -60,6 +64,7 @@ const useSettingsStore = create(
         customProxyPrefix: s.customProxyPrefix,
         themeId: s.themeId,
         modelId: s.modelId,
+        scannerModelId: s.scannerModelId,
         chefTemperature: s.chefTemperature,
       }),
     },

@@ -16,7 +16,7 @@
 import { useState, useRef, useCallback } from "react";
 import { CreateMLCEngine } from "@mlc-ai/web-llm";
 import useSettingsStore from "@/store/settings";
-import { DEFAULT_MODEL_ID } from "@/data/llm-models";
+import { DEFAULT_SCANNER_MODEL_ID } from "@/data/llm-models";
 
 // System prompt — instructs the model to output ONLY a valid JSON recipe.
 const SYSTEM_PROMPT = `You are a structured recipe extraction assistant. Parse the provided text and return ONLY a valid JSON object — no markdown, no code fences, no explanation.
@@ -92,8 +92,8 @@ function normalizeExtracted(parsed) {
 }
 
 export function useWebLLM() {
-  // Read model from settings; fall back to default if not set.
-  const modelId = useSettingsStore((s) => s.modelId) || DEFAULT_MODEL_ID;
+  // Recipe scanner uses its own dedicated model setting so it can differ from the chat model.
+  const modelId = useSettingsStore((s) => s.scannerModelId) || DEFAULT_SCANNER_MODEL_ID;
 
   const [status, setStatus] = useState(() =>
     typeof navigator !== "undefined" && !navigator.gpu

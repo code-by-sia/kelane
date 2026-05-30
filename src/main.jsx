@@ -24,6 +24,8 @@ const BrowserPage         = lazy(() => import("./pages/browser"));
 const AssistantPage       = lazy(() => import("./pages/assistant"));
 const PreferencesPage     = lazy(() => import("./pages/preferences"));
 const ProfilePage         = lazy(() => import("./pages/profile"));
+const DocsPage            = lazy(() => import("./pages/docs"));
+const ImportPage          = lazy(() => import("./pages/import"));
 
 // Pages without the sidebar shell (standalone layouts)
 const SetupPage           = lazy(() => import("./setup/index"));
@@ -31,7 +33,9 @@ const CookPage            = lazy(() => import("./pages/kitchen/cook"));
 const PrintPage           = lazy(() => import("./pages/kitchen/print"));
 const RecipeEditorPage    = lazy(() => import("./pages/recipe-editor"));
 
-// Layout — owns the SidebarProvider + AppSidebar + content Suspense boundary
+// Layout — owns the SidebarProvider + AppSidebar + content Suspense boundary.
+// React Router 7 handles the lazy() suspension for route elements internally,
+// so no extra Suspense wrapper is needed here.
 const AppLayout           = lazy(() => import("./pages/app-layout"));
 
 // ── App ──────────────────────────────────────────────────────────────────────
@@ -61,6 +65,8 @@ createRoot(document.getElementById("root")).render(
           <Route path="/assistant"                element={<AssistantPage />} />
           <Route path="/preferences"              element={<PreferencesPage />} />
           <Route path="/profile"                  element={<ProfilePage />} />
+          <Route path="/docs"                     element={<DocsPage />} />
+          <Route path="/import"                   element={<ImportPage />} />
         </Route>
 
         {/* ── Standalone pages — no sidebar ── */}

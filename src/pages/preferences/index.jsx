@@ -9,9 +9,50 @@ import SidebarPage from "@/pages/sidebar-page";
 import { ThemePicker } from "@/components/theme-picker";
 import useSetupStore from "@/store/setup";
 import useSettingsStore, { PROXY_PRESETS } from "@/store/settings";
-import { LLM_MODELS } from "@/data/llm-models";
+import { LLM_MODELS, SPEED_COLOR, SPEED_LABEL } from "@/data/llm-models";
 import "./preferences.css";
 import { DataTab } from "./data-tab";
+
+/** Reusable model picker card list */
+function ModelCards({ activeId, onSelect }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {LLM_MODELS.map((model) => {
+        const active = activeId === model.id;
+        return (
+          <button
+            key={model.id}
+            type="button"
+            onClick={() => onSelect(model.id)}
+            className={`prefs-model-card ${active ? "prefs-model-card--active" : "prefs-model-card--idle"}`}
+          >
+            <div className={`prefs-model-radio ${active ? "prefs-model-radio--active" : "prefs-model-radio--idle"}`}>
+              {active && <CheckIcon size={12} className="text-primary-foreground" strokeWidth={3} />}
+            </div>
+            <div className="prefs-model-meta">
+              <div className="prefs-model-name-row">
+                <span className="prefs-model-name">{model.name}</span>
+                {model.badge && (
+                  <Badge className="text-[10px] h-4 px-1.5 bg-primary/15 text-primary border-transparent">
+                    {model.badge}
+                  </Badge>
+                )}
+                <Badge variant="outline" className="text-[10px] h-4 px-1.5 font-mono ml-auto">
+                  {model.vram}
+                </Badge>
+              </div>
+              <span className="prefs-model-desc">{model.description}</span>
+            </div>
+            <div className="prefs-model-speed">
+              <ZapIcon size={12} className={SPEED_COLOR[model.speed]} />
+              <span className="text-xs text-muted-foreground">{SPEED_LABEL[model.speed]}</span>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 const DIETARY_OPTIONS = [
   { id: "vegan",       label: "Vegan" },
@@ -37,6 +78,8 @@ export default function PreferencesPage() {
   const setDietaryTags = useSetupStore((s) => s.setDietaryTags);
   const modelId          = useSettingsStore((s) => s.modelId);
   const setModel         = useSettingsStore((s) => s.setModel);
+  const scannerModelId   = useSettingsStore((s) => s.scannerModelId);
+  const setScannerModel  = useSettingsStore((s) => s.setScannerModel);
   const chefTemperature  = useSettingsStore((s) => s.chefTemperature) ?? 0.72;
   const setChefTemperature = useSettingsStore((s) => s.setChefTemperature);
   const proxyPresetId    = useSettingsStore((s) => s.proxyPresetId);
@@ -89,49 +132,29 @@ export default function PreferencesPage() {
         <TabsContent value="ai" className="prefs-tab-content">
           <div className="prefs-tab-inner--gap">
 
-            {/* ── On-device model ── */}
+            {/* ── Kejal assistant model ── */}
             <div>
-              <p className="text-sm font-medium mb-0.5">On-device model</p>
+              <p className="text-sm font-medium mb-0.5">Kejal assistant model</p>
               <p className="text-sm text-muted-foreground">
-                Used by the recipe scanner and Kejal assistant. Runs entirely on
-                your device — nothing is sent to the cloud. The first use
-                downloads and caches the model locally.
+                Used for the in-app chat assistant. Runs entirely on your device
+                via WebGPU — no data leaves the browser. Downloaded and cached on
+                first use.
               </p>
             </div>
-            <div className="flex flex-col gap-2">
-              {LLM_MODELS.map((model) => {
-                const active = modelId === model.id;
-                return (
-                  <button
-                    key={model.id}
-                    type="button"
-                    onClick={() => setModel(model.id)}
-                    className={`prefs-model-card ${active ? "prefs-model-card--active" : "prefs-model-card--idle"}`}
-                  >
-                    <div className={`prefs-model-radio ${active ? "prefs-model-radio--active" : "prefs-model-radio--idle"}`}>
-                      {active && <CheckIcon size={12} className="text-primary-foreground" strokeWidth={3} />}
-                    </div>
-                    <div className="prefs-model-meta">
-                      <div className="prefs-model-name-row">
-                        <span className="prefs-model-name">{model.name}</span>
-                        <Badge variant="outline" className="text-[10px] h-4 px-1.5 font-mono">
-                          {model.size}
-                        </Badge>
-                      </div>
-                      <span className="prefs-model-desc">{model.description}</span>
-                    </div>
-                    <div className="prefs-model-speed">
-                      <ZapIcon size={12} className={
-                        model.speed === "fast"   ? "text-green-500" :
-                        model.speed === "medium" ? "text-amber-500" :
-                                                   "text-muted-foreground"
-                      } />
-                      <span className="text-xs text-muted-foreground">{SPEED_LABELS[model.speed]}</span>
-                    </div>
-                  </button>
-                );
-              })}
+            <ModelCards activeId={modelId} onSelect={setModel} />
+
+            <hr className="border-border" />
+
+            {/* ── Recipe scanner model ── */}
+            <div>
+              <p className="text-sm font-medium mb-0.5">Recipe scanner model</p>
+              <p className="text-sm text-muted-foreground">
+                Used when extracting a recipe from a URL or pasted text. Can be
+                different from the chat model — a smaller model is often enough
+                for structured extraction.
+              </p>
             </div>
+            <ModelCards activeId={scannerModelId} onSelect={setScannerModel} />
 
             <hr className="border-border" />
 
