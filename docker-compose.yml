@@ -1,0 +1,33 @@
+services:
+
+  # ── App — builds the SPA and serves it with nginx ──────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── CORS Proxy — optional, needed for the Recipe Browser feature ────────────
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: proxy
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: "3001"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

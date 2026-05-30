@@ -5,7 +5,7 @@ import {
   IconLogout,
   IconUserCircle,
 } from "@tabler/icons-react";
-import { UtensilsIcon } from "lucide-react";
+import { BookOpenIcon, UtensilsIcon } from "lucide-react";
 import { useNavigate } from "react-router";
 import {
   DropdownMenu,
@@ -87,6 +87,10 @@ export function NavUser() {
               <DropdownMenuItem onClick={() => navigate("/preferences")}>
                 <UtensilsIcon size={16} />
                 Preferences
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/docs")}>
+                <BookOpenIcon size={16} />
+                Docs &amp; Self-hosting
               </DropdownMenuItem>
             </DropdownMenuGroup>
 

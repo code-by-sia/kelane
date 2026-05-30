@@ -4,6 +4,37 @@
    Recipe Scanner dialog
    ──────────────────────────────────────────────────────────── */
 
+/* ── Model picker row ─────────────────────────────────────────────────────── */
+.scanner-model-row {
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50 border;
+}
+
+.scanner-model-label {
+    @apply text-xs text-muted-foreground shrink-0;
+}
+
+.scanner-model-select-wrap {
+    @apply flex-1 min-w-0;
+}
+
+.scanner-model-select {
+    @apply w-full bg-transparent text-sm font-medium outline-none cursor-pointer
+           truncate disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.scanner-model-speed {
+    @apply text-[11px] font-medium shrink-0 tabular-nums;
+}
+
+.scanner-model-badge {
+    @apply text-[10px] font-semibold px-1.5 py-0.5 rounded-full
+           bg-primary/15 text-primary shrink-0;
+}
+
+.scanner-model-desc {
+    @apply text-xs text-muted-foreground -mt-1;
+}
+
 /* URL / Paste text tab selector */
 .scanner-tabs {
     @apply flex gap-1 rounded-lg bg-muted p-1 self-start;

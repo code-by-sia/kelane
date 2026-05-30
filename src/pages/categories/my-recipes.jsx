@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ArrowLeftIcon, Clock9Icon, FlagIcon, HeartIcon } from "lucide-react";
+import { ArrowLeftIcon, Clock9Icon, FlagIcon, HeartIcon, ImportIcon } from "lucide-react";
 import { RecipeViewer } from "@/components/recipe";
 import { RecipeList } from "@/components/recipe-list";
 import SidebarPage from "@/pages/sidebar-page";
@@ -10,24 +10,30 @@ import { Button } from "@/components/ui/button";
 const A_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 const FILTERS = [
-  { id: "all", label: "All" },
-  { id: "favorites", label: "Favorites", icon: HeartIcon },
-  { id: "want-to-cook", label: "Want to Cook", icon: FlagIcon },
-  { id: "recent", label: "Most Recent", icon: Clock9Icon },
+  { id: "all",          label: "All" },
+  { id: "favorites",    label: "Favorites",    icon: HeartIcon   },
+  { id: "want-to-cook", label: "Want to Cook", icon: FlagIcon    },
+  { id: "recent",       label: "Most Recent",  icon: Clock9Icon  },
+  { id: "imported",     label: "Imported",     icon: ImportIcon  },
 ];
+
+/** A recipe is "imported" if its code begins with "imported-" or importedFrom is set. */
+const isImported = (r) =>
+  r.importedFrom != null || String(r.code).startsWith("imported-");
 
 export function MyRecipesPage() {
   const [filter, setFilter] = useState("all");
   const { recipeId } = useParams();
   const go = useNavigate();
 
-  const recipes = useRecipeStore((s) => s.recipes);
+  const recipes            = useRecipeStore((s) => s.recipes);
   const getFavoriteRecipes = useRecipeStore((s) => s.getFavoriteRecipes);
-  const getFlaggedRecipes = useRecipeStore((s) => s.getFlaggedRecipes);
+  const getFlaggedRecipes  = useRecipeStore((s) => s.getFlaggedRecipes);
 
   const filtered = useMemo(() => {
-    if (filter === "favorites") return getFavoriteRecipes();
+    if (filter === "favorites")    return getFavoriteRecipes();
     if (filter === "want-to-cook") return getFlaggedRecipes();
+    if (filter === "imported")     return recipes.filter(isImported);
     if (filter === "recent")
       return [...recipes]
         .filter((r) => r.date && new Date(r.date) > new Date(Date.now() - A_WEEK))
@@ -41,22 +47,33 @@ export function MyRecipesPage() {
     });
   }, [filter, recipes, getFavoriteRecipes, getFlaggedRecipes]);
 
+  const importedCount = useMemo(() => recipes.filter(isImported).length, [recipes]);
+
   const filterBar = (
     <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
-      {FILTERS.map(({ id, label, icon: Icon }) => (
-        <button
-          key={id}
-          onClick={() => setFilter(id)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer shrink-0 ${
-            filter === id
-              ? "bg-foreground text-background"
-              : "bg-muted hover:bg-muted/80 text-muted-foreground"
-          }`}
-        >
-          {Icon && <Icon size={11} />}
-          {label}
-        </button>
-      ))}
+      {FILTERS.map(({ id, label, icon: Icon }) => {
+        // Hide "Imported" chip when there are no imported recipes
+        if (id === "imported" && importedCount === 0) return null;
+        return (
+          <button
+            key={id}
+            onClick={() => setFilter(id)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer shrink-0 ${
+              filter === id
+                ? "bg-foreground text-background"
+                : "bg-muted hover:bg-muted/80 text-muted-foreground"
+            }`}
+          >
+            {Icon && <Icon size={11} />}
+            {label}
+            {id === "imported" && (
+              <span className={`ml-0.5 tabular-nums ${filter === id ? "opacity-70" : "opacity-60"}`}>
+                {importedCount}
+              </span>
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 
@@ -75,7 +92,6 @@ export function MyRecipesPage() {
       {/* ── Mobile: recipe selected → full-screen detail ── */}
       {recipeId ? (
         <>
-          {/* Back button row, mobile only */}
           <div className="md:hidden flex items-center gap-2 px-3 py-2 border-b shrink-0">
             <Button variant="ghost" size="icon-sm" onClick={() => go("/my-recipes")} title="Back">
               <ArrowLeftIcon size={16} />
@@ -83,7 +99,6 @@ export function MyRecipesPage() {
             <span className="text-sm font-medium text-muted-foreground">My Recipes</span>
           </div>
           <div className="flex divide-x flex-1 min-h-0 overflow-hidden">
-            {/* List hidden on mobile when recipe is open */}
             <div className="hidden md:flex">
               <RecipeList recipes={filtered} onSelect={(code) => go(`/my-recipes/${code}`)} />
             </div>
@@ -93,7 +108,6 @@ export function MyRecipesPage() {
           </div>
         </>
       ) : (
-        /* No recipe selected — list fills full width */
         <div className="flex divide-x flex-1 min-h-0 overflow-hidden">
           <RecipeList recipes={filtered} onSelect={(code) => go(`/my-recipes/${code}`)} />
         </div>

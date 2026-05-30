@@ -16,6 +16,13 @@
         }
     }
 
+    /* Slim top progress bar shown during page navigation */
+    --animate-nav-progress: nav-progress 1.4s ease-in-out infinite;
+    @keyframes nav-progress {
+        from { transform: translateX(-100%); }
+        to   { transform: translateX(250%); }
+    }
+
     /* Expiry urgency pulse — used by badge-urgent class */
     @keyframes expiry-pulse {
         0%, 100% { opacity: 1; }

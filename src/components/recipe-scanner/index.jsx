@@ -42,6 +42,7 @@ import { useWebLLM } from "@/hooks/use-web-llm";
 import useRecipeStore from "@/store/recipe";
 import { getProxyPrefix } from "@/store/settings";
 import useSettingsStore from "@/store/settings";
+import { LLM_MODELS, SPEED_COLOR, SPEED_LABEL } from "@/data/llm-models";
 import { LLMStatusBar } from "./llm-status-bar";
 import { RecipePreview } from "./recipe-preview";
 import "./recipe-scanner.css";
@@ -195,6 +196,9 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
   const addRecipe = useRecipeStore((s) => s.addRecipe);
   const settingsState = useSettingsStore();
   const proxyPrefix = getProxyPrefix(settingsState);
+  const scannerModelId  = useSettingsStore((s) => s.scannerModelId);
+  const setScannerModel = useSettingsStore((s) => s.setScannerModel);
+  const activeModel = LLM_MODELS.find((m) => m.id === scannerModelId) ?? LLM_MODELS[0];
 
   const busy = status === "loading" || status === "extracting" || fetching;
 
@@ -335,6 +339,40 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
               an in-browser AI model — no server, no API key.
             </DialogDescription>
           </DialogHeader>
+
+          {/* ── Model picker ─────────────────────────────────────────── */}
+          <div className="scanner-model-row">
+            <BrainCircuitIcon size={13} className="text-muted-foreground shrink-0" />
+            <span className="scanner-model-label">AI Model</span>
+
+            <div className="scanner-model-select-wrap">
+              <select
+                className="scanner-model-select"
+                value={scannerModelId}
+                onChange={(e) => setScannerModel(e.target.value)}
+                disabled={busy}
+              >
+                {LLM_MODELS.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}{m.badge ? ` ★` : ""} · {m.vram}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Speed dot */}
+            <span className={`scanner-model-speed ${SPEED_COLOR[activeModel.speed]}`}>
+              ● {SPEED_LABEL[activeModel.speed]}
+            </span>
+
+            {/* "Recommended" badge */}
+            {activeModel.badge && (
+              <span className="scanner-model-badge">{activeModel.badge}</span>
+            )}
+          </div>
+
+          {/* Active model description */}
+          <p className="scanner-model-desc">{activeModel.description}</p>
 
           {/* WebGPU unsupported warning */}
           {unsupported && (

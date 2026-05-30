@@ -28,8 +28,12 @@ export default function ToBuyPanel() {
   const [formExpiry, setFormExpiry] = useState(null);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(new Set());
+  const [selectMode, setSelectMode] = useState(false);
   const [moveDialogOpen, setMoveDialogOpen] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
+
+  /** True whenever the panel is in selection/batch mode */
+  const inSelectMode = selectMode || selected.size > 0;
 
   const submit = (e) => {
     e.preventDefault();
@@ -52,7 +56,10 @@ export default function ToBuyPanel() {
       return next;
     });
 
-  const clearSelection = () => setSelected(new Set());
+  const clearSelection = () => {
+    setSelected(new Set());
+    setSelectMode(false);
+  };
 
   const batchDelete = () => {
     removeToBuyItems(selected);
@@ -113,22 +120,30 @@ export default function ToBuyPanel() {
             </div>
           </form>
         ) : (
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full items-center">
             <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
               <PlusIcon size={14} /> Add item
             </Button>
             <Button variant="outline" size="sm" title="Find items with camera" onClick={() => setCameraOpen(true)}>
               <CameraIcon size={14} />
             </Button>
-            {checkedCount > 0 && selected.size === 0 && (
-              <Button variant="ghost" size="sm" className="ml-auto text-muted-foreground" onClick={clearCheckedToBuyItems}>
-                Clear {checkedCount} checked
-              </Button>
-            )}
+            <div className="flex items-center gap-1 ml-auto">
+              {checkedCount > 0 && !inSelectMode && (
+                <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={clearCheckedToBuyItems}>
+                  Clear {checkedCount} checked
+                </Button>
+              )}
+              {toBuyItems.length > 0 && !inSelectMode && (
+                <Button variant="ghost" size="sm" onClick={() => setSelectMode(true)}>
+                  Select
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>
 
+      {/* ── Item list ── */}
       <div className="flex-1 overflow-y-auto divide-y">
         {toBuyItems.length === 0 && (
           <div className="flex flex-col items-center justify-center gap-2 py-16 text-muted-foreground">
@@ -137,40 +152,28 @@ export default function ToBuyPanel() {
         )}
         {toBuyItems.map((item) => {
           const isSelected = selected.has(item.id);
-          const inBatchMode = selected.size > 0;
           return (
             <div
               key={item.id}
-              className={`group flex items-center gap-2 px-4 py-2 transition-colors ${
+              className={`flex items-center gap-2 px-4 py-2 transition-colors ${
                 isSelected ? "bg-accent/40" : ""
               }`}
             >
-              {/* Selection checkbox — hidden until hover or batch mode is active.
-                  Uses a fixed-width wrapper so layout doesn't shift. */}
-              <div
-                className={`shrink-0 transition-opacity ${
-                  inBatchMode || isSelected
-                    ? "opacity-100"
-                    : "opacity-0 group-hover:opacity-100"
-                }`}
-              >
-                <Checkbox
-                  checked={isSelected}
-                  onCheckedChange={() => toggleSelect(item.id)}
-                />
-              </div>
-
-              {/* Primary action: mark as bought */}
+              {/*
+                Single checkbox — in normal mode it marks the item as bought;
+                in select mode it toggles the item's selection for batch actions.
+                This avoids the confusing double-checkbox layout.
+              */}
               <Checkbox
-                checked={item.checked}
-                onCheckedChange={() => toggleToBuyItem(item.id)}
+                checked={inSelectMode ? isSelected : item.checked}
+                onCheckedChange={() =>
+                  inSelectMode ? toggleSelect(item.id) : toggleToBuyItem(item.id)
+                }
               />
 
               <span
                 className={`flex-1 text-sm ${
-                  item.checked
-                    ? "line-through text-muted-foreground"
-                    : "font-medium"
+                  item.checked ? "line-through text-muted-foreground" : "font-medium"
                 }`}
               >
                 {item.name}
@@ -183,40 +186,59 @@ export default function ToBuyPanel() {
               )}
 
               <NutritionButton name={item.name} />
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                title="Move to fridge"
-                onClick={() => moveToFridge(item.id)}
-              >
-                <RefrigeratorIcon size={14} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={() => removeToBuyItem(item.id)}
-              >
-                <Trash2Icon size={14} />
-              </Button>
+
+              {/* Per-row actions hidden in select mode to reduce visual noise */}
+              {!inSelectMode && (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  title="Move to fridge"
+                  onClick={() => moveToFridge(item.id)}
+                >
+                  <RefrigeratorIcon size={14} />
+                </Button>
+              )}
+              {!inSelectMode && (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={() => removeToBuyItem(item.id)}
+                >
+                  <Trash2Icon size={14} />
+                </Button>
+              )}
             </div>
           );
         })}
       </div>
 
-      {selected.size > 0 && (
+      {/* ── Batch action bar — visible whenever select mode is active ── */}
+      {inSelectMode && (
         <div className="grocery-batch-bar">
+          {/* The "select all" checkbox in the bar doubles as the visual anchor */}
           <Checkbox checked={allSelected} onCheckedChange={toggleAll} />
-          <span className="text-sm flex-1">{selected.size} selected</span>
+          <span className="text-sm flex-1 text-muted-foreground">
+            {selected.size > 0 ? `${selected.size} selected` : "Tap to select"}
+          </span>
           <Button size="sm" variant="ghost" onClick={clearSelection}>Cancel</Button>
-          <Button size="sm" variant="outline" onClick={() => setMoveDialogOpen(true)}>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={selected.size === 0}
+            onClick={() => setMoveDialogOpen(true)}
+          >
             <RefrigeratorIcon size={14} /> To fridge
           </Button>
-          <Button size="sm" variant="destructive" onClick={batchDelete}>
+          <Button
+            size="sm"
+            variant="destructive"
+            disabled={selected.size === 0}
+            onClick={batchDelete}
+          >
             <Trash2Icon size={14} /> Delete
           </Button>
         </div>
       )}
-
 
       {moveDialogOpen && (
         <MoveFridgeDialog
