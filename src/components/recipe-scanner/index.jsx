@@ -15,7 +15,7 @@
  *  initialUrl  optional pre-filled URL
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   BrainCircuitIcon,
@@ -179,11 +179,54 @@ function extractMetaImage(html) {
   return null;
 }
 
+// ── Paste HTML cleaner ─────────────────────────────────────────────────────
+
+/**
+ * Strip noisy, dangerous, or layout-only elements from clipboard HTML
+ * while keeping semantic structure (headings, lists, paragraphs).
+ * The result is safe to set as innerHTML in a contenteditable.
+ */
+function cleanPastedHtml(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+
+  // Remove elements that add nothing useful or are dangerous
+  const remove = [
+    "script", "style", "noscript", "nav", "header", "footer", "aside",
+    "iframe", "form", "input", "button", "select", "textarea",
+    "video", "audio", "canvas", "svg", "figure", "figcaption",
+    "picture", "source", "track", "map", "area",
+  ];
+  remove.forEach((tag) => div.querySelectorAll(tag).forEach((el) => el.remove()));
+
+  // Strip every attribute (inline styles, classes, ids, event handlers)
+  // so pasted content matches the app's own theme
+  div.querySelectorAll("*").forEach((el) => {
+    const tag = el.tagName.toLowerCase();
+    const href = tag === "a" ? el.getAttribute("href") : null;
+    while (el.attributes.length > 0) el.removeAttribute(el.attributes[0].name);
+    if (href) el.setAttribute("href", href);
+  });
+
+  // Remove images — keep the text
+  div.querySelectorAll("img").forEach((el) => el.remove());
+
+  return div.innerHTML;
+}
+
 // ── Main dialog ────────────────────────────────────────────────────────────
 export function RecipeScanner({ open, onClose, initialText = "", initialUrl = "" }) {
   const [tab, setTab] = useState(initialText ? "text" : "url");
   const [url, setUrl] = useState(initialUrl);
-  const [pastedText, setPastedText] = useState(initialText);
+  const [hasRichContent, setHasRichContent] = useState(!!initialText);
+  const richTextRef = useRef(null);
+
+  // Seed initial text (e.g. from the Browser page "Extract Recipe" button)
+  const didInit = useRef(false);
+  if (!didInit.current && initialText && richTextRef.current) {
+    richTextRef.current.innerText = initialText;
+    didInit.current = true;
+  }
   const [fetchError, setFetchError] = useState(null);
   const [fetching, setFetching] = useState(false);
   const [extracted, setExtracted] = useState(null);
@@ -242,29 +285,40 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
       .trim();
 
   /**
-   * Paste handler for the rich-text tab.
-   * If the clipboard contains text/html, we try JSON-LD first (no LLM needed),
-   * then fall back to stripping the HTML to clean plain text for the textarea.
+   * Paste handler for the rich-text contenteditable.
+   * Always intercepts paste so we can:
+   *  1. Try JSON-LD extraction instantly (no LLM needed).
+   *  2. Insert cleaned, styled HTML instead of raw clipboard markup.
    */
   const handleRichPaste = (e) => {
-    const html = e.clipboardData?.getData("text/html");
-    if (!html) return; // no HTML in clipboard — let the default plain-text paste work
-
-    // 1. JSON-LD in copied HTML? Extract instantly, no LLM.
-    const ld = extractJsonLdRecipe(html);
-    if (ld) {
-      e.preventDefault();
-      const recipe = mapJsonLdToRecipe(ld);
-      if (!recipe.image) recipe.image = extractMetaImage(html) ?? "";
-      setExtracted(recipe);
-      setExtractedSource("json-ld");
-      return;
-    }
-
-    // 2. No structured data — strip tags and populate the textarea with clean text
     e.preventDefault();
-    const text = htmlToText(html);
-    setPastedText(text);
+    const html = e.clipboardData?.getData("text/html");
+    const plain = e.clipboardData?.getData("text/plain");
+
+    if (html) {
+      // 1. Structured data → extract instantly, skip the editor entirely
+      const ld = extractJsonLdRecipe(html);
+      if (ld) {
+        const recipe = mapJsonLdToRecipe(ld);
+        if (!recipe.image) recipe.image = extractMetaImage(html) ?? "";
+        setExtracted(recipe);
+        setExtractedSource("json-ld");
+        return;
+      }
+
+      // 2. No JSON-LD → display cleaned rich HTML in the editor
+      const clean = cleanPastedHtml(html);
+      if (richTextRef.current) {
+        richTextRef.current.innerHTML = clean;
+        setHasRichContent(!!richTextRef.current.innerText?.trim());
+      }
+    } else if (plain) {
+      // Plain-text paste (e.g. from a text editor)
+      if (richTextRef.current) {
+        richTextRef.current.innerText = plain;
+        setHasRichContent(!!plain.trim());
+      }
+    }
   };
 
   /** Run the LLM extractor and merge in a discovered image URL */
@@ -303,8 +357,23 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
   };
 
   const handleScanText = async () => {
-    if (!pastedText.trim()) return;
-    await runLlm(pastedText);
+    const div = richTextRef.current;
+    if (!div) return;
+    const html = div.innerHTML;
+    const text = htmlToText(html);
+    if (!text.trim()) return;
+
+    // Re-check for JSON-LD in case user typed/pasted structured content
+    const ld = extractJsonLdRecipe(html);
+    if (ld) {
+      const recipe = mapJsonLdToRecipe(ld);
+      if (!recipe.image) recipe.image = extractMetaImage(html) ?? "";
+      setExtracted(recipe);
+      setExtractedSource("json-ld");
+      return;
+    }
+
+    await runLlm(text);
   };
 
   const handleImportDirect = () => {
@@ -427,13 +496,32 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
               </p>
             </div>
           ) : (
-            <textarea
-              className="scanner-textarea"
-              placeholder="Paste the recipe page text or copy a whole recipe page here…"
-              value={pastedText}
-              onChange={(e) => setPastedText(e.target.value)}
-              onPaste={handleRichPaste}
-            />
+            <div className="flex flex-col gap-1.5">
+              {/* Rich-text paste area */}
+              <div
+                ref={richTextRef}
+                contentEditable
+                suppressContentEditableWarning
+                spellCheck={false}
+                className="scanner-richtext"
+                data-placeholder="Copy a recipe page and paste it here — formatting is preserved…"
+                onPaste={handleRichPaste}
+                onInput={() => setHasRichContent(!!richTextRef.current?.innerText?.trim())}
+              />
+              {/* Clear button */}
+              {hasRichContent && (
+                <button
+                  type="button"
+                  className="self-end text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => {
+                    if (richTextRef.current) richTextRef.current.innerHTML = "";
+                    setHasRichContent(false);
+                  }}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           )}
 
           {/* LLM status bar — only shown when model is actually involved */}
@@ -465,7 +553,7 @@ export function RecipeScanner({ open, onClose, initialText = "", initialUrl = ""
                 disabled={
                   busy ||
                   unsupported ||
-                  (tab === "url" ? !url.trim() : !pastedText.trim())
+                  (tab === "url" ? !url.trim() : !hasRichContent)
                 }
                 onClick={tab === "url" ? handleScanUrl : handleScanText}
               >
