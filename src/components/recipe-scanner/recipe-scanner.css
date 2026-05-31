@@ -53,11 +53,49 @@
     @apply text-muted-foreground hover:text-foreground;
 }
 
-/* Pasted-text textarea */
-.scanner-textarea {
-    @apply w-full rounded-md border bg-card px-3 py-2 text-sm
-           placeholder:text-muted-foreground resize-none h-36
+/* ── Rich-text paste area (contenteditable) ───────────────────────────────── */
+.scanner-richtext {
+    @apply w-full min-h-36 max-h-64 rounded-md border bg-card px-3 py-2 text-sm
+           overflow-y-auto overflow-x-hidden
            focus:outline-none focus:ring-2 focus:ring-ring;
+    word-break: break-word;
+}
+
+/* Placeholder via CSS attr() */
+.scanner-richtext:empty::before {
+    content: attr(data-placeholder);
+    @apply text-muted-foreground pointer-events-none;
+}
+
+/* Style the pasted rich content to match the app's typography */
+.scanner-richtext h1,
+.scanner-richtext h2,
+.scanner-richtext h3,
+.scanner-richtext h4 {
+    @apply font-semibold text-sm mt-3 mb-1 leading-snug;
+}
+.scanner-richtext p {
+    @apply text-sm my-1 leading-relaxed;
+}
+.scanner-richtext ul {
+    @apply list-disc pl-4 my-1.5 flex flex-col gap-0.5;
+}
+.scanner-richtext ol {
+    @apply list-decimal pl-4 my-1.5 flex flex-col gap-0.5;
+}
+.scanner-richtext li {
+    @apply text-sm leading-snug;
+}
+.scanner-richtext strong,
+.scanner-richtext b {
+    @apply font-semibold;
+}
+.scanner-richtext em,
+.scanner-richtext i {
+    @apply italic;
+}
+.scanner-richtext a {
+    @apply text-primary underline underline-offset-2;
 }
 
 /* ── Recipe preview card ── */
