@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
-const EFFECTIVE_DATE = "25 May 2026";
+const EFFECTIVE_DATE = "31 May 2026";
 
 export default function Welcome({ onNext }) {
   const [accepted, setAccepted] = useState(false);
@@ -39,10 +39,10 @@ export default function Welcome({ onNext }) {
           <h2 className="text-foreground font-semibold text-sm">2. Your Data &amp; Privacy</h2>
           <p>
             All data you enter — recipes, grocery lists, meal plans, preferences,
-            and cook history — is stored <strong className="text-foreground">exclusively
-            in your browser</strong> (localStorage / IndexedDB). Nothing is
-            transmitted to any external server, and no analytics or tracking of
-            any kind is performed.
+            and cook history — is stored{" "}
+            <strong className="text-foreground">exclusively in your browser</strong>{" "}
+            (localStorage / IndexedDB). Nothing is transmitted to any external
+            server, and no analytics or tracking of any kind is performed.
           </p>
           <p>
             Because your data lives only in your browser, it may be lost if you
@@ -52,7 +52,7 @@ export default function Welcome({ onNext }) {
           </p>
         </section>
 
-        {/* 3 ── AI Assistant (Kejal) */}
+        {/* 3 ── AI Features */}
         <section className="space-y-1.5">
           <h2 className="text-foreground font-semibold text-sm">3. AI Features &amp; Disclaimers</h2>
           <p>
@@ -60,7 +60,8 @@ export default function Welcome({ onNext }) {
             recipe scanner, both powered by{" "}
             <strong className="text-foreground">WebLLM</strong> — an open-source
             framework that runs large language models directly in your browser
-            using WebGPU. <strong className="text-foreground">No prompts, messages,
+            using WebGPU.{" "}
+            <strong className="text-foreground">No prompts, messages,
             or recipe data are ever sent to any external server or AI provider.</strong>
           </p>
           <p>
@@ -83,16 +84,34 @@ export default function Welcome({ onNext }) {
           <p>
             <strong className="text-foreground">Model download:</strong>{" "}
             On first use, AI features require downloading a language model
-            (roughly 0.9–2.2 GB depending on your selection in Preferences).
+            (roughly 0.9–3.7 GB depending on your selection in Preferences).
             The model is cached locally in your browser. WebGPU-capable hardware
-            and a compatible browser (Chrome 113+ or Edge 113+) are required; AI
-            features are silently unavailable otherwise.
+            and a compatible browser (Chrome 113+ or Edge 113+) are required.
           </p>
         </section>
 
-        {/* 4 ── Recipe Content */}
+        {/* 4 ── Chrome Extension */}
         <section className="space-y-1.5">
-          <h2 className="text-foreground font-semibold text-sm">4. Recipe Content</h2>
+          <h2 className="text-foreground font-semibold text-sm">4. Chrome Extension</h2>
+          <p>
+            The optional Kelane Chrome extension can detect and import recipes
+            from websites you visit. To do so it requires the{" "}
+            <strong className="text-foreground">activeTab</strong> and{" "}
+            <strong className="text-foreground">scripting</strong> browser
+            permissions, which allow it to read the content of the current tab
+            when you click the extension icon.
+          </p>
+          <p>
+            The extension does not run in the background, does not track your
+            browsing history, and does not transmit any data to external servers.
+            Recipe data extracted from a page is sent directly from your browser
+            to your local Kelane instance only.
+          </p>
+        </section>
+
+        {/* 5 ── Recipe Content */}
+        <section className="space-y-1.5">
+          <h2 className="text-foreground font-semibold text-sm">5. Recipe Content</h2>
           <p>
             Recipes included with Kelane as sample data are provided for personal
             use only. When you scan or import recipes from external URLs, you are
@@ -108,32 +127,42 @@ export default function Welcome({ onNext }) {
           </p>
         </section>
 
-        {/* 5 ── Intellectual Property */}
+        {/* 6 ── License & Intellectual Property */}
         <section className="space-y-1.5">
-          <h2 className="text-foreground font-semibold text-sm">5. Intellectual Property</h2>
+          <h2 className="text-foreground font-semibold text-sm">6. License &amp; Intellectual Property</h2>
           <p>
-            Kelane — including its source code, design, branding, and original
-            content — is proprietary and private. Unauthorised copying,
-            redistribution, or reverse engineering of any part of the application
-            is not permitted.
+            Kelane is released under the{" "}
+            <strong className="text-foreground">
+              Creative Commons Attribution-NonCommercial 4.0 International
+            </strong>{" "}
+            (CC BY-NC 4.0) license. You are free to use, share, and adapt
+            Kelane for personal and non-commercial purposes, provided you give
+            appropriate credit and indicate any changes made.
+          </p>
+          <p>
+            <strong className="text-foreground">Commercial use is not permitted</strong>{" "}
+            without explicit written permission from the author. This includes,
+            but is not limited to, selling the application, offering it as a
+            paid service, or incorporating it into a commercial product.
           </p>
         </section>
 
-        {/* 6 ── Limitation of Liability */}
+        {/* 7 ── Limitation of Liability */}
         <section className="space-y-1.5">
-          <h2 className="text-foreground font-semibold text-sm">6. Limitation of Liability</h2>
+          <h2 className="text-foreground font-semibold text-sm">7. Limitation of Liability</h2>
           <p>
-            Kelane is provided <strong className="text-foreground">"as is"</strong>,
-            without warranties of any kind. To the maximum extent permitted by
-            applicable law, the developers of Kelane shall not be liable for any
-            loss of data, indirect, incidental, or consequential damages arising
-            from your use of the application or reliance on AI-generated content.
+            Kelane is provided{" "}
+            <strong className="text-foreground">"as is"</strong>, without
+            warranties of any kind. To the maximum extent permitted by applicable
+            law, the developers of Kelane shall not be liable for any loss of
+            data, indirect, incidental, or consequential damages arising from
+            your use of the application or reliance on AI-generated content.
           </p>
         </section>
 
-        {/* 7 ── Changes */}
+        {/* 8 ── Changes */}
         <section className="space-y-1.5">
-          <h2 className="text-foreground font-semibold text-sm">7. Changes to These Terms</h2>
+          <h2 className="text-foreground font-semibold text-sm">8. Changes to These Terms</h2>
           <p>
             These terms may be updated from time to time. Continued use of the
             application after an update constitutes acceptance of the revised
