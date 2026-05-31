@@ -84,13 +84,14 @@ export default function DocsPage() {
   return (
     <SidebarPage title="Docs">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-10">
-
         {/* Hero */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2.5">
             <FlameIcon size={22} className="text-primary" />
             <h1 className="text-2xl font-bold tracking-tight">Kelane</h1>
-            <Badge variant="secondary" className="text-xs">v0.0.0</Badge>
+            <Badge variant="secondary" className="text-xs">
+              v0.0.0
+            </Badge>
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">
             A private, offline-first recipe manager and kitchen organiser that
@@ -167,8 +168,8 @@ export default function DocsPage() {
             </Step>
             <Step n="3" title="Stock your fridge">
               <p className="text-sm text-muted-foreground">
-                Go to <strong>Groceries → Fridge</strong>. Add items manually
-                or import them by moving entries from the buy list. Set expiry
+                Go to <strong>Groceries → Fridge</strong>. Add items manually or
+                import them by moving entries from the buy list. Set expiry
                 dates so you get warned before things go off.
               </p>
             </Step>
@@ -182,8 +183,8 @@ export default function DocsPage() {
             <Step n="5" title="Cook mode">
               <p className="text-sm text-muted-foreground">
                 Hit <strong>Start Cooking</strong> on any recipe. Each step is
-                highlighted one at a time with a full-screen timer when the
-                step has a duration. The display stays on while you cook.
+                highlighted one at a time with a full-screen timer when the step
+                has a duration. The display stays on while you cook.
               </p>
             </Step>
           </div>
@@ -199,7 +200,10 @@ export default function DocsPage() {
             occasionally.
           </p>
           <div className="flex gap-3 p-4 rounded-xl border bg-card">
-            <DatabaseIcon size={16} className="text-muted-foreground shrink-0 mt-0.5" />
+            <DatabaseIcon
+              size={16}
+              className="text-muted-foreground shrink-0 mt-0.5"
+            />
             <p className="text-sm text-muted-foreground">
               The AI assistant downloads a small language model to your device
               the first time you open it (~400 MB). The model runs locally in a
@@ -213,8 +217,8 @@ export default function DocsPage() {
         {/* Chrome Extension */}
         <Section id="extension" icon={ChromeIcon} title="Chrome Extension">
           <p className="text-sm text-muted-foreground leading-relaxed">
-            The Kelane browser extension lets you import recipes from any cooking
-            website with one click. It scans for structured{" "}
+            The Kelane browser extension lets you import recipes from any
+            cooking website with one click. It scans for structured{" "}
             <Code>schema.org/Recipe</Code> data and opens a confirmation page in
             Kelane where you can review and save the recipe.
           </p>
@@ -224,7 +228,9 @@ export default function DocsPage() {
               <TerminalIcon size={14} className="text-muted-foreground" />
               <p className="text-sm font-semibold">Install</p>
             </div>
-            <Code block>{`# 1. Generate the PNG icons (one-time, uses the project's sharp)
+            <Code
+              block
+            >{`# 1. Generate the PNG icons (one-time, uses the project's sharp)
 node extension/icons/generate.mjs
 
 # 2. In Chrome: open chrome://extensions
@@ -234,18 +240,25 @@ node extension/icons/generate.mjs
           <div className="flex flex-col gap-2 p-4 rounded-xl border bg-card text-sm">
             <p className="font-semibold">How it works</p>
             <ol className="flex flex-col gap-1.5 text-muted-foreground list-decimal list-inside">
-              <li>Navigate to any recipe page (AllRecipes, BBC Good Food, NYT Cooking, …)</li>
-              <li>Click the Kelane toolbar icon — the popup shows a recipe preview</li>
-              <li>Click <strong className="text-foreground">Import to Kelane</strong></li>
+              <li>
+                Navigate to any recipe page (AllRecipes, BBC Good Food, NYT
+                Cooking, …)
+              </li>
+              <li>
+                Click the Kelane toolbar icon — the popup shows a recipe preview
+              </li>
+              <li>
+                Click{" "}
+                <strong className="text-foreground">Import to Kelane</strong>
+              </li>
               <li>Review the recipe, pick categories, click Save</li>
             </ol>
           </div>
 
           <p className="text-xs text-muted-foreground">
-            The extension defaults to{" "}
-            <Code>https://chef.samalstudios.com</Code>. To use a local or
-            self-hosted instance, click the ⚙ gear in the popup and enter your
-            URL.
+            The extension defaults to <Code>https://chef.samalstudios.com</Code>
+            . To use a local or self-hosted instance, click the ⚙ gear in the
+            popup and enter your URL.
           </p>
         </Section>
 
@@ -264,10 +277,12 @@ node extension/icons/generate.mjs
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <ContainerIcon size={14} className="text-muted-foreground" />
-              <p className="text-sm font-semibold">Quick start with Docker Compose</p>
+              <p className="text-sm font-semibold">
+                Quick start with Docker Compose
+              </p>
             </div>
             <Code block>{`# 1. Clone the repository
-git clone https://github.com/your-org/kelane.git
+git clone https://github.com/code-by-sia/kelane.git
 cd kelane
 
 # 2. Start everything (builds the image on first run)
@@ -276,9 +291,9 @@ docker compose up -d
 # App →  http://localhost:80
 # Proxy → http://localhost:3001   (Recipe Browser only)`}</Code>
             <p className="text-xs text-muted-foreground">
-              The compose file contains two services:{" "}
-              <Code>app</Code> (nginx serving the production build) and{" "}
-              <Code>proxy</Code> (the CORS proxy for external recipe sites).
+              The compose file contains two services: <Code>app</Code> (nginx
+              serving the production build) and <Code>proxy</Code> (the CORS
+              proxy for external recipe sites).
             </p>
           </div>
 
@@ -328,13 +343,23 @@ npm run proxy`}</Code>
               <div className="grid grid-cols-[auto_1fr] divide-y">
                 {[
                   ["PORT", "3001", "Port for the CORS proxy server"],
-                  ["VITE_PROXY_URL", "http://localhost:3001", "Override the proxy URL baked into the build"],
+                  [
+                    "VITE_PROXY_URL",
+                    "http://localhost:3001",
+                    "Override the proxy URL baked into the build",
+                  ],
                 ].map(([k, def, desc]) => (
                   <div key={k} className="contents">
-                    <div className="bg-muted px-3 py-2 font-bold border-r">{k}</div>
+                    <div className="bg-muted px-3 py-2 font-bold border-r">
+                      {k}
+                    </div>
                     <div className="px-3 py-2 flex flex-col gap-0.5">
-                      <span>default: <span className="text-primary">{def}</span></span>
-                      <span className="text-muted-foreground font-sans text-[11px]">{desc}</span>
+                      <span>
+                        default: <span className="text-primary">{def}</span>
+                      </span>
+                      <span className="text-muted-foreground font-sans text-[11px]">
+                        {desc}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -349,15 +374,24 @@ npm run proxy`}</Code>
         <Section id="stack" icon={FlameIcon} title="Tech Stack">
           <div className="flex flex-wrap gap-2">
             {[
-              "React 19", "Vite 7", "Tailwind CSS v4", "Radix UI",
-              "Zustand", "React Router v7", "date-fns", "Recharts",
-              "WebLLM", "PWA (Workbox)", "Node.js proxy",
+              "React 19",
+              "Vite 7",
+              "Tailwind CSS v4",
+              "Radix UI",
+              "Zustand",
+              "React Router v7",
+              "date-fns",
+              "Recharts",
+              "WebLLM",
+              "PWA (Workbox)",
+              "Node.js proxy",
             ].map((t) => (
-              <Badge key={t} variant="secondary" className="font-mono text-xs">{t}</Badge>
+              <Badge key={t} variant="secondary" className="font-mono text-xs">
+                {t}
+              </Badge>
             ))}
           </div>
         </Section>
-
       </div>
     </SidebarPage>
   );

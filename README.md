@@ -1,4 +1,7 @@
 # Kelane
+
+<img src="demo.png" />
+
 ## Project Structure Overview
 This template provides a robust foundation for a modern SPA. Understanding the file layout is key to development:
 

@@ -1,6 +1,6 @@
 # Kelane Recipe Importer — Chrome Extension
 
-A Chrome extension that detects structured recipe data on any cooking website and imports it into your [Kelane](https://github.com/your-org/kelane) recipe manager with one click.
+A Chrome extension that detects structured recipe data on any cooking website and imports it into your [Kelane](https://github.com/code-by-sia/kelane) recipe manager with one click.
 
 ## Supported sites
 
